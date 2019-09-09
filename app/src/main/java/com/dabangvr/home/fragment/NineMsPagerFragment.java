@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,14 @@ import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dabangvr.R;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.home.activity.HxxqLastActivity;
+import com.dabangvr.model.ActivityBean;
+import com.dabangvr.model.Goods;
 import com.dabangvr.model.GoodsVo;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.JsonUtil;
@@ -35,11 +39,13 @@ import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.BGANormalRefreshViewHolder;
 import com.dabangvr.video.adapter.ThreadUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +63,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     private String hoursTime;
     private BaseLoadMoreHeaderAdapter adapter;
     private RecyclerView recyclerView;
-    private List<GoodsVo> list = new ArrayList<>();
+    private List<Goods> list = new ArrayList<>();
 
     private LocalBroadcastManager broadcastManager;
     private IntentFilter intentFilter;
@@ -86,6 +92,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     };
     private long mMorePageNumber = 0;
     private long mNewPageNumber = 0;
+
     public NineMsPagerFragment(int serial) {
         mSerial = serial;
     }
@@ -102,7 +109,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
             sendMessage(0, "1");
             isFirst = false;
         }
-        getDataFromHttp(0,"1");
+        getDataFromHttp(0, "1");
         return view;
     }
 
@@ -119,9 +126,9 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
         recyclerView.setLayoutManager(manager);
 
         //View header = LayoutInflater.from(context).inflate(R.layout.ms_tips, null);
-        adapter = new BaseLoadMoreHeaderAdapter<GoodsVo>(context, recyclerView, list, R.layout.ms_nine_item) {
+        adapter = new BaseLoadMoreHeaderAdapter<Goods>(context, recyclerView, list, R.layout.ms_nine_item) {
             @Override
-            public void convert(Context mContext, BaseRecyclerHolder holder, GoodsVo goods) {
+            public void convert(Context mContext, BaseRecyclerHolder holder, Goods goods) {
 
                 //商品图片
                 holder.setImageByUrl(R.id.ms_li_img, goods.getListUrl());
@@ -130,29 +137,36 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                 holder.setText(R.id.ms_li_title, goods.getName());
 
                 //商品市场价，设置中划线
-                holder.setText(R.id.ms_li_market, goods.getSalesVolume());
+                holder.setText(R.id.ms_li_market, "已销售：" + goods.getSalesVolume() + "件");
 
                 //秒杀价
-                holder.setText(R.id.ms_li_price, goods.getSecondsPrice());
-
+                holder.setText(R.id.ms_li_price, goods.getSellingPrice());
+                TextView tv_discount_one = holder.getView(R.id.tv_discount_one);
+                TextView tv_discount_two = holder.getView(R.id.tv_discount_two);
+                List<ActivityBean> activitys = goods.getActivitys();
+                if (activitys != null && activitys.size() > 0) {
+                    if (activitys.size() >= 2) {
+                        tv_discount_one.setText(activitys.get(0).getName());
+                        tv_discount_two.setText(activitys.get(1).getName());
+                    } else {
+                        tv_discount_one.setText(activitys.get(0).getName());
+                    }
+                }
             }
         };
-
         //adapter.addHeadView(header);
         recyclerView.setAdapter(adapter);
-
         adapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                // TODO: 2019/9e
                 Intent intent = new Intent(context, HxxqLastActivity.class);
                 intent.putExtra("id", list.get(position).getId());
-                intent.putExtra("type", 2);
+                intent.putExtra("type", 0);
                 context.startActivity(intent);
             }
         });
     }
-
-
     /**
      * @param type        刷新标志
      * @param rankingType 排序 1时间，2销量
@@ -185,11 +199,10 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     private void getDataFromHttp(final int isFlush, String rankingType) {
         Map<String, String> map = new HashMap<>();
 //        map.put("hoursTime", hoursTime);
-        map.put("hoursTime", "17");
-        map.put("rankingType", rankingType);
+        map.put("priceRange", hoursTime);
         map.put("page", String.valueOf(page));
         map.put("limit", "10");
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getSecondsKillGoodsList, map,
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsLists, map,
                 new GsonObjectCallback<String>(DyUrl.BASE) {
                     @Override
                     public void onUi(String result) {
@@ -202,8 +215,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                                 }
                                 JSONObject dataObj = object.optJSONObject("data");
                                 String str = dataObj.optString("goodsList");
-                                list = JsonUtil.string2Obj(str, List.class, GoodsVo.class);
-
+                                list = JsonUtil.string2Obj(str, List.class, Goods.class);
                                 if (isFlush == 0) {//刷新
                                     adapter.updateData(list);
                                 } else {
@@ -221,6 +233,14 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                     }
                 });
     }
+
+    /**
+     * 获取网络数据
+     * <p>
+     * 第一个item   my_orther_item_dep
+     * 第二个item   my_orther_item_goods
+     */
+
 
     //处理通知或状态
     @Override
@@ -259,8 +279,6 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-
-
         mMorePageNumber++;
         if (mMorePageNumber > 4) {
             mRefreshLayout.endLoadingMore();
@@ -274,8 +292,6 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                 mRefreshLayout.endLoadingMore();
             }
         }, 1500);
-
-
         return true;
     }
 }

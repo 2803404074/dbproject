@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/ms_li_img"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
         android:layout_centerVertical="true"
         android:src="@mipmap/ic_launcher" />
 
@@ -39,6 +39,21 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_discount_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_round_bg"
+                android:gravity="center"
+                android:padding="@dimen/dp_3"
+                android:text="就是不包邮"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_discount_two"
+                android:background="@drawable/btn_round_bg"
+                android:gravity="center"
+                android:padding="@dimen/dp_3"
+                android:layout_marginLeft="@dimen/dp_30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -58,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:text="¥"
                 android:textColor="@color/red"
-                android:textSize="21sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -67,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:text="59.0"
                 android:textColor="@color/red"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -87,15 +102,11 @@
 
             <TextView
                 android:id="@+id/ms_li_go"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_30"
                 android:layout_marginRight="10dp"
-                android:background="@mipmap/btn_round_red"
+                android:background="@drawable/btn_round_red_bg"
                 android:gravity="center"
-                android:padding="5dp"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
                 android:text="抢"
                 android:textColor="@color/white" />
         </LinearLayout>
