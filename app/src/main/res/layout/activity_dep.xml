@@ -20,8 +20,8 @@
                 android:layout_marginHorizontal="@dimen/dp_5"
                 android:padding="5dp">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
                     android:src="@drawable/h_position" />
 
                 <TextView
@@ -35,8 +35,8 @@
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:padding="@dimen/dp_5"
                 android:src="@drawable/back" />
         </RelativeLayout>
@@ -66,8 +66,8 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
                         android:src="@drawable/h_search" />
 
                     <TextView
@@ -113,7 +113,7 @@
                     android:layout_marginVertical="@dimen/dp_10"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:text="附近优选"
-                    android:textSize="21sp"
+                    android:textSize="@dimen/sp_20"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.RecyclerView

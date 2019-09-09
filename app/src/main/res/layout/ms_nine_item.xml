@@ -46,7 +46,6 @@
                 android:background="@drawable/btn_round_bg"
                 android:gravity="center"
                 android:padding="@dimen/dp_3"
-                android:text="就是不包邮"
                 android:textSize="12sp" />
             <TextView
                 android:id="@+id/tv_discount_two"
@@ -57,7 +56,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="就是不包邮"
                 android:textSize="12sp" />
         </LinearLayout>
 

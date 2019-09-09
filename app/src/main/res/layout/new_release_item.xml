@@ -8,16 +8,12 @@
     android:background="@drawable/detalis_goods_eb_shape"
     >
 
-    <com.shehuan.niv.NiceImageView
+    <ImageView
         android:id="@+id/new_item_img"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_174"
         android:scaleType="center"
-        android:src="@mipmap/tx_icon"
-        app:corner_top_right_radius="@dimen/dp_6"
-        app:corner_top_left_radius="@dimen/dp_6" />
-
-
+        android:src="@mipmap/tx_icon" />
     <!--<ImageView-->
         <!--android:id="@+id/new_item_img"-->
         <!--android:layout_width="150dp"-->

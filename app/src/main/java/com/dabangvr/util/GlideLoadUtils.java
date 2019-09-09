@@ -84,6 +84,19 @@ public class GlideLoadUtils {
             Log.i(TAG, "Picture loading failed,context is null");
         }
     }
-
+    /**
+     *
+     * @param imageView  imageview id
+     * @param url  图片url
+     * @param cornerType  圆角方向，top  ，底部，左边，右边·等等 顶部 GlideRoundedCornersTransform.CornerType说明
+     * @param dpValue  圆角大小
+     * @return
+     */
+    public void glideLoadRoundangle(Context context, String url, ImageView imageView, float dpValue, GlideRoundedCornersTransform.CornerType cornerType){
+        RequestOptions myOptions = new RequestOptions().optionalTransform
+                (new GlideRoundedCornersTransform(DensityUtil.dip2px(context,dpValue)
+                        , cornerType));
+        Glide.with(context).load(url).apply(myOptions).into(imageView);
+    }
 
 }

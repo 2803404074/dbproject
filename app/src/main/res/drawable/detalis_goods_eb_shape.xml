@@ -13,7 +13,7 @@
 
     <!-- android:radius 圆角的半径 -->
     <corners
-        android:radius="6dp"
+        android:radius="@dimen/dp_6"
         />
 
 </shape>
