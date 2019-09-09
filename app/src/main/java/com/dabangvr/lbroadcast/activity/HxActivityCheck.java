@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.dabangvr.R;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
-import com.dabangvr.home.activity.HxActivity;
 import com.dabangvr.lbroadcast.fragment.HxFragmentCheck;
 import com.dabangvr.model.CheckMo;
 import com.dabangvr.model.TypeBean;

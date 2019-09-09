@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 
@@ -39,51 +38,30 @@ import okhttp3.Call;
 /**
  * 海鲜跳转的页面
  */
-public class HxActivityType extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class HxClassToActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
     private SimpleFragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments = new ArrayList<Fragment>();
     private int position = 0;
-
     private int curTab = 0;
-    private TextView hxTitle;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_hx_type);
+        this.setContentView(R.layout.activity_hx_class_to);
         initView();
     }
 
     private void initView() {
         position = getIntent().getIntExtra("position", 0);
-        String title = getIntent().getStringExtra("title");
+
         mTabLayout = findViewById(R.id.m_tablayout);
         mViewPager = findViewById(R.id.m_viewpager);
-        hxTitle = findViewById(R.id.hx_title);
-        hxTitle.setText(title);
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-        findViewById(R.id.mess).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //创建弹出式菜单对象（最低版本11）
-                PopupMenu popup = new PopupMenu(HxActivityType.this, v);//第二个参数是绑定的那个view
-                //获取菜单填充器
-                MenuInflater inflater = popup.getMenuInflater();
-                //填充菜单
-                inflater.inflate(R.menu.main_menu, popup.getMenu());
-                //绑定菜单项的点击事件
-                popup.setOnMenuItemClickListener(HxActivityType.this);
-                //显示(这一行代码不要忘记了)
-                popup.show();
-
             }
         });
         getList();
@@ -131,7 +109,7 @@ public class HxActivityType extends AppCompatActivity implements PopupMenu.OnMen
     private void setTab(List<TypeBean> list) {
         String[] tabTitle = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            HxFragment fragment = new HxFragment(position);
+            HxFragment fragment = new HxFragment();
             fragment.setTabPos(i, list.get(i).getId());//设置第几页，以及每页的id
             mFragments.add(fragment);
             tabTitle[i] = list.get(i).getName();
@@ -167,11 +145,8 @@ public class HxActivityType extends AppCompatActivity implements PopupMenu.OnMen
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_cart: {
-                Intent intent = new Intent(HxActivityType.this, CartActivity.class);
+                Intent intent = new Intent(HxClassToActivity.this, CartActivity.class);
                 startActivity(intent);
-                break;
-            }
-            case R.id.action_mess: {
                 break;
             }
         }

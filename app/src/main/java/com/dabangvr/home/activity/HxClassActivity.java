@@ -1,9 +1,6 @@
 package com.dabangvr.home.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,20 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.WithHint;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,24 +24,19 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dabangvr.R;
 import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.common.activity.CartActivity;
-import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
-import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.home.activity.two.LeftListAdapter;
 import com.dabangvr.home.activity.two.LeftSortBean;
 import com.dabangvr.home.activity.two.RightBean;
 import com.dabangvr.home.activity.two.RightListAdapter;
 import com.dabangvr.home.activity.two.ScrollTopLayoutManager;
 import com.dabangvr.model.GoodsCategoryJson;
-import com.dabangvr.model.TypeBean;
 import com.dabangvr.util.JsonUtil;
-import com.dabangvr.util.ToastUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,9 +51,9 @@ import config.DyUrl;
 import okhttp3.Call;
 
 /**
- * 海鲜跳转的页面
+ * 分类页面
  */
-public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
+public class HxClassActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private Unbinder mUnbinder;
     @BindView(R.id.mRvLeft)
     RecyclerView mRvLeft;
@@ -84,7 +70,7 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
     private RightListAdapter mRightAdapter;
     public static final int COLUMN_NUM = 3;
     private boolean isSelectLeftList;
-    public static HxActivity instant;
+    public static HxClassActivity instant;
     private List<GoodsCategoryJson> list = new ArrayList<>();
     ;
 
@@ -96,7 +82,7 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
 
     @Override
     public int setLayout() {
-        return R.layout.activity_hx;
+        return R.layout.activity_hx_class;
     }
 
     @Override
@@ -236,7 +222,10 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 RightBean rightBean = mRightBeans.get(position);
-                Toast.makeText(getApplicationContext(), rightBean.getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HxClassActivity.this,HxClassToActivity.class);
+                intent.putExtra("typeId",rightBean.getId());//一级分类id
+                intent.putExtra("position",position);//二级分类的下标
+                startActivity(intent);
             }
         });
         mRvRight.setAdapter(mRightAdapter);
@@ -329,7 +318,7 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
         findViewById(R.id.ll_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HxActivity.this, SearchActivity.class));
+                startActivity(new Intent(HxClassActivity.this, SearchActivity.class));
             }
         });
 
@@ -338,13 +327,13 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
             @Override
             public void onClick(View v) {
                 //创建弹出式菜单对象（最低版本11）
-                PopupMenu popup = new PopupMenu(HxActivity.this, v);//第二个参数是绑定的那个view
+                PopupMenu popup = new PopupMenu(HxClassActivity.this, v);//第二个参数是绑定的那个view
                 //获取菜单填充器
                 MenuInflater inflater = popup.getMenuInflater();
                 //填充菜单
                 inflater.inflate(R.menu.main_menu, popup.getMenu());
                 //绑定菜单项的点击事件
-                popup.setOnMenuItemClickListener(HxActivity.this);
+                popup.setOnMenuItemClickListener(HxClassActivity.this);
                 //显示(这一行代码不要忘记了)
                 popup.show();
             }
@@ -356,7 +345,7 @@ public class HxActivity extends BaseActivity implements PopupMenu.OnMenuItemClic
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_cart: {
-                Intent intent = new Intent(HxActivity.this, CartActivity.class);
+                Intent intent = new Intent(HxClassActivity.this, CartActivity.class);
                 startActivity(intent);
                 break;
             }

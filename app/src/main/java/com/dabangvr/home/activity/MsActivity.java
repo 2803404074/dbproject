@@ -10,11 +10,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.dabangvr.R;
 import com.dabangvr.dep.activity.DepActivity;
-import com.dabangvr.home.activity.two.RightBean;
 import com.dabangvr.home.interf.ChangeRadioButtonCallBack;
 import com.dabangvr.model.MenuMo;
 import com.dabangvr.model.TypeBean;
@@ -167,7 +164,7 @@ public class MsActivity extends BaseActivity {
                         return;
                     case "hx":
                         // TODO: 2019/8/3 海鲜分类
-                        T = HxActivity.class;
+                        T = HxClassActivity.class;
                         break;
                     case "pt":
                         T = PtActivityType.class;
@@ -198,7 +195,7 @@ public class MsActivity extends BaseActivity {
                         T = MsActivity.class;
                         break;
                     default:
-                        T = HxActivityType.class;
+                        T = HxClassToActivity.class;
                         break;
                 }
 

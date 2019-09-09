@@ -1,10 +1,7 @@
 package com.dabangvr.view.home;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,12 +13,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dabangvr.R;
@@ -29,8 +23,8 @@ import com.dabangvr.base.BaseFragment;
 import com.dabangvr.contens.ParameterContens;
 import com.dabangvr.dep.activity.DepActivity;
 import com.dabangvr.dynamic.page.DynamicPage;
-import com.dabangvr.home.activity.HxActivity;
-import com.dabangvr.home.activity.HxActivityType;
+import com.dabangvr.home.activity.HxClassActivity;
+import com.dabangvr.home.activity.HxClassToActivity;
 import com.dabangvr.home.activity.MsActivity;
 import com.dabangvr.home.activity.NineMsActivity;
 import com.dabangvr.home.activity.XsMsActivity;
@@ -327,7 +321,7 @@ public class HomeFragment extends BaseFragment {
                         return;
                     case ParameterContens.HXFL:
                         // TODO: 2019/8/3 海鲜分类
-                        T = HxActivity.class;
+                        T = HxClassActivity.class;
                         break;
                     case ParameterContens.PT:  //拼团
                         T = PtActivityType.class;
@@ -365,7 +359,7 @@ public class HomeFragment extends BaseFragment {
                         T = MsActivity.class;
                         break;
                     default:
-                        T = HxActivityType.class;
+                        T = HxClassToActivity.class;
                         break;
                 }
 
@@ -391,15 +385,15 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 if (TextUtils.equals(typeData.get(position).getJumpUrl(), ParameterContens.HXFL)) {
-                    Intent intent = new Intent(getContext(), HxActivity.class);
+                    Intent intent = new Intent(getContext(), HxClassActivity.class);
                     startActivity(intent);
                 } else if (TextUtils.equals(typeData.get(position).getJumpUrl(), ParameterContens.TTTEJ)) {
                     ToastUtils.s(getContext(), "功能正在完善中");
                 } else if (TextUtils.equals(typeData.get(position).getJumpUrl(), ParameterContens.QBFL)) {
-                    Intent intent = new Intent(getContext(), HxActivity.class);
+                    Intent intent = new Intent(getContext(), HxClassActivity.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(HomeFragment.this.getContext(), HxActivityType.class);
+                    Intent intent = new Intent(HomeFragment.this.getContext(), HxClassToActivity.class);
                     intent.putExtra("id", typeData.get(position).getId());
                     intent.putExtra("title", typeData.get(position).getName());
                     startActivity(intent);

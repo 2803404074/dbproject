@@ -7,10 +7,8 @@ import android.widget.TextView;
 
 import com.dabangvr.R;
 import com.dabangvr.common.activity.BaseActivity;
-import com.dabangvr.home.activity.HxActivity;
-import com.dabangvr.home.activity.HxActivityType;
+import com.dabangvr.home.activity.HxClassActivity;
 import com.dabangvr.lbroadcast.activity.PlayZhiBoActivity;
-import com.dabangvr.main.MainActivity;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.TextUtil;
@@ -73,7 +71,7 @@ public class JfActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_goods:
-                Intent intent = new Intent(JfActivity.this, HxActivity.class);
+                Intent intent = new Intent(JfActivity.this, HxClassActivity.class);
                 startActivity(intent);
                 break;
                 default:break;

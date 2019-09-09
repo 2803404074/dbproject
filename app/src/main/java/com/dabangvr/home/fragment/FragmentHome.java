@@ -24,8 +24,8 @@ import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
 import com.dabangvr.dep.activity.DepActivity;
-import com.dabangvr.home.activity.HxActivity;
-import com.dabangvr.home.activity.HxActivityType;
+import com.dabangvr.home.activity.HxClassActivity;
+import com.dabangvr.home.activity.HxClassToActivity;
 import com.dabangvr.home.activity.XsMsActivity;
 import com.dabangvr.home.activity.NewReleaseActivity;
 import com.dabangvr.home.activity.PtActivityType;
@@ -269,7 +269,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                         LoginTipsDialog.ortehrTips(FragmentHome.this.getActivity(), "短视频功能维护中，敬请期待");
                         return;
                     case "hx":
-                        T = HxActivity.class;
+                        T = HxClassActivity.class;
                         break;
                     case "pt":
                         T = PtActivityType.class;
@@ -297,7 +297,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                         T = StartOpenShopActivity.class;
                         break;
                     default:
-                        T = HxActivityType.class;
+                        T = HxClassToActivity.class;
                         break;
                 }
                 if (null != T) {
@@ -315,7 +315,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         typeAdapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(FragmentHome.this.getContext(), HxActivityType.class);
+                Intent intent = new Intent(FragmentHome.this.getContext(), HxClassToActivity.class);
                 intent.putExtra("id", typeData.get(position).getId());
                 startActivity(intent);
             }
@@ -326,7 +326,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_type: {
-                Intent intent = new Intent(FragmentHome.this.getContext(), HxActivity.class);
+                Intent intent = new Intent(FragmentHome.this.getContext(), HxClassActivity.class);
                 startActivity(intent);
                 break;
             }

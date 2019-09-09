@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dabangvr.R;
-import com.dabangvr.home.activity.HxActivity;
+import com.dabangvr.home.activity.HxClassActivity;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dbvr.imglibrary.model.Image;
@@ -286,7 +286,7 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(CommentActivity.this, HxActivity.class);
+                                        Intent intent = new Intent(CommentActivity.this, HxClassActivity.class);
                                         startActivity(intent);
                                     }
                                 })

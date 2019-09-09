@@ -127,7 +127,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.activity.HxActivity"
+            android:name=".home.activity.HxClassActivity"
             android:screenOrientation="portrait" /> <!-- 测试 -->
         <activity
             android:name=".home.activity.HxxqLastActivity"
@@ -235,7 +235,7 @@
         <activity android:name=".my.activity.AuthMessActivity" />
         <activity android:name=".dep.activity.DepMessActivity" />
         <activity android:name=".common.activity.PositionActivityTen" />
-        <activity android:name=".home.activity.HxActivityType" />
+        <activity android:name=".home.activity.HxClassToActivity" />
         <activity android:name=".lbroadcast.activity.HxActivityCheck" />
         <activity android:name=".lbroadcast.activity.HxActivityChoose" />
         <activity android:name=".home.activity.PtActivityType" />

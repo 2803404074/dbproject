@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.dabangvr.R;
 import com.dabangvr.common.activity.CartActivity;
-import com.dabangvr.home.activity.HxActivity;
+import com.dabangvr.home.activity.HxClassActivity;
 import com.dabangvr.home.activity.SearchActivity;
 import com.dabangvr.lbroadcast.activity.ZbSearchActivity;
 import com.dabangvr.video.dsp.VideoSonDspFragment;
@@ -193,7 +193,7 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_type:        //头部分类
-                Intent intent = new Intent(getContext(), HxActivity.class);
+                Intent intent = new Intent(getContext(), HxClassActivity.class);
                 startActivity(intent);
                 break;
             case R.id.h_cart:           //头部消息
