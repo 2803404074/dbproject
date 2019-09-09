@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".dep.activity.DepMessActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <RelativeLayout
+        android:id="@+id/dep_top"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/dep_logo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/app_lunch" />
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:padding="@dimen/dp_5"
+            android:src="@drawable/back" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:background="@drawable/h_shape_with"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/top_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_3"
+                android:text="兴宁店铺"
+                android:textColor="@color/colorGray5"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_tag1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_name"
+                android:drawableLeft="@mipmap/dep_location"
+                android:drawablePadding="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:text="配送约44分钟" />
+
+            <TextView
+                android:id="@+id/tv_tag2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_name"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_toRightOf="@+id/tv_tag1"
+                android:drawableLeft="@mipmap/dep_location"
+                android:drawablePadding="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:text="配送约44分钟" />
+
+            <TextView
+                android:id="@+id/dep_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tag2"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableLeft="@mipmap/dep_location"
+                android:drawablePadding="@dimen/dp_5"
+                android:padding="5dp"
+                android:text="南宁市青秀区广西人才市场大厦"
+                android:textColor="@color/colorGray5" />
+
+            <TextView
+                android:id="@+id/tv_dy01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dep_address"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:background="@drawable/h_shape_oran_noradio"
+                android:paddingHorizontal="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_3"
+                android:text="满138减20"
+                android:textColor="#EE2C2C" />
+
+            <TextView
+                android:id="@+id/tv_dy02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dep_address"
+                android:layout_marginHorizontal="@dimen/dp_10"
+                android:layout_toRightOf="@+id/tv_dy01"
+                android:background="@drawable/h_shape_oran_noradio"
+                android:paddingHorizontal="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_3"
+                android:text="满138减20"
+                android:textColor="#EE2C2C" />
+
+            <TextView
+                android:id="@+id/tv_dy03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dep_address"
+                android:layout_toRightOf="@+id/tv_dy02"
+                android:background="@drawable/h_shape_oran_noradio"
+                android:paddingHorizontal="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_3"
+                android:text="满138减20"
+                android:textColor="#EE2C2C" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/dp_5"
+                android:src="@mipmap/app_logo" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorGray3"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/name_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorDb3"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/back2"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:padding="@dimen/dp_5"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/dep_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="--"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <include layout="@layout/dc_system" />
+</LinearLayout>

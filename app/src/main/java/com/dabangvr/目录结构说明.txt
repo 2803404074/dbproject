@@ -1,0 +1,30 @@
+
+醒目目录结构
+
+app 主项目
+
+    common : 公共包
+
+    dep : 门店，外卖
+
+    dynamic : 动态说说
+
+    home : 首页
+
+    ibroadcast : 直播
+
+    main : MainActivity 以及 service、application
+
+    model : 数据模型
+
+    my : 个人中心
+
+    util : 工具类
+
+    video : 短视频
+
+    wxapi : 微信强行要求的包
+
+myhttp  网络请求框架
+
+qiniuyun  七牛云存储

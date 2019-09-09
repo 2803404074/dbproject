@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DemoActivity">
+    <item android:id="@+id/my_cart"
+        android:title="我的购物车"
+
+        android:orderInCategory="100"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/my_order"
+        android:title="我的订单"
+        android:orderInCategory="100"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/my_dz"
+        android:title="点赞"
+        android:orderInCategory="100"
+        app:showAsAction="never"  />
+
+</menu>

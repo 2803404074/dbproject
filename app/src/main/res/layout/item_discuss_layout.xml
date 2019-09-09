@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/color_f4f4f4"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/white"
+        >
+
+        <ImageView
+            android:id="@+id/iv_shop_id"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@mipmap/shp"
+            android:layout_marginLeft="16dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2019款超级比较本，吃鸡办公做图两用欢迎来订购"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_shop_id"
+            android:lineSpacingExtra="4dp"
+            android:lines="2"
+            android:ellipsize="end"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="#222222"
+            android:textSize="@dimen/text_normal"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        >
+
+        <EditText
+            android:id="@+id/ed_discuss_id"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/transparent"
+            android:hint="亲，您对这个商品满意吗,您的评价会帮助我们选择更好的商品"
+            android:textColor="@color/videoFrameActivityMiddleBG"
+            android:textSize="@dimen/text_normal"
+            android:gravity="top"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_8"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/upload"
+            android:layout_below="@+id/ed_discuss_id"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="上传图片"
+            android:gravity="center"
+            android:textSize="@dimen/text_normal"
+            android:drawablePadding="@dimen/dp_6"
+            />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_8"
+        android:background="@color/color_f4f4f4"
+        />
+
+
+</LinearLayout>

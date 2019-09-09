@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/home_goods_white_shape"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/nice_iv0"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_174"
+        android:scaleType="center"
+        android:src="@mipmap/tx_icon" />
+
+
+    <TextView
+        android:id="@+id/tv_title_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_12"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6dp"
+        android:lines="2"
+        android:text=""
+        android:textColor="@color/color_2c2c2c"
+        android:textSize="@dimen/text_small" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_nameType_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:background="@drawable/home_blue_border_shape"
+            android:paddingLeft="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingRight="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:text="海鲜专卖"
+            android:textColor="@color/color_48f5f7"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/tv_preferential_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/home_read_border_shape"
+            android:paddingLeft="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingRight="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:text="满100减10"
+            android:textColor="@color/color_f74881"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_pric_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:text=""
+            android:textColor="@color/color_f24c50"
+            android:textSize="@dimen/text_large" />
+
+        <TextView
+            android:id="@+id/tv_sales_volume_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_6"
+            android:text=""
+            android:textColor="@color/color_2c2c2c"
+            android:textSize="@dimen/text_min" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

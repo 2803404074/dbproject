@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="3dp"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/zhibo_comment_bg"
+    android:layout_marginBottom="10dp"
+    android:orientation="horizontal">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/drawee_img"
+        android:layout_width="28dp"
+        android:padding="3dp"
+        android:layout_height="28dp"
+        fresco:roundAsCircle="true" />
+    <TextView
+        android:id="@+id/auth_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorYl"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:text="评论人:"/>
+    <TextView
+        android:id="@+id/auth_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textColor="#fff"
+        android:text="xi信息"/>
+</LinearLayout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".my.activity.LoginActivity">
+
+
+    <com.pili.pldroid.player.widget.PLVideoTextureView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/login_head"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_below="@+id/login_head"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="海 鲜 风 暴"
+        android:textColor="#fff"
+        android:textSize="25sp"
+        android:textStyle="italic"/>
+
+    <LinearLayout
+        android:id="@+id/wechat_login"
+        android:layout_above="@+id/tips"
+        android:layout_width="match_parent"
+        android:background="@drawable/wechart_shape"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/login_wechat"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="微信登录"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/tips"
+        android:layout_above="@+id/orther_login"
+        android:layout_marginVertical="@dimen/dp_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp"
+
+        tools:ignore="RtlCompat">
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="2px"
+            android:layout_gravity="center"
+            android:background="#fff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="其它登入方式"
+            android:textColor="#fff" />
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="2px"
+            android:layout_gravity="center"
+            android:background="#fff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/orther_login"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        tools:ignore="RtlCompat">
+
+        <LinearLayout
+            android:id="@+id/qq_login"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="28dp"
+                android:padding="@dimen/dp_3"
+                android:scaleType="fitXY"
+                android:src="@drawable/login_qq"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="QQ登录"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phone_login"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="28dp"
+                android:padding="@dimen/dp_3"
+                android:scaleType="fitXY"
+                android:src="@drawable/login_phone"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="手机登录"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/account_login"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="28dp"
+                android:padding="@dimen/dp_3"
+                android:scaleType="fitXY"
+                android:src="@drawable/login_user"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="账号登录"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

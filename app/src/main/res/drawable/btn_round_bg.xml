@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 边框的颜色及形状 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorFF1c38" />
+            <corners
+                android:bottomRightRadius="@dimen/dp_10"
+                android:bottomLeftRadius="@dimen/dp_10"
+                android:topLeftRadius="10dp"
+                android:topRightRadius="10dp" />
+        </shape>
+    </item>
+    <!--  背景的颜色及形状  -->
+    <item
+            android:right="1dp"
+        android:bottom="1dp"
+        android:left="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners
+                android:bottomRightRadius="@dimen/dp_10"
+                android:bottomLeftRadius="@dimen/dp_10"
+                android:topLeftRadius="10dp"
+                android:topRightRadius="10dp" />
+        </shape>
+    </item>
+
+
+</layer-list>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/colorDb3"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/home_search"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/dp_15"
+        android:background="@drawable/search_shape"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/start_search"
+            android:layout_width="21dp"
+            android:layout_height="23dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/h_search" />
+
+        <TextView
+            android:id="@+id/search_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="东兴KKK"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_my_zb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:padding="@dimen/dp_3"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/dp_10"
+            android:drawableTop="@drawable/login_user"
+            android:text="我的直播"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/dp_5">
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorDb3"
+            app:tl_textsize="@dimen/sp_18"
+            tl:tl_indicator_color="#fff"
+            app:tl_textUnselectColor="#fff"
+            tl:tl_indicator_style="TRIANGLE"/>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

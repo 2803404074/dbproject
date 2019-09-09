@@ -1,0 +1,135 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:layout_gravity="bottom"
+    android:clipChildren="false"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/colorWhite"
+            android:id="@+id/rv_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingBottom="30dp"
+            android:layout_weight="1"/>
+
+        <FrameLayout
+            android:background="@color/colorWhite"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/lin_fragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+        </FrameLayout>
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_start_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未达到起送价哦，加油"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#fff"
+            android:visibility="gone"
+            android:padding="@dimen/dp_3"
+            android:background="@drawable/touming_shape_left"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#80000000"
+        android:alpha="20"
+        android:orientation="horizontal"
+        android:gravity="bottom" >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:id="@+id/cart"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/hxxq_car_h" />
+
+            <TextView
+                android:id="@+id/goods_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginBottom="51dp"
+                android:text="0"
+                android:textColor="@color/colorAccentButton"
+                android:background="@drawable/yuanxing"
+                android:paddingHorizontal="@dimen/dp_5"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="50dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:text="起送价："/>
+        <TextView
+            android:id="@+id/tv_start_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:text="100"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总计 : "
+            android:textColor="#fff"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textSize="21sp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00 "
+            android:textColor="@color/colorDb3"
+            android:textSize="21sp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/go_order"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="去结算"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="@color/colorDb3"
+            android:textSize="21sp"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+</LinearLayout>

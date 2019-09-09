@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/detalis_goods_eb_shape"
+    >
+
+    <com.shehuan.niv.NiceImageView
+        android:id="@+id/new_item_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_174"
+        android:scaleType="center"
+        android:src="@mipmap/tx_icon"
+        app:corner_top_right_radius="@dimen/dp_6"
+        app:corner_top_left_radius="@dimen/dp_6" />
+
+
+    <!--<ImageView-->
+        <!--android:id="@+id/new_item_img"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_gravity="center" />-->
+
+    <LinearLayout
+        android:id="@+id/ms_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/new_item_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/h_shape_qg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="立即购买"
+            android:visibility="gone"
+            android:textColor="#fff" />
+
+
+        <TextView
+            android:id="@+id/new_item_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_12"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6dp"
+            android:lines="2"
+            android:text=""
+            android:textColor="@color/color_2c2c2c"
+            android:textSize="@dimen/text_small" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/new_item_msg"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:lines="2"-->
+            <!--android:ellipsize="end"-->
+            <!--android:text="野生xxxxxxxxxxx" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"
+            >
+
+            <TextView
+                android:id="@+id/tv_rmb_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_normal"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:text="@string/app_money"
+                android:textColor="@color/color_2c2c2c" />
+
+            <TextView
+                android:id="@+id/new_item_salse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="@dimen/text_normal"
+                android:layout_toRightOf="@+id/tv_rmb_id"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/tv_salecount_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="月销量 0 "
+                android:textSize="@dimen/text_small"
+                android:layout_marginRight="@dimen/dp_10"
+                android:textColor="@color/color_7b7a7a"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

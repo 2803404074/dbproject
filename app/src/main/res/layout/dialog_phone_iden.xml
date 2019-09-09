@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="360dp"
+    android:layout_marginHorizontal="@dimen/dp_10"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/phone_gif"
+        android:layout_gravity="center"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGray5"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="您需要绑定手机号"/>
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:hint="您的手机号"
+        android:paddingHorizontal="@dimen/dp_10"
+        android:layout_marginVertical="@dimen/dp_20"
+        android:paddingVertical="@dimen/dp_3"
+        android:background="@drawable/h_shape"/>
+
+    <RelativeLayout
+        android:layout_marginVertical="@dimen/dp_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_10">
+        <EditText
+            android:id="@+id/et_code"
+            android:paddingVertical="@dimen/dp_3"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:hint="验证码"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/h_shape"/>
+
+        <TextView
+            android:id="@+id/tv_get_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_style_blue"
+            android:text="获取验证码"
+            android:textColor="#fff"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_phone_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123456"
+        android:visibility="invisible"
+        android:textSize="18sp"
+        android:drawablePadding="@dimen/dp_5"
+        android:drawableLeft="@mipmap/a_must_fill"
+        android:layout_marginHorizontal="@dimen/dp_10"/>
+
+    <TextView
+        android:id="@+id/tv_start_iden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="验证"
+        android:background="@drawable/button_style_blue"
+        android:textColor="@color/white"
+        android:layout_gravity="right"
+        android:layout_margin="@dimen/dp_10"
+        android:padding="@dimen/dp_10"/>
+
+</LinearLayout>

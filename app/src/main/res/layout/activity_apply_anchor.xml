@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".my.activity.ApplyAnchorActivity">
+
+    <LinearLayout
+        android:id="@+id/car_top"
+        android:layout_width="match_parent"
+        android:background="@color/colorDb3"
+        android:layout_height="28dp"
+        android:orientation="horizontal" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorDb3"
+        android:layout_height="40dp">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/back"
+            android:layout_centerVertical="true"
+            android:padding="3dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:paddingTop="7dp"
+            android:layout_centerHorizontal="true"
+            android:text="主播认证"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:background="#BFEFFF"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textColor="@color/colorHs2"
+        android:gravity="center"
+        android:text="根据相关规定，您需要通过实名认证才能开启直播">
+    </TextView>
+
+    <com.example.mylibrary.ViewPagerSlide
+        android:id="@+id/view_pager"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.example.mylibrary.ViewPagerSlide>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:layout_marginHorizontal="@dimen/dp_20"
+    android:orientation="vertical"
+    android:background="@drawable/touming_shape_with">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/jf_success"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+100"
+        android:textSize="35sp"
+        android:textColor="#fff"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:paddingHorizontal="@dimen/dp_20"
+        android:text="恭喜您获得100积分，积分可在商城抵现金。赶紧下单吧。"/>
+
+    <TextView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我知道啦"
+        android:textColor="#fff"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/dp_10"
+        android:background="@drawable/h_shape_red"
+        android:padding="@dimen/dp_5"/>
+</LinearLayout>

@@ -1,0 +1,39 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+	package
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:4:5-43
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:1-7:12
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml:2:11-69
+uses-sdk
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		ADDED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml
+		INJECTED from E:\android-project\projects\circleimageview_lib\src\main\AndroidManifest.xml

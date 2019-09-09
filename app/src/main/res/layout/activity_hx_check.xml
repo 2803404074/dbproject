@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.dabangvr.home.activity.HxActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorDb3"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="7dp"
+            android:src="@drawable/back"/>
+        <LinearLayout
+            android:padding="@dimen/dp_5"
+            android:background="@drawable/button_style_blue"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/check_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:text="我选中的商品"/>
+            <TextView
+                android:id="@+id/check_goods_num"
+                android:textColor="#fff"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_height="wrap_content"
+                android:text="0"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/m_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:tabIndicatorColor="@color/colorDb"
+        app:tabMode="fixed"
+        android:background="#fff "
+        android:tooltipText="12sp"
+        app:tabSelectedTextColor="@color/colorDb"
+        app:tabTextColor="@color/divider"
+        app:tabTextAppearance="@style/TabStyle"
+        />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/m_viewpager"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:background="@android:color/white">
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

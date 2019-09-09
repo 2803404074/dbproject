@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:background="#F7F7F7"
+    android:orientation="vertical">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ms_recycler_view"
+        android:padding="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="450dp">
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dp_10"
+        android:paddingHorizontal="@dimen/dp_10">
+        <TextView
+            android:id="@+id/keep_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:textColor="#fff"
+            android:background="@drawable/h_shape_colors"
+            android:text="继续选"/>
+        <TextView
+            android:id="@+id/check_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/dp_5"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/h_shape_colors"
+            android:text="选择其它分类"/>
+    </RelativeLayout>
+
+</LinearLayout>

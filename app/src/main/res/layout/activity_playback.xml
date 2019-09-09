@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_above="@+id/et_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:text="视频标题"
+        android:textColor="#fff"
+        android:textSize="21sp"/>
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:background="@drawable/h_shape_no_solid"
+        android:layout_above="@+id/upload_btn"
+        android:layout_width="match_parent"
+        android:hint="说些什么？"
+        android:layout_marginVertical="@dimen/dp_10"
+        android:layout_height="wrap_content" />
+    <SurfaceView
+        android:id="@+id/video"
+        android:layout_above="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"  />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_above="@+id/upload_btn"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:maxHeight="5dp"
+        android:minHeight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginHorizontal="@dimen/dp_20" />
+
+    <Button
+        android:id="@+id/upload_btn"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/h_shape_blue_noradio"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

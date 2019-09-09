@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".common.activity.PositionActivityTen">
+
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <TextView
+        android:onClick="startSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_style_blue"
+        android:textColor="#fff"
+        android:layout_margin="@dimen/dp_20"
+        android:padding="@dimen/dp_10"
+        tools:ignore="OnClick" />
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:padding="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/touming_shape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:text="我的位置:"/>
+        <TextView
+            android:id="@+id/text_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="定位中......"
+            android:layout_gravity="center"
+            android:textColor="@color/colorDb3"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/top_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        android:padding="@dimen/dp_5"
+        android:background="@drawable/touming_shape"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:text="搜索:"/>
+        <EditText
+            android:background="@null"
+            android:id="@+id/position_search"
+            android:layout_width="match_parent"
+            android:textColor="#fff"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy"
+        android:padding="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_below="@+id/top_search"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

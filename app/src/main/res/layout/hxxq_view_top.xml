@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="goods"
+            type="com.dabangvr.model.goods.GoodsDetails" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:clipChildren="false"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:weightSum="200">
+
+            <com.dabangvr.common.weight.ViewPagerTransform
+                android:id="@+id/viewpager"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="120"
+                android:clipChildren="false" />
+        </LinearLayout>
+
+
+        <!--android:background="@drawable/touming_shape_with"-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:id="@+id/hx_money_s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:text="@{goods.name}"
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="@dimen/text_large" />
+
+
+                <TextView
+                    android:id="@+id/hx_money_y"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/view_line_id"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@+id/hx_money_s"
+                    android:text="----"
+                    android:textColor="@color/color_9f9f9f"
+                    android:textSize="@dimen/text_small" />
+
+                <View
+                    android:id="@+id/view_line_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/hx_money_s" />
+
+                <TextView
+                    android:id="@+id/tv_qua_pric_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_14"
+                    android:layout_below="@+id/view_line_id"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:layout_toRightOf="@+id/hx_money_s"
+                    android:background="@color/color_d5fbfc"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp_4"
+                    android:paddingRight="@dimen/dp_4"
+                    android:text="快抢价"
+                    android:textColor="@color/color_067273"
+                    android:textSize="9sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_sy_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view_line_id"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_qua_pric_id"
+                    android:text="剩余"
+                    android:textColor="@color/color_5d5d5d"
+                    android:textSize="@dimen/text_small" />
+
+                <TextView
+                    android:id="@+id/kucun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view_line_id"
+                    android:layout_toRightOf="@+id/tv_sy_id"
+                    android:text="5"
+                    android:textColor="@color/color_5d5d5d"
+                    android:textSize="@dimen/text_small" />
+
+
+                <LinearLayout
+                    android:id="@+id/is_ms_or_pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="距结束"
+                        android:textColor="@color/colorAccentButton"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/hx_countdown_timer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10sp"
+                        android:text="倒计时"
+                        android:textColor="@color/colorAccentNo"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/hx_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_8"
+                android:ellipsize="end"
+                android:lineSpacingExtra="@dimen/dp_4"
+                android:lines="2"
+                android:text="商品信息商品信息商品信息商品信息商品信息商品信息商品信息"
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="@dimen/text_normal" />
+
+            <RelativeLayout
+                android:id="@+id/center_yf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginBottom="@dimen/dp_12">
+
+                <TextView
+                    android:id="@+id/yf_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_8"
+                    android:text="免邮费"
+                    android:textColor="@color/color_939393"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/dep_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:text="广西南宁"
+                    android:textColor="@color/color_939393"
+                    android:textSize="9sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/color_ebebeb" />
+
+        <TextView
+            android:id="@+id/hx_dz_hhc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:text="---"
+            android:textColor="@color/color_939393"
+            android:textSize="@dimen/text_normal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/color_ebebeb" />
+
+    </LinearLayout>
+</layout>

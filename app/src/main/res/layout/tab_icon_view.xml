@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:paddingTop="@dimen/dp_5"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="12:00"
+        android:textStyle="bold"
+        android:textColor="@color/color_white"
+        android:id="@+id/tab_time"
+        android:textSize="@dimen/text_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:paddingBottom="@dimen/dp_5"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="抢购中"
+        android:id="@+id/tab_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

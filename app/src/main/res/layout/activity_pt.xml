@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/car_top"
+        android:layout_width="match_parent"
+        android:background="@color/colorDb3"
+        android:layout_height="28dp"
+        android:orientation="horizontal" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorDb3"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:src="@drawable/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拼团"
+            android:textColor="#fff"
+            android:textSize="21sp"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/mess"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/xp_top_right"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/pt_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RadioGroup
+        android:id="@+id/pt_radiogrop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/pt_now"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/pt_assembling"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:text="正在拼单" />
+
+        <RadioButton
+            android:layout_gravity="center"
+            android:id="@+id/pt_host"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/pt_host"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:text="热卖排行" />
+        <RadioButton
+            android:layout_gravity="center"
+            android:id="@+id/pt_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/pt_my_pt"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:text="我的拼单" />
+    </RadioGroup>
+</LinearLayout>

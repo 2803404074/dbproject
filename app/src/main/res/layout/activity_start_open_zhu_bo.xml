@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".my.activity.StartOpenZhuBoActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/car_top"
+            android:layout_width="match_parent"
+            android:background="@color/zhiBo"
+            android:layout_height="28dp"
+            android:orientation="horizontal" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/zhiBo">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="5dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="主播认证"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <ImageView
+             android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/zbrz_test1" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/zbrz_test2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/zhiBo"
+                android:padding="5dp"
+                android:text="我们的主播"
+                android:layout_margin="10dp"
+                android:textColor="#fff" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/zb_shape_xuxian" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/h_love"
+            android:drawablePadding="10dp"
+            android:layout_margin="10dp"
+            android:text="申请成为主播后可随时随地直播。" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/h_love"
+            android:drawablePadding="10dp"
+            android:layout_margin="10dp"
+            android:text="主播可选商品直播，凡是在本直播间卖出商品都会得到特定的提成。" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/h_love"
+            android:drawablePadding="10dp"
+            android:layout_margin="10dp"
+            android:text="主播可选娱乐直播，展示独特技能吸引观众，提高商品直播的销量，进而带来可观的收入哦。" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/h_love"
+            android:drawablePadding="10dp"
+            android:layout_margin="10dp"
+            android:text="直播平台是一个公共场合，任何一个主播成员都务必遵守网络安全、网络文化信息内容的规范。" />
+
+
+
+            <TextView
+                android:id="@+id/start_zb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_style_blue"
+                android:padding="5dp"
+                android:text="开始认证"
+                android:textColor="#fff" />
+
+
+
+    </LinearLayout>
+</ScrollView>

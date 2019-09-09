@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@mipmap/a_picture"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:drawableRight="@drawable/zf_yes"
+        android:drawablePadding="5dp"
+        android:text="提交成功"
+        android:textColor="@color/zhiBo"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="20dp"
+        android:text="         尊敬的商户您好，您已成功申请入驻，请保持电话通常，以便配合入驻进度。申请结果可在“个人中心”的“消息”功能查看，请留意。" />
+
+    <TextView
+        android:id="@+id/tv_02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:text="         尊敬的会员您好，您已成功申请主播，请保持电话通常，以便配合申请进度。申请结果可在“个人中心”的“消息”功能查看，请留意。" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_pri"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/p_button_style"
+            android:text="返回"
+            android:textColor="#fff" />
+    </LinearLayout>
+</LinearLayout>
