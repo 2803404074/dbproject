@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@drawable/arc_bgo_white"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,18 +12,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.dabangvr.widget.CircleImageView
+            android:layout_marginTop="@dimen/dp_7"
             android:id="@+id/hx_dilog_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
+            android:layout_marginLeft="@dimen/dp_10"
             android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:padding="@dimen/dp_5">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -33,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥"
-                    android:textSize="21sp"
+                    android:textSize="@dimen/sp_21"
                     android:textStyle="bold" />
 
                 <TextView
@@ -41,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0"
-                    android:textSize="21sp"
+                    android:textSize="@dimen/sp_21"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -83,26 +85,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="@dimen/dp_10">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="数量"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
 
         <LinearLayout
             android:id="@+id/rl_edit"
-            android:layout_width="120dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_30"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/dp_10"
             android:background="@drawable/h_shape">
 
             <TextView
                 android:id="@+id/di_iv_sub"
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
@@ -112,7 +114,7 @@
 
             <TextView
                 android:id="@+id/di_iv_num"
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
@@ -121,7 +123,7 @@
 
             <TextView
                 android:id="@+id/di_iv_add"
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
@@ -136,10 +138,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/dp_10"
         android:background="@color/colorAccentNo"
         android:gravity="center"
-        android:padding="7dp"
+        android:padding="@dimen/dp_7"
         android:text="确 认"
         android:textColor="#fff" />
 

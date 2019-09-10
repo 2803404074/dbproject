@@ -11,32 +11,32 @@
         android:id="@+id/car_top"
         android:layout_width="match_parent"
         android:background="@color/colorDb3"
-        android:layout_height="28dp"
+        android:layout_height="@dimen/dp_28"
         android:orientation="horizontal" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/colorDb3"
-        android:layout_height="40dp">
+        android:layout_height="@dimen/dp_40">
         <ImageView
             android:id="@+id/back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:src="@drawable/back"
             android:layout_centerVertical="true"
             android:padding="3dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             android:textColor="#fff"
-            android:paddingTop="7dp"
+            android:paddingTop="@dimen/dp_7"
             android:layout_centerHorizontal="true"
             android:text="店铺入驻入口"/>
     </RelativeLayout>
 
     <com.example.mylibrary.ViewPagerSlide
         android:id="@+id/view_pager"
-        android:padding="5dp"
+        android:padding="@dimen/dp_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.example.mylibrary.ViewPagerSlide>

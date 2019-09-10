@@ -9,7 +9,7 @@
         android:id="@+id/car_top"
         android:layout_width="match_parent"
         android:background="@color/colorDb3"
-        android:layout_height="28dp"
+        android:layout_height="@dimen/dp_28"
         android:orientation="horizontal" />
     <LinearLayout
         android:layout_below="@+id/car_top"
@@ -20,22 +20,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/dp_40"
             android:background="@color/colorDb3"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/tv_titlebar_left"
-                android:layout_width="30dp"
+                android:layout_width="@dimen/dp_30"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:paddingLeft="13dp"
-                android:paddingRight="13dp"
+                android:padding="@dimen/dp_8"
+                android:paddingLeft="@dimen/dp_13"
+                android:paddingRight="@dimen/dp_13"
                 android:src="@drawable/back" />
 
             <TextView
                 android:id="@+id/tv_titlebar_center"
-                android:layout_width="200dp"
+                android:layout_width="@dimen/dp_200"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:ellipsize="end"
@@ -44,7 +44,7 @@
                 android:singleLine="true"
                 android:text="购物车"
                 android:textColor="#fff"
-                android:textSize="21dp"
+                android:textSize="@dimen/dp_21"
                 android:visibility="visible" />
 
             <TextView
@@ -54,12 +54,12 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:gravity="center"
-                android:paddingLeft="13dp"
-                android:paddingRight="13dp"
+                android:paddingLeft="@dimen/dp_13"
+                android:paddingRight="@dimen/dp_13"
                 android:singleLine="true"
                 android:text="编辑"
                 android:textColor="#4c4c4c"
-                android:textSize="15dp"
+                android:textSize="@dimen/dp_15"
                 android:visibility="gone" />
 
             <View
@@ -83,7 +83,7 @@
         <RelativeLayout
             android:id="@+id/rl"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp_45"
             android:background="#ffffff"
             android:visibility="gone">
 
@@ -92,46 +92,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingRight="10dp">
+                android:paddingRight="@dimen/dp_10">
 
                 <ImageView
                     android:id="@+id/iv_select_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:background="@mipmap/unselect" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="@dimen/dp_6"
                     android:text="全选"
                     android:textColor="#333333"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/dp_14" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btn_order"
-                android:layout_width="125dp"
+                android:layout_width="@dimen/dp_125"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="#ee1d23"
                 android:text="去结算"
                 android:textColor="#ffffff"
-                android:textSize="16dp"
+                android:textSize="@dimen/dp_16"
                 android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_delete"
-                android:layout_width="125dp"
+                android:layout_width="@dimen/dp_125"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="#ee1d23"
                 android:text="删除"
                 android:textColor="#ffffff"
-                android:textSize="16dp"
+                android:textSize="@dimen/dp_16"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -147,23 +147,23 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:layout_marginRight="@dimen/dp_10"
                     android:maxLength="12"
                     android:singleLine="true"
                     android:text="￥0.00"
                     android:textColor="#333333"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/sp_15" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="@dimen/dp_20"
                     android:layout_toLeftOf="@id/tv_total_price"
                     android:text="合计："
                     android:textColor="#333333"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/sp_15" />
             </RelativeLayout>
 
             <View
@@ -182,20 +182,20 @@
 
         <ImageView
             android:id="@+id/iv_no_contant"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/home_tab_no_data" />
 
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="@dimen/dp_200"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_no_contant"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:gravity="center"
             android:text="购物车竟然是空的！"
             android:textColor="#808080"
-            android:textSize="16dp" />
+            android:textSize="@dimen/dp_16" />
     </RelativeLayout>
 </RelativeLayout>

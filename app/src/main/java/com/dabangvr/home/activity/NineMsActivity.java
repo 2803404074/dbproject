@@ -30,6 +30,8 @@ public class NineMsActivity extends BaseActivity implements View.OnClickListener
     private ViewPager vp_pager;
     private TabLayoutFragmentPagerAdapter adapter;
     private NineMsPagerFragment nineMsPagerFragment;
+    private String[] tabString = {"9.9", "19.9", "39.9"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,7 @@ public class NineMsActivity extends BaseActivity implements View.OnClickListener
         List<Fragment> mFragments = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             nineMsPagerFragment = new NineMsPagerFragment(0);
-            nineMsPagerFragment.setTabPos(i, "00");//设置第几页，以及每页的id
+            nineMsPagerFragment.setTabPos(i, tabString[i]);//设置第几页，以及每页的id
             mFragments.add(nineMsPagerFragment);
 
         }
@@ -88,6 +90,7 @@ public class NineMsActivity extends BaseActivity implements View.OnClickListener
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
+
             @Override
             public void onPageSelected(int position) {
                 //滑动监听加载数据，一次只加载一个标签页                刷新标志     排序

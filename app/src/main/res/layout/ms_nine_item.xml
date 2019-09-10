@@ -94,18 +94,19 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/ms_li_go"
-                android:layout_width="@dimen/dp_50"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/btn_round_red_bg"
                 android:gravity="center"
+                android:id="@+id/ms_li_go"
+                android:layout_width="@dimen/dp_65"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/btn_round_red"
                 android:text="抢"
+                android:textSize="@dimen/sp_10"
                 android:textColor="@color/white" />
         </LinearLayout>
 

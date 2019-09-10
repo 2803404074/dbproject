@@ -419,11 +419,13 @@ public class HomeFragment extends BaseFragment {
     private void getMenu() {
         Map<String, String> map = new HashMap<>();
         map.put("mallSpeciesId", "1");
+        map.put("parentId", "1");
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getChannelMenuList, map,
                 new GsonObjectCallback<String>(DyUrl.BASE) {
                     //主线程处理
                     @Override
                     public void onUi(String msg) {
+
                         try {
                             JSONObject object = new JSONObject(msg);
                             int code = object.optInt("errno");
