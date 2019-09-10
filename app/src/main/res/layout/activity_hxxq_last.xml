@@ -68,13 +68,14 @@
 
         <ImageView
             android:id="@+id/backe"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
             android:padding="@dimen/dp_5"
+            android:background="@drawable/touming_ruang"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_gravity="center"
-            android:src="@drawable/back_black"/>
+            android:src="@drawable/back"/>
     </RelativeLayout>
 
 

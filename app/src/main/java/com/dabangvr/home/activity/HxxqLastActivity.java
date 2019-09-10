@@ -78,7 +78,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     public static HxxqLastActivity instants;
     private BottomSheetDialog bottomInterPasswordDialog;
 
-    private GoodsView goodsView;
     //规格控件
     private ShoppingSelectHome selectView;
     private TextView number;//底部弹窗的数量控件
@@ -144,6 +143,9 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setRootViewFitsSystemWindows(this, false);
+
+        //设置状态栏透明myfragment用到
+        //StatusBarUtil.setTranslucentStatus(this);
     }
 
     @Override
@@ -558,30 +560,17 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         //商品基本信息视图
         TopMessView topMessView = new TopMessView(this,this);
         topMessView.setMess(type, mData);
-        topMessView.setJf(jfNum);
-        //topMessView.setCall(this);
 
         //评论视图
         CommentView commentView = new CommentView(this);
-        commentView.setGoodsId(mData.getId());
-        commentView.setSaleNum(mData.getSalesVolume());
-        if (null != commentMoList && commentMoList.size()>0){
-            commentView.setViewShow(true);
-            commentView.setView(commentMoList.get(0));
-            commentView.setCommentNum(commentMoList.get(0).getCommentSize());
-        }else {
-            commentView.setViewShow(false);
-        }
+        commentView.setBaseMess(mData.getGoodsId(),mData.getDeptLogo(),mData.getDeptName(),commentMoList);
+
         //商品详细信息视图
         DeatilsView deatilsView = new DeatilsView(this);
-        deatilsView.setDepId(mData.getDeptId());
-        deatilsView.setIvDepHead(mData.getDeptLogo());
-        deatilsView.setTvDepName(mData.getDeptName());
-        //deatilsView.setTvDepSale(mData.getDepSalseNum());
         deatilsView.setWebView(mData.getGoodsDesc());
 
         //推荐视图
-        goodsView = new GoodsView(this);
+        GoodsView goodsView = new GoodsView(this);
 
         anchorList.add(topMessView);
         anchorList.add(commentView);

@@ -62,7 +62,7 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             public void convert(Context mContext, BaseRecyclerHolder holder, CommentBean bean) {
                 holder.setImageByUrl(R.id.hx_lv_icon,bean.getHeadUrl());
-                holder.setText(R.id.hx_lv_name,bean.getNickName());
+                holder.setText(R.id.tv_name,bean.getNickName());
                 holder.setText(R.id.hx_lv_content,bean.getCommentContent());
             }
 
