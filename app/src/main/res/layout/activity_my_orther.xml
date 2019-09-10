@@ -6,47 +6,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".my.activity.MyOrtherActivity">
-    <LinearLayout
-        android:id="@+id/car_top"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/colorGray1"
-        android:layout_height="28dp"
-        android:orientation="horizontal" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/colorGray1"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="@color/colorGray1">
         <ImageView
             android:id="@+id/backe"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:padding="@dimen/dp_5"
             android:layout_gravity="center"
             android:src="@drawable/back_black"/>
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="我的订单"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:textColor="@color/colorGray5"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             android:layout_gravity="center"
             android:gravity="center"/>
-    </LinearLayout>
+    </RelativeLayout>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
-        android:paddingHorizontal="@dimen/dp_5"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/colorDb3"
+        android:layout_height="@dimen/dp_30"
+        app:tabIndicatorColor="#33e8e8"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        android:layout_gravity="center"
         android:background="@color/colorGray1"
-        app:tabSelectedTextColor="@color/colorDb3"
-        app:tabTextColor="@color/colorGray4"
-        app:tabTextAppearance="@style/TabStyle"
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="#09fdfd"
+        app:tabTextAppearance="@style/MyTabLayoutTextStyle"
         />
     <android.support.v4.view.ViewPager
         android:id="@+id/tab_viewpager"

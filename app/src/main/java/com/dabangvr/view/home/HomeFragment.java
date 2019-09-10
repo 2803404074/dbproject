@@ -394,8 +394,8 @@ public class HomeFragment extends BaseFragment {
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(HomeFragment.this.getContext(), HxClassToActivity.class);
-                    intent.putExtra("id", typeData.get(position).getId());
-                    intent.putExtra("title", typeData.get(position).getName());
+                    intent.putExtra("typeId", typeData.get(position).getId());
+                    intent.putExtra("typeName", typeData.get(position).getName());
                     startActivity(intent);
                 }
 
@@ -488,7 +488,6 @@ public class HomeFragment extends BaseFragment {
                                     list.add(list1.get(i));
                                 }
                                 for (int j = 0; j < list.size(); j++) {
-
                                     typeData.add(list.get(j));
                                 }
                                 if (typeData1 != null && typeData1.size() > 0) {

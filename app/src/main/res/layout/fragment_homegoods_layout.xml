@@ -31,11 +31,13 @@
             android:id="@+id/recycler_goods_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingHorizontal="@dimen/dp_5"
             android:background="@color/white" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_goods_id"
+            android:paddingHorizontal="@dimen/dp_5"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

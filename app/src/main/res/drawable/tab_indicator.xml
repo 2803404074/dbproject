@@ -6,7 +6,7 @@
         <shape>
 
             <size
-                android:width="25dp"
+                android:width="@dimen/dp_20"
                 android:height="4dp" />
             <corners android:radius="4dp"/>
             <solid android:color="@color/white" />

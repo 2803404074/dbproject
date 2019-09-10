@@ -42,7 +42,7 @@
                     android:layout_toRightOf="@+id/iv_id"
                     android:text="消息"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"
@@ -91,7 +91,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="收藏"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"
@@ -138,7 +138,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="商家认证"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"
@@ -180,7 +180,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="鲜币中心"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"
@@ -227,7 +227,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="主播认证"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"
@@ -276,7 +276,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="设置"
                     android:textColor="@color/color_5d5d5d"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_10" />
 
                 <ImageView
                     android:layout_width="12dp"

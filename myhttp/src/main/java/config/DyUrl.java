@@ -6,12 +6,12 @@ public class DyUrl {
     //根地址http://www.vrzbgw.com/dabang
 
     //public static String BASE = "";
-    public static String BASE = "http://www.vrzbgw.com/dabang";//远程
+    //public static String BASE = "http://www.vrzbgw.com/dabang";//远程
 //    public static String BASE = "http://admin.vrzbgw.com:8080";//远程
 //    public static String BASE = "http://192.168.200.111:8080";//
 //    public static String BASE = "http://192.168.200.103:8080";//
     //public static String BASE = "http://192.168.1.103:8080";//强
-     //public static String BASE = "http://192.168.0.168:8080";//邓
+     public static String BASE = "http://192.168.0.168:8080";//邓
     //public static String BASE = "http://192.168.1.110:8080";//桃
 
     //public static String BASE = "http://www.vrzbgw.com/dabang";

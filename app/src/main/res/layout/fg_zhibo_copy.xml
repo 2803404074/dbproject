@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp_40"
         android:background="@color/colorDb3"
         android:orientation="horizontal">
 
@@ -35,12 +35,11 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:drawableTop="@mipmap/home_type"
                 android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingRight="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_10"
                 android:text="分类"
+                android:paddingTop="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_3"
                 android:textColor="#fff"
-                android:textSize="@dimen/text_min"
+                android:textSize="@dimen/sp_10"
                 android:textStyle="bold" />
 
 
@@ -48,6 +47,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_3"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:tabIndicator="@drawable/tab_indicator"
@@ -67,6 +67,7 @@
             android:layout_width="1dp"
             android:layout_height="50dp"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:background="@color/colorDb3"
             android:orientation="horizontal">
 
@@ -74,11 +75,10 @@
             <LinearLayout
                 android:id="@+id/home_search"
                 android:layout_width="1dp"
-                android:layout_height="24dp"
+                android:layout_height="@dimen/dp_18"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginBottom="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/home_search_shape"
                 android:gravity="center"
@@ -113,11 +113,11 @@
                 android:drawableTop="@mipmap/message"
                 android:paddingLeft="@dimen/dp_15"
                 android:paddingTop="5dp"
+                android:layout_gravity="center"
                 android:paddingRight="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_10"
                 android:text="消息"
                 android:textColor="#fff"
-                android:textSize="@dimen/text_min"
+                android:textSize="@dimen/dp_8"
                 android:textStyle="bold" />
         </LinearLayout>
 

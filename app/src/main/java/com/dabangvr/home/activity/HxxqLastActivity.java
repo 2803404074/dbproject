@@ -394,7 +394,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         if (null != bottomDialogImg) {
             imageView.setImageBitmap(bottomDialogImg);
         } else {
-            Glide.with(HxxqLastActivity.this).load(mData.getListUrl()).into(imageView);
+            Glide.with(getApplicationContext()).load(mData.getListUrl()).into(imageView);
         }
         //库存
         bottomTvStok = view.findViewById(R.id.stock);
