@@ -193,12 +193,10 @@ public class TopMessView extends LinearLayout {
             public void onProcess(int day, int hour, int minute, int second) {
                 tvTime.setText(day + "天 " + hour + "时 " + minute + "分 " + second + "秒");
             }
-
             @Override
             public void onFinish() {
                 timeCall.isEnd(true);
                 tvTime.setText("活动已结束");
-
             }
         });
     }
