@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:paddingVertical="@dimen/dp_5"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,8 +16,8 @@
         <ImageView
             android:id="@+id/hx_img"
             android:scaleType="fitXY"
-            android:layout_width="160dp"
-            android:layout_height="130dp" />
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,15 +26,25 @@
             android:paddingLeft="@dimen/dp_5">
 
             <TextView
-                android:id="@+id/hx_title"
+                android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="2"
                 android:ellipsize="end"
                 android:text="标题"
-                android:textSize="15sp" />
+                android:textColor="@color/colorGray6"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:textSize="@dimen/sp_8"
+                android:ellipsize="end"
+                android:text="标题"
+                android:layout_marginVertical="@dimen/dp_5" />
             <LinearLayout
-                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -57,18 +68,15 @@
                     android:text="满100减10"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/hx_market"
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="@dimen/dp_1"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginVertical="@dimen/dp_3"
-                android:text="市场价" />
+                android:layout_weight="1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="@dimen/dp_5"
                 android:orientation="horizontal">
 
                 <TextView
@@ -84,31 +92,27 @@
                     android:text="000"
                     android:textSize="21sp"
                     android:textColor="@color/colorAccentButton" />
+
+                <TextView
+                    android:id="@+id/hx_market"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginVertical="@dimen/dp_3"
+                    android:text="市场价" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/sales_num"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已售1.1万件"/>
             </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:paddingRight="@dimen/dp_5">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="销量:"
-                android:textColor="@color/colorGray4" />
-
-            <TextView
-                android:id="@+id/sales_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/colorGray4" />
-        </LinearLayout>
-
     </LinearLayout>
 
 
@@ -117,8 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dip"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginBottom="@dimen/dp_5"
-        android:background="@color/colorDb3" />
+        android:background="@color/colorGray2" />
 
 
 </RelativeLayout>

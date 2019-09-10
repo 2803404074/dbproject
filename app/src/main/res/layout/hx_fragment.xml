@@ -3,19 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/hx_recyclerView"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/dp_10"
-            android:paddingBottom="@dimen/dp_10"
-            android:paddingVertical="@dimen/dp_10"
-            android:divider="@null">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/hx_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_10"
+                android:divider="@null">
+            </android.support.v7.widget.RecyclerView>
+
+            <ImageView
+                android:id="@+id/iv_tips"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_200"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/null_data"/>
+        </RelativeLayout>
+
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

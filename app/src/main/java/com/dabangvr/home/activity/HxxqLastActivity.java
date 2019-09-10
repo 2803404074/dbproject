@@ -21,9 +21,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.dep.activity.DepMessActivity;
@@ -37,7 +36,6 @@ import com.dabangvr.model.GoodsComment;
 import com.dabangvr.model.goods.GoodsDetails;
 import com.dabangvr.util.BottomImgSize;
 import com.dabangvr.util.DensityUtil;
-import com.dabangvr.util.GlideRoundedCornersTransform;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
 import com.dabangvr.util.StatusBarUtil;
@@ -60,13 +58,14 @@ import java.util.Map;
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import Utils.PdUtil;
+import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
 
 /**
  * 海鲜-商品详情页
  */
-public class HxxqLastActivity extends BaseActivity implements View.OnClickListener, TopMessView.TimeCall {
+public class HxxqLastActivity extends BaseNewActivity implements View.OnClickListener, TopMessView.TimeCall {
 
     private int type;//页面类型，0普通，1拼团，2秒杀
 
@@ -75,7 +74,6 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     private GoodsDetails mData;//商品信息
     private List<GoodsComment> commentMoList;
 
-    private PdUtil pdUtil;
     public static Bitmap bottomDialogImg;
     public static HxxqLastActivity instants;
     private BottomSheetDialog bottomInterPasswordDialog;
@@ -84,18 +82,17 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     //规格控件
     private ShoppingSelectHome selectView;
     private TextView number;//底部弹窗的数量控件
+    private TextView bottomTvStok;//底部弹窗 的库存
+    private TextView countPrice;//底部弹窗 的价钱
 
-
-    private TextView countPrice;
 
     //立即购买按钮
-    private TextView tvBuy;
+    @BindView(R.id.hx_shop)
+    TextView tvBuy;
 
     //拼团/秒杀购买按钮
-    private TextView tvBuyGroup;
-
-    //底部弹窗 的库存
-    private TextView bottomTvStok;
+    @BindView(R.id.hx_shop_pt)
+    TextView tvBuyGroup;
 
     //统一商品库存
     public static String unifiedStok;
@@ -111,9 +108,14 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     private int page;
 
     //底部按钮
-    private CheckBox CbCollection;
-    private CheckBox sc;
-    private RadioButton jg;
+    @BindView(R.id.cb_collection_id)
+    CheckBox CbCollection;
+
+    @BindView(R.id.hx_sc)
+    CheckBox sc;
+
+    @BindView(R.id.hx_jg)
+    RadioButton jg;
 
     /**
      * 占位tablayout，用于滑动过程中去确定实际的tablayout的位置
@@ -134,10 +136,9 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     private boolean isScroll;
     //记录上一次位置，防止在同一内容块里滑动 重复定位到tablayout
     private int lastPos = 0;
+
     //监听判断最后一个模块的高度，不满一屏时让最后一个模块撑满屏幕
     private ViewTreeObserver.OnGlobalLayoutListener listener;
-    private View sj;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,10 +153,8 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
 
     @Override
-    protected void initView() {
-        type = getIntent().getIntExtra("type", 0);
-        pdUtil = new PdUtil(this);
-        pdUtil.showLoding("正在加载");
+    public void initView() {
+        type = getIntent().getIntExtra("type",0);
         realTabLayout = findViewById(R.id.tablayout_real);
         scrollView = findViewById(R.id.scrollView);
         container = findViewById(R.id.container);
@@ -165,13 +164,11 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.backe).setOnClickListener(this);
 
         //底部按钮
-        CbCollection = (CheckBox) findViewById(R.id.cb_collection_id);
         sc = findViewById(R.id.hx_sc);
         CbCollection.setOnClickListener(this);
         sc.setOnClickListener(this);
-        jg = findViewById(R.id.hx_jg);
         jg.setOnClickListener(this);
-        if (type != 0) {
+        if (type != 0){
             jg.setVisibility(View.GONE);
         }
 
@@ -181,7 +178,6 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 //        bis.setImgSize(69, 69, 1, jg, R.drawable.hx_jg);
 
         //立即购买
-        tvBuy = findViewById(R.id.hx_shop);
         tvBuy.setOnClickListener(this);
 
         //拼团购买
@@ -190,14 +186,14 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
 
         goodsRecy = findViewById(R.id.orther_recy);
-        GridLayoutManager manager = new GridLayoutManager(this, 2);
-        goodsRecy.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(this, 7), ContextCompat.getColor(this, R.color.white)));
+        GridLayoutManager manager = new GridLayoutManager(this,2);
+        goodsRecy.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(this,7), ContextCompat.getColor(this,R.color.white)));
         goodsRecy.setLayoutManager(manager);
         goodsRecy.setNestedScrollingEnabled(false);
         goodsAdapter = new BaseLoadMoreHeaderAdapter<Goods>(this, goodsRecy, goodsData, R.layout.new_release_item) {
             @Override
             public void convert(Context mContext, BaseRecyclerHolder holder, Goods o) {
-                holder.setImageByUrl(R.id.new_item_img, o.getListUrl(), GlideRoundedCornersTransform.CornerType.TOP,6f);
+                holder.setImageByUrl(R.id.new_item_img, o.getListUrl());
                 holder.setText(R.id.new_item_msg, o.getName());
                 holder.setText(R.id.new_item_salse, o.getSellingPrice());
             }
@@ -249,9 +245,9 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                 break;
             }
             case R.id.hx_sc: {//收藏
-                String token = getSPKEY(this, "token");
-                if (StringUtils.isEmpty(token)) {
-                    ToastUtil.showShort(this, "登录后才能收藏哦");
+                String token = getSPKEY(this,"token");
+                if (StringUtils.isEmpty(token)){
+                    ToastUtil.showShort(this,"登录后才能收藏哦");
                     sc.setChecked(false);
                     return;
                 }
@@ -266,7 +262,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
             }
             case R.id.cb_collection_id:
                 Intent intent = new Intent(this, DepMessActivity.class);
-                intent.putExtra("depId", mData.getDeptId());
+                intent.putExtra("depId",mData.getDeptId());
                 this.startActivity(intent);
                 break;
             case R.id.di_iv_sub: {//减
@@ -306,9 +302,8 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(url, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
-                pdUtil.desLoding();
                 try {
-
+                    setLoaddingView(false);
                     JSONObject object = new JSONObject(result);
                     if (500 == object.optInt("code")) {
                         ToastUtil.showShort(HxxqLastActivity.this, "服务异常");
@@ -316,8 +311,8 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                     }
                     int err = object.optInt("errno");
                     if (err == 0) {
-                        if (500 == object.optInt("code")) {
-                            ToastUtil.showShort(HxxqLastActivity.this, "获取失败");
+                        if (500 == object.optInt("code")){
+                            ToastUtil.showShort(HxxqLastActivity.this,"获取失败");
                             return;
                         }
 
@@ -364,7 +359,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                         ToastUtil.showShort(HxxqLastActivity.this, object.optString("errmsg"));
                     }
 
-                    if (null != bottomInterPasswordDialog) {
+                    if (null != bottomInterPasswordDialog){
                         bottomInterPasswordDialog.dismiss();
                     }
                 } catch (JSONException e) {
@@ -374,7 +369,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailed(Call call, IOException e) {
-
+                setLoaddingView(false);
             }
         });
     }
@@ -387,7 +382,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     private void showBottomDialog(final int index) {
 
         //初始化底部弹窗
-        if (null == bottomInterPasswordDialog) {
+        if (null ==bottomInterPasswordDialog){
             bottomInterPasswordDialog = new BottomSheetDialog(this);
 
         }
@@ -435,22 +430,22 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                 }
                 //0立即购买，1加购，2单独购买，3拼团购买，4秒杀购买
                 if (index == 0) {
-                    pdUtil.showLoding("获取订单");
+                    setLoaddingView(true);
                     unifiedRequest(map, DyUrl.confirmGoods, index);
                 } else if (index == 1) {
                     unifiedRequest(map, DyUrl.addToCart, index);
                 } else if (index == 2) {
                     //301直接购买，302发起拼团，303参加拼团
                     map.put("initiateType", "301");
-                    pdUtil.showLoding("获取订单");
+                    setLoaddingView(true);
                     unifiedRequest(map, DyUrl.confirmGoods2groupbuy, index);
                 } else if (index == 3) {
                     //301直接购买，302发起拼团，303参加拼团
-                    pdUtil.showLoding("获取拼团订单");
+                    setLoaddingView(true);
                     map.put("initiateType", "302");
                     unifiedRequest(map, DyUrl.confirmGoods2groupbuy, index);
                 } else {//index == 4,秒杀
-                    pdUtil.showLoding("获取秒杀订单");
+                    setLoaddingView(true);
                     unifiedRequest(map, DyUrl.confirmGoods2seconds, index);
                 }
             }
@@ -462,10 +457,10 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
             selectView = view.findViewById(R.id.v_home);//规格控件
             selectView.setData(mData.getSpecList());//规格数组
             selectView.setTextViewAndGGproject(index, number, countPrice, hxxq_dilog_ok, bottomTvStok, mData.getProductInfoList());
-            if (selectView.getHasSpe()) {
+            if (selectView.getHasSpe()){
                 hxxq_dilog_ok.setBackgroundColor(getResources().getColor(R.color.colorAccentNo));
                 hxxq_dilog_ok.setClickable(false);
-            } else {
+            }else {
                 hxxq_dilog_ok.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 hxxq_dilog_ok.setClickable(true);
             }
@@ -496,15 +491,15 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bottomInterPasswordDialog != null) bottomInterPasswordDialog = null;
-        if (selectView != null) selectView = null;
+        if (bottomInterPasswordDialog!=null)bottomInterPasswordDialog = null;
+        if (selectView!=null)selectView = null;
     }
 
     /**
      * 购买按钮 以及初始化库存和价钱信息
      */
     private void setGoodsData() {
-        if (type == 1 || type == 2) {
+        if (type == 1 || type == 2){
             jg.setClickable(false);
         }
         //-----------------------分类信息----------0普通，1拼团，2秒杀------------
@@ -547,25 +542,21 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
         }
 
         //已收藏标志
-        if (!StringUtils.isEmpty(mData.getCollectTag()) && !mData.getCollectTag().equals("null") && mData.getCollectTag().equals("1")) {
+        if (!StringUtils.isEmpty(mData.getCollectTag()) && !mData.getCollectTag().equals("null") && mData.getCollectTag().equals("1")){
             sc.setChecked(true);
         }
-
-
-        pdUtil.desLoding();
     }
 
     /**
      * 评论信息，详细信息。其他商品推荐
      */
-    // TODO: 2019/9/9 商品詳情添加視圖列表
     private void setAdapter() {
         int type = getIntent().getIntExtra("type", 0);
-        if (type == 1 || type == 2) {
+        if (type == 1 || type == 2){
             jg.setClickable(false);
         }
         //商品基本信息视图
-        TopMessView topMessView = new TopMessView(this, this);
+        TopMessView topMessView = new TopMessView(this,this);
         topMessView.setMess(type, mData);
         topMessView.setJf(jfNum);
         //topMessView.setCall(this);
@@ -574,11 +565,11 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
         CommentView commentView = new CommentView(this);
         commentView.setGoodsId(mData.getId());
         commentView.setSaleNum(mData.getSalesVolume());
-        if (null != commentMoList && commentMoList.size() > 0) {
+        if (null != commentMoList && commentMoList.size()>0){
             commentView.setViewShow(true);
             commentView.setView(commentMoList.get(0));
             commentView.setCommentNum(commentMoList.get(0).getCommentSize());
-        } else {
+        }else {
             commentView.setViewShow(false);
         }
         //商品详细信息视图
@@ -619,7 +610,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    isScroll = true;
+                        isScroll = true;
 
                 }
                 return false;
@@ -643,11 +634,11 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                 }
-                if (y < 250 && y > 120) {
+                if (y < 250 && y>120) {
                     //.mutate()方法不会通知其他控件跟着改变background
                     realTabLayout.getBackground().mutate().setAlpha(y);
                     realTabLayout.setVisibility(View.VISIBLE);
-                } else if (y < 120) {
+                }else if(y < 120){
                     realTabLayout.setVisibility(View.GONE);
                 }
             }
@@ -685,27 +676,29 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
         setOrtherData(false);
     }
 
-    private void setScrollViewGoTop() {
+    private void setScrollViewGoTop(){
         scrollView.fullScroll(View.FOCUS_UP);
     }
-
     @Override
-    protected void initData() {
+    public void initData() {
+        setLoaddingView(true);
         String id = getIntent().getStringExtra("id");
         HashMap<String, String> map = new HashMap<>();
-        map.put(DyUrl.TOKEN_NAME, getSPKEY(this, "token"));
+        map.put(DyUrl.TOKEN_NAME,getSPKEY(this,"token"));
         map.put("goodsId", id);
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsDetails, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             //主线程处理
             @Override
             public void onUi(String newsBean) {
+
+                setLoaddingView(false);
                 if (StringUtils.isEmpty(newsBean)) {
                     ToastUtil.showShort(HxxqLastActivity.this, "获取数据失败");
                 }
                 try {
                     JSONObject object = new JSONObject(newsBean);
                     int err = object.optInt("errno");
-                    if (1 == err) {
+                    if (1 == err){
                         LoginTipsDialog.finishTips(HxxqLastActivity.this, "该产品已下架");
                     }
                     if (err == 0) {
@@ -716,7 +709,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                         JSONObject object1 = object.optJSONObject("data");
 
                         //获取商品积分
-                        jfNum = object1.optString("integral");
+                        jfNum= object1.optString("integral");
 
                         String str = object1.optString("goodsDetails");
                         Gson gson = new Gson();
@@ -724,10 +717,10 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
                         String commentVoList = object1.optString("commentVoList");
 
-                        commentMoList = JsonUtil.string2Obj(commentVoList, List.class, GoodsComment.class);
+                        commentMoList = JsonUtil.string2Obj(commentVoList,List.class,GoodsComment.class);
 
                         //设置商品详细信息
-                        if (null != mData) {
+                        if ( null != mData){
                             setGoodsData();
                             //设置滑动
                             setAdapter();
@@ -735,6 +728,7 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    setLoaddingView(false);
                 }
             }
 
@@ -743,17 +737,15 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
             public void onFailed(Call call, IOException e) {
                 sc.setClickable(false);
                 jg.setClickable(false);
+                setLoaddingView(false);
             }
 
 
             @Override
             public void onFailure(Call call, IOException e) {
                 super.onFailure(call, e);
-                if (pdUtil != null) {
-                    pdUtil.desLoding();
-                }
                 Looper.prepare();
-                ToastUtil.showShort(HxxqLastActivity.this, "电波无法到达，请检查您的网络~~");
+                ToastUtil.showShort(HxxqLastActivity.this,"电波无法到达，请检查您的网络~~");
                 Looper.loop();
                 sc.setClickable(false);
                 jg.setClickable(false);
@@ -771,13 +763,13 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
     public void setOrtherData(final boolean isLoad) {
         if (isLoad) {
-            page++;
+            page ++;
         } else {
             page = 1;
         }
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        map.put("categoryId", mData.getCategoryId());
+        map.put("categoryId",mData.getCategoryId());
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsList, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
@@ -790,13 +782,13 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
                         if (object.optInt("code") == 500) return;
                         JSONObject object1 = object.optJSONObject("data");
                         String str = object1.optString("goodsList");
-                        goodsData = JsonUtil.string2Obj(str, List.class, Goods.class);
+                        goodsData = JsonUtil.string2Obj(str,List.class,Goods.class);
                         if (isLoad) {
-                            if (goodsData.size() > 0) {
+                            if (goodsData.size()>0){
                                 goodsAdapter.addAll(goodsData);
                             }
                         } else {
-                            if (goodsData.size() > 0) {
+                            if (goodsData.size()>0){
                                 goodsAdapter.updateData(goodsData);
                             }
                         }
@@ -814,12 +806,11 @@ public class HxxqLastActivity extends BaseActivity implements View.OnClickListen
 
     /**
      * 秒杀或拼团是否已经结束
-     *
      * @param b
      */
     @Override
     public void isEnd(boolean b) {
-        if (b) {
+        if (b){
             tvBuyGroup.setClickable(false);
             tvBuyGroup.setBackgroundResource(R.color.colorGray2);
             tvBuyGroup.setText("活动已结束");

@@ -11,11 +11,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.dabangvr.R;
 import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.SPUtils2;
 
 import Utils.OkHttp3Utils;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -27,6 +30,9 @@ import butterknife.Unbinder;
  * data 2019/7/8
  */
 public abstract class BaseFragmentFromType extends Fragment {
+
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -64,6 +70,15 @@ public abstract class BaseFragmentFromType extends Fragment {
         }
     });
 
+    public void showTips(View view){
+        view.setVisibility(View.VISIBLE);
+    }
+    public void hideTips(View view){
+        view.setVisibility(View.GONE);
+    }
+
+
+
     @Override
         public void onAttach(Context ctx) {
         super.onAttach(ctx);
@@ -85,10 +100,11 @@ public abstract class BaseFragmentFromType extends Fragment {
             isFirst = false;
             sendMessage();
         }
-        initView(rootView);
+        initView();
 
         return rootView;
     }
+
 
 
     @Override
@@ -138,10 +154,8 @@ public abstract class BaseFragmentFromType extends Fragment {
 
     /**
      * 初始化控件
-     *
-     * @param view 布局View
      */
-    protected abstract void initView(final View view);
+    protected abstract void initView();
 
 
     /**

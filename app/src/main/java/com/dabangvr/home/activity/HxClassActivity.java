@@ -103,13 +103,20 @@ public class HxClassActivity extends BaseActivity implements PopupMenu.OnMenuIte
                             initLeftSortRecyclerView();
                             initRightRecyclerView();
                             for (GoodsCategoryJson dataBean : list) {
-                                mLeftSortBeans.add(new LeftSortBean(dataBean.getName()));
-                                mRightBeans.add(new RightBean(dataBean.getName()));
+                                mLeftSortBeans.add(new LeftSortBean(dataBean.getName(),dataBean.getId()));
+                                mRightBeans.add(new RightBean(dataBean.getName(),dataBean.getId()));
                                 if (dataBean.getChildren() == null || dataBean.getChildren().size() <= 0) {
                                     continue;
                                 }
+                                int pId = dataBean.getId();
                                 for (GoodsCategoryJson.ChildrenBean listBean : dataBean.getChildren()) {
-                                    mRightBeans.add(new RightBean(listBean.getName(), listBean.getId(), listBean.getCategoryImg(), dataBean.getName(), dataBean.getName()));
+                                    mRightBeans.add(new RightBean(
+                                            listBean.getName(),
+                                            listBean.getId(),
+                                            listBean.getCategoryImg(),
+                                            dataBean.getName(),
+                                            dataBean.getName(),
+                                            pId));
                                 }
                             }
                             mLeftAdapter.notifyDataSetChanged();
@@ -218,17 +225,18 @@ public class HxClassActivity extends BaseActivity implements PopupMenu.OnMenuIte
                 }
             }
         });
-        mRightAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+        mRvRight.setAdapter(mRightAdapter);
+
+        mRightAdapter.setOnItemTableClick(new RightListAdapter.OnItemTableClick() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                RightBean rightBean = mRightBeans.get(position);
+            public void viewName(String parentId, String name) {
                 Intent intent = new Intent(HxClassActivity.this,HxClassToActivity.class);
-                intent.putExtra("typeId",rightBean.getId());//一级分类id
-                intent.putExtra("position",position);//二级分类的下标
+                intent.putExtra("typeId",parentId);//一级分类id
+                intent.putExtra("typeName",name);//二级分类的下标
                 startActivity(intent);
             }
         });
-        mRvRight.setAdapter(mRightAdapter);
     }
 
     /**

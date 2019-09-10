@@ -54,7 +54,7 @@
 
     <style name="TabStyle" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/sp_15</item>
     </style>
 
     <!--圆角的dialog样式-->
@@ -160,6 +160,14 @@
         <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textColor">@color/color_3d3d3d</item>
     </style>
+
+    <style name="HxClassToTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">true</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:textColor">@color/colorGray4</item>
+    </style>
+
     <style name="TabLayoutTextStylehome" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">true</item>
         <item name="android:textAllCaps">true</item>

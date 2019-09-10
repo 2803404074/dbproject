@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dabangvr.util.SPUtils2;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 
 import butterknife.ButterKnife;
@@ -58,6 +59,9 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract void  initData();
 
+    public String getToken(){
+        return (String) SPUtils2.instance(BaseFragment.this.getContext()).getkey("token","");
+    }
 
     @Override
     public void onDestroyView() {

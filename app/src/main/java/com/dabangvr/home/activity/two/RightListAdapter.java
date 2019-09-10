@@ -17,6 +17,14 @@ import java.util.List;
  */
 public class RightListAdapter extends BaseMultiItemQuickAdapter<RightBean, BaseViewHolder> {
     private Context context;
+    private OnItemTableClick onItemTableClick;
+    public interface OnItemTableClick{
+        void viewName(String parentId,String name);
+    }
+
+    public void setOnItemTableClick(OnItemTableClick onItemTableClick){
+        this.onItemTableClick = onItemTableClick;
+    }
 
     public RightListAdapter(List<RightBean> data, Context context) {
         super(data);
@@ -32,6 +40,13 @@ public class RightListAdapter extends BaseMultiItemQuickAdapter<RightBean, BaseV
                 helper.setText(R.id.tv_name, item.getName());
                 ImageView imageView = helper.getView(R.id.iv_img);
                 Glide.with(context).load(item.getImgRes()).into(imageView);
+                final RightBean finalItem = item;
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemTableClick.viewName(String.valueOf(finalItem.getParentId()),finalItem.getName());
+                    }
+                });
                 break;
             case RightBean.TYPE_TITLE:
                 helper.setText(R.id.tv_title, item.getName());

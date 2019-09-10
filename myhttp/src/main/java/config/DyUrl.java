@@ -11,7 +11,7 @@ public class DyUrl {
 //    public static String BASE = "http://192.168.200.111:8080";//
 //    public static String BASE = "http://192.168.200.103:8080";//
     //public static String BASE = "http://192.168.1.103:8080";//强
-    // public static String BASE = "http://192.168.1.168:8080";//邓
+     //public static String BASE = "http://192.168.0.168:8080";//邓
     //public static String BASE = "http://192.168.1.110:8080";//桃
 
     //public static String BASE = "http://www.vrzbgw.com/dabang";

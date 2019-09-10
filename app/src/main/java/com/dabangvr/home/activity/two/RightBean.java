@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * @date 2019/1/11
  */
 public class RightBean implements MultiItemEntity {
+    private int  parentId;
     private String name;
     private String id;
     private String imgRes;
@@ -18,18 +19,28 @@ public class RightBean implements MultiItemEntity {
     public static final int TYPE_ITEM = 0;
     public static final int TYPE_TITLE = 1;
 
-    public RightBean(String name, String id, String categoryImg,String  jumpUrl, String groupName) {
+    public int getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public RightBean(String name, String id, String categoryImg, String  jumpUrl, String groupName,int parentId ) {
         this.name = name;
         this.id = id;
         this.imgRes = categoryImg;
         this.type = TYPE_ITEM;
         this.groupName = groupName;
         this.jumpUrl=jumpUrl;
+        this.parentId = parentId;
     }
 
-    public RightBean(String name) {
+    public RightBean(String name,int parentId) {
         this.name = name;
         this.groupName = name;
+        this.parentId = parentId;
         this.type = TYPE_TITLE;
     }
 

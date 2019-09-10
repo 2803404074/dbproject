@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import bean.Goods;
+import config.DyUrl;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -260,13 +264,13 @@ public class OkHttp3Utils {
      * 参数二：请求的JSON
      * 参数三：请求回调
      */
-    public static void doPostJson(String url, String jsonParams, Callback callback) {
+    public  void doPostJson(String url, Map<String,Object> map,String token, Callback callback) {
+        Gson gson = new Gson();
+        String jsonParams = gson.toJson(map);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
-        Request request = new Request.Builder().url(url).post(requestBody).build();
+        Request request = new Request.Builder().url(BASE_PATH + url).addHeader(DyUrl.TOKEN_NAME,token).post(requestBody).build();
         Call call = getOkHttpClient().newCall(request);
         call.enqueue(callback);
-
-
     }
 
     /**

@@ -6,10 +6,20 @@ package com.dabangvr.home.activity.two;
  */
 public class LeftSortBean {
     private String typeName;
+    private int id;
     private boolean isSelected;
 
-    public LeftSortBean(String typeName) {
+    public LeftSortBean(String typeName,int id) {
         this.typeName = typeName;
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTypeName() {

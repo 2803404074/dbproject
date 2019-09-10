@@ -34,8 +34,4 @@ public class LeftListAdapter extends BaseQuickAdapter<LeftSortBean, BaseViewHold
         notifyItemChanged(index);
         selectPosition = index;
     }
-
-    public int getSelectPosition(){
-        return selectPosition;
-    }
 }
