@@ -8,12 +8,9 @@ public class AddressBean implements Serializable {
     private String province;//省代码
     private String city;//城市代码
     private String area;//县区代码
-
     private String provinceOne;//省名称
     private String cityOne;//城市名称
     private String areaOne;//县区名称
-
-
     private String address;//详细地址
     private String zipCode;//邮编
     private String consigneeName;//收货人

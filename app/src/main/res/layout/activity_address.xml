@@ -1,84 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.dabangvr.common.activity.AddressActivity">
+    android:background="@color/color_f6f6f6">
 
     <!--title-->
     <LinearLayout
+        android:id="@+id/llTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorDb3"
-        android:padding="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
+
         <ImageView
             android:id="@+id/back"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center"
             android:padding="5dp"
-            android:layout_gravity="center"
-            android:src="@drawable/back"/>
+            android:src="@drawable/back" />
+
         <TextView
-            android:layout_width="0dp"
-            android:text="收货地址"
-            android:textSize="18sp"
-            android:textColor="#fff"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="收货地址"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:padding="5dp"
-            android:text="保存"
-            android:visibility="invisible"
-            android:textColor="#fff"
             android:layout_gravity="center"
-            />
+            android:padding="5dp"
+            android:text="添加"
+            android:textColor="#fff"
+            android:visibility="invisible" />
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="@dimen/dp_10"
+        android:id="@+id/recy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/llTitle"/>
+
     <RelativeLayout
-        android:id="@+id/linear_address"
-        android:padding="5dp"
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:visibility="gone">
+
         <ImageView
             android:id="@+id/add_top_img"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/add_positon"/>
+            android:src="@drawable/add_positon" />
+
         <TextView
-            android:layout_toEndOf="@+id/add_top_img"
             android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:layout_centerVertical="true"
             android:layout_height="wrap_content"
-            android:text="新增地址"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toEndOf="@+id/add_top_img"
+            android:text="新增地址"
+            android:textSize="18sp" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:src="@drawable/back_black"
-            android:rotation="180"
             android:layout_alignParentRight="true"
+            android:layout_gravity="center"
             android:padding="@dimen/dp_5"
-            />
+            android:rotation="180"
+            android:src="@drawable/back_black" />
 
     </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recy"
+    <top.androidman.SuperButton
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linear_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        android:layout_height="@dimen/dp_40"
+        android:layout_margin="@dimen/dp_20"
+        app:color_pressed="@color/colorYl"
+        app:color_normal="@color/colorDb2"
+        app:corner="@dimen/dp_20"
+        app:text="添加地址"
+        app:textColor="@color/white"
+        app:textSize="@dimen/sp_15" />
+
+</RelativeLayout>

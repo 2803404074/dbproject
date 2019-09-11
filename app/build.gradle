@@ -163,4 +163,6 @@ dependencies {
 
     //加载动画
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    //superbutton 按钮
+    implementation 'top.androidman:superbutton:1.1.1'
 }

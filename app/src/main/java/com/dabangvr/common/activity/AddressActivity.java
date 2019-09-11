@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -15,6 +16,7 @@ import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.model.AddressBean;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils;
+import com.dabangvr.util.StringUtils;
 import com.dabangvr.util.ToastUtil;
 
 import org.json.JSONException;
@@ -68,7 +70,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                     if (errno == 0) {
                         if (500 == object.optInt("code")) {
                             ToastUtil.showShort(AddressActivity.this, "服务数据更新中");
-                            return ;
+                            return;
                         }
                         JSONObject object1 = object.optJSONObject("data");
                         String str = object1.optString("receivingAddressVoList");
@@ -124,8 +126,12 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void convert(Context mContext, BaseRecyclerHolder holder, final AddressBean o) {
                 holder.setText(R.id.tv_title, o.getConsigneeName());//收货人
-                holder.setText(R.id.ad_phone, o.getConsigneePhone());//电话
-                holder.setText(R.id.ad_address, o.getAddress());//详细地址
+                if (!TextUtils.isEmpty(o.getConsigneePhone())) {
+
+                    holder.setText(R.id.ad_phone, StringUtils.hidePhoneNum(o.getConsigneePhone()));//电话
+                }
+
+                holder.setText(R.id.ad_address, o.getProvinceOne() + " " + o.getCityOne() + " " + o.getAreaOne() + " " + o.getAddress());//详细地址
                 CheckBox checkBox = holder.getView(R.id.cb_checkbox);
 
                 holder.getView(R.id.add_delete).setOnClickListener(new View.OnClickListener() {
@@ -149,15 +155,12 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                         intent.putExtra("consigneeName", o.getConsigneeName());
                         intent.putExtra("consigneePhone", o.getConsigneePhone());
                         intent.putExtra("isDefault", o.getIsDefault());
-
                         intent.putExtra("province", o.getProvince());
                         intent.putExtra("city", o.getCity());
                         intent.putExtra("area", o.getArea());
-
                         intent.putExtra("provinceOne", o.getProvinceOne());
                         intent.putExtra("cityOne", o.getCityOne());
                         intent.putExtra("areaOne", o.getAreaOne());
-
                         startActivityForResult(intent, 100);
                     }
                 });
@@ -216,6 +219,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override

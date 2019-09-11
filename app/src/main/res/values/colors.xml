@@ -81,6 +81,7 @@
     <color name="lsq_color_orange">#ff6633</color>
     <color name="lsq_color_transparent">#00000000</color>
     <color name="lsq_color_semitransparent">#7f000000</color>
+    <color name="color_f6f6f6">#f6f6f6</color>
 
     <!-- seekbar -->
     <color name="lsq_seekbar_drag_color">#f4a11a</color>
