@@ -6,6 +6,9 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +21,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.dabangvr.R;
+import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
+import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.common.weight.ViewPagerTransform;
 import com.dabangvr.model.goods.GoodsDetails;
+import com.dabangvr.model.goods.ParameterMo;
 import com.dabangvr.util.CountDownUtil;
+import com.dabangvr.util.DialogUtilT;
+import com.dabangvr.util.TextUtil;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Unbinder;
 
 import static com.dabangvr.home.activity.HxxqLastActivity.unifiedPrice;
 import static com.dabangvr.home.activity.HxxqLastActivity.unifiedStok;
@@ -35,45 +45,37 @@ public class TopMessView extends LinearLayout {
     private Context context;
     private ViewPagerTransform viewPager;
 
-
     private TimeCall timeCall;
+
+    //滑动轮播图变化的翻页数字
+    private TextView tvImgNum;
+
     //销售价
     private TextView tvPrice;
-
     //市场价
     private TextView tvMarketPrice;
-
-    //库存
-    private TextView tvStock;
-
-
     //商品标题
     private TextView tvGoodsName;
-
+    //商品副标题
+    private TextView tvGoodsTitle;
+    //销量
+    private TextView tvSalseNum;
+    //已选的规格
+    private TextView tvProduct;
     //倒计时
     private TextView tvTime;
     //倒计时视图（用于普通商品隐藏，秒杀拼团商品显示）
     private LinearLayout llTimeView;
-
-    //是否免邮费
+    //邮费
     private TextView tvYfPrice;
-
-    //商家所在的省份
-    private TextView depAddress;
-
-    //积分
-    private TextView tvJf;
-
-    public void setJf(String jfNum) {
-        tvJf.setText("支持返还积分，下单立即赠送 "+jfNum+" 积分");
-    }
+    //服务
+    private TextView tvServer;
+    //服务弹窗的数据
+    private List<ParameterMo>mServerData = new ArrayList<>();
 
     public interface TimeCall{
         void isEnd(boolean b);
     }
-
-
-
     public void setCall(TimeCall timeCall){
         this.timeCall = timeCall;
     }
@@ -95,37 +97,66 @@ public class TopMessView extends LinearLayout {
         init(context);
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.hxxq_view_top, this, true);
+
         //3D画廊
         viewPager = (ViewPagerTransform) view.findViewById(R.id.viewpager);
         viewPager.setPageMargin(20);
 
-
-        //商品信息（名称）
-        tvGoodsName = view.findViewById(R.id.hx_info);
-
-        //销售价
-        tvPrice = view.findViewById(R.id.hx_money_s);
-
-        //市场价
-        tvMarketPrice = view.findViewById(R.id.hx_money_y);
-
-        //库存
-        tvStock = view.findViewById(R.id.kucun);
-
+        //滑动时候变化的数字（）
+        tvImgNum = view.findViewById(R.id.tv_imgNum);
 
         //倒计时
-        tvTime = view.findViewById(R.id.hx_countdown_timer);
-        llTimeView = view.findViewById(R.id.is_ms_or_pt);
+        llTimeView = view.findViewById(R.id.llTime);
+        tvTime = view.findViewById(R.id.tvTime);
 
-        //是否免邮费
-        tvYfPrice = view.findViewById(R.id.yf_price);
+        //商品标题
+        tvGoodsName = view.findViewById(R.id.tv_name);
 
-        depAddress = view.findViewById(R.id.dep_address);
+        //商品副标题
+        tvGoodsTitle = view.findViewById(R.id.tv_title);
 
-        tvJf = view.findViewById(R.id.hx_dz_hhc);
+        //销售价
+        tvPrice = view.findViewById(R.id.tv_price);
 
+        //市场价
+        tvMarketPrice = view.findViewById(R.id.m_price);
+
+        //销量
+        tvSalseNum = view.findViewById(R.id.tv_salseNum);
+
+        //已选的规格
+        tvProduct = view.findViewById(R.id.tv_product);
+
+        //邮费
+        tvYfPrice = view.findViewById(R.id.tv_yf);
+
+        //服务
+        tvServer = view.findViewById(R.id.tv_server);
+
+        tvServer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtilT dialogUtilT = new DialogUtilT(context) {
+                    @Override
+                    public void convert(BaseRecyclerHolder holder) {
+                        RecyclerView serverRecyc =  holder.getView(R.id.recy_server);
+                        serverRecyc.setLayoutManager(new LinearLayoutManager(context));
+                        BaseLoadMoreHeaderAdapter serverAdapter = new BaseLoadMoreHeaderAdapter<ParameterMo>
+                                (context,serverRecyc,mServerData,R.layout.key_value_img_item) {
+                            @Override
+                            public void convert(Context mContext, BaseRecyclerHolder holder, ParameterMo o) {
+                                holder.setText(R.id.tv_key,o.getKey());
+                                holder.setText(R.id.tv_value,o.getValue());
+                            }
+                        };
+                        serverRecyc.setAdapter(serverAdapter);
+                    }
+                };
+                dialogUtilT.show(R.layout.dialog_server);
+            }
+        });
     }
 
     //图片轮播适配
@@ -136,6 +167,8 @@ public class TopMessView extends LinearLayout {
             public int getCount() {
                 return imgAndVideo.size();
             }
+
+
 
             @Override
             public boolean isViewFromObject(View view, Object object) {
@@ -152,12 +185,6 @@ public class TopMessView extends LinearLayout {
                     final ImageView iv =  view.findViewById(R.id.hxxq_img);
 
                     imgList.add((ImageView)view.findViewById(R.id.hxxq_img));
-
-                    //Glide.with(container.getContext()).load(img).into(imgList.get(position));
-
-                    //heightList.add(imgList.get(position).getHeight());
-
-                    //iv.setImageResource(position % 2 == 0 ? R.mipmap.app_lunch : R.mipmap.application);
 
                     Glide.with(container.getContext()).asBitmap()
                             .load(img)
@@ -176,6 +203,24 @@ public class TopMessView extends LinearLayout {
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
                 container.removeView((View) object);
+            }
+        });
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                i++;
+                tvImgNum.setText(i+"/"+imgAndVideo.size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
     }
@@ -206,30 +251,27 @@ public class TopMessView extends LinearLayout {
      * 商品基本信息
      */
     public void setMess(int type, GoodsDetails mData) {
-
         //设置轮播
-
          setViewPagerAdapter(mData.getImgList());
 
-
+         //初始滑动下标
+        tvImgNum.setText(1+"/"+mData.getImgList().size());
         //-----------------------分类信息----------0普通，1拼团，2秒杀------------
+        //设置价钱
         switch (type) {
             case 0:
                 llTimeView.setVisibility(View.GONE);//隐藏倒计时视图
-                tvPrice.setText("¥" + setText(0,unifiedPrice));//团购价
-                tvStock.setText(setText(0,unifiedStok) + "件");//团购商品库存
+                tvPrice.setText("¥" + TextUtil.isNull(mData.getSellingPrice()));//团购价
                 break;
             case 1:
                 llTimeView.setVisibility(View.VISIBLE);//显示倒计时视图
-                tvPrice.setText("¥" + setText(0,unifiedPrice));//团购价
-                tvStock.setText(setText(0,unifiedStok) + "件");//团购商品库存
+                tvPrice.setText("¥" + TextUtil.isNull(mData.getGroupPrice()));//团购价
                 //团购倒计时
                 dowTime(mData.getEndTime());
                 break;
             case 2:
                 llTimeView.setVisibility(View.VISIBLE);//显示倒计时视图
-                tvPrice.setText("¥" + setText(0,unifiedPrice));//秒杀价
-                tvStock.setText(setText(0,unifiedStok) + "件");//秒杀商品库存
+                tvPrice.setText("¥" + TextUtil.isNull(mData.getSecondsPrice()));//秒杀价
                 //秒杀倒计时
                 dowTime(mData.getSecondsEndTime());
                 break;
@@ -238,34 +280,33 @@ public class TopMessView extends LinearLayout {
         //---------------------公共的信息---------------
         //商品名称（信息）
         tvGoodsName.setText(mData.getName());
+        //商品标题
+        tvGoodsTitle.setText(StringUtils.isEmpty(mData.getTitle())?"该接口中有title字段，但是没有值":mData.getTitle());
+
         //商品市场价
         tvMarketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG ); //中间横线
         tvMarketPrice.setText("￥ " + mData.getMarketPrice());
         tvMarketPrice.getPaint().setAntiAlias(true);// 抗锯齿
 
+        //销量
+        tvSalseNum.setText("已售"+mData.getSalesVolume());
+
+        //默认规格
+        tvProduct.setText("默认规格....");
 
         //邮费
-        if (StringUtils.isEmpty(mData.getLogisticsPrice()) || mData.getLogisticsPrice().equals("null") || Float.valueOf(mData.getLogisticsPrice()) <= 0) {
-            tvYfPrice.setText("免邮");
-        } else {
-            tvYfPrice.setText("快递费:" + mData.getLogisticsPrice());
-        }
+        tvYfPrice.setText(StringUtils.isEmpty(mData.getLogisticsPrice())?"免邮":mData.getLogisticsPrice());
 
-        //地址
-        depAddress.setText(setText(1, mData.getDepAddress()));
-    }
+        //服务
+        tvServer.setText("服务支持。。。。");
 
-    /**
-     * @param index 0设置数字，1设置字符串
-     * @param tv
-     * @return
-     */
-    private String setText(int index, String tv) {
-        if (StringUtils.isEmpty(tv) || tv.equals("0") || tv.equals("null")) {
-            if (index == 0) return "0";
-            else return "该店铺未提供地址";
-        } else {
-            return tv;
-        }
+        //服务模拟数据
+        mServerData.add(new ParameterMo("5天发货",""));
+        mServerData.add(new ParameterMo("8天退货","8天退货，退货邮费卖家承担"));
+        mServerData.add(new ParameterMo("破损包退","所有商品在谦手时候如有商品破损变形等，商家承诺进行退款处理"));
+        mServerData.add(new ParameterMo("运险费","爱上大大说asd阿萨"));
+        mServerData.add(new ParameterMo("公益宝贝","萨的方式打撒旦盛大的啊啊撒啊阿斯顿阿萨奥迪"));
+        mServerData.add(new ParameterMo("蚂蚁花呗","爱上大大撒旦阿大湿答答asd阿大啊打上单啊打上单安师大打色大时代的asdasd是哒是哒打色"));
+        mServerData.add(new ParameterMo("信用卡支付","爱上大大撒旦阿大湿答答asd阿大啊打上单啊打上单安师大打色大时代的asdasd是哒是哒打色按时打撒打色asd"));
     }
 }

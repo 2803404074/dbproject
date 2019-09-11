@@ -6,76 +6,18 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_anchor"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:alpha="20"
-        android:background="@color/color_ebebeb" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/dep_head"
-            android:layout_width="@dimen/dp_60"
-            android:layout_height="60dp"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:layout_centerVertical="true"
-            android:src="@drawable/m_vedio_h" />
-
-        <TextView
-            android:id="@+id/dep_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_12"
-            android:layout_toRightOf="@+id/dep_head"
-            android:text="兴宁店"
-            android:textSize="14sp"
-            android:textColor="@color/color_2c2c2c"
-            android:layout_above="@+id/view_id"
-            />
-
-        <View
-            android:id="@+id/view_id"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:layout_centerVertical="true"
-            />
-
-
-        <TextView
-            android:id="@+id/go_dep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/home_blue_border_shape"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingRight="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_4"
-            android:layout_above="@+id/view_id"
-            android:layout_marginRight="@dimen/dp_8"
-            android:textSize="@dimen/text_normal"
-            android:text="进店"
-            android:textColor="@color/color_07eeeb" />
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="7dp"
-        android:alpha="20"
-        android:background="@color/background_gray1" />
-
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_18"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_gravity="center"
+        android:textColor="@color/colorGray6"
+        android:text="商品详情" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/dp_10"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:textSize="15sp"
-        android:textColor="@color/color_777777"
-        android:text="商品详情" />
+        android:layout_gravity="center"
+        android:text="COMMODITY DETAILS"/>
 
     <WebView
         android:id="@+id/hx_bom_web_view"

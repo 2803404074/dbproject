@@ -255,7 +255,7 @@ public class HxxqActivityCopy extends BaseActivity implements View.OnClickListen
         sdCommentHead = findViewById(R.id.hx_lv_icon);
 
         //评论人名称
-        tvCommentName = findViewById(R.id.hx_lv_name);
+        //tvCommentName = findViewById(R.id.hx_lv_name);
 
         //评论时间
         tvCommentDate = findViewById(R.id.comment_date);

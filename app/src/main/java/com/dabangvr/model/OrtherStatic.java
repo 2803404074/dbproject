@@ -11,7 +11,7 @@ import java.util.List;
 public class OrtherStatic {
     public static List<TabAndViewPagerMo> setData(){
         List<TabAndViewPagerMo>list = new ArrayList<>();
-        for (int i=0;i<6;i++){
+        for (int i=0;i<5;i++){
             TabAndViewPagerMo title = new TabAndViewPagerMo();
             switch (i){
                 case 0:{

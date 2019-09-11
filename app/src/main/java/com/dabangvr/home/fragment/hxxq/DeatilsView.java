@@ -20,23 +20,8 @@ import com.dabangvr.util.MyWebViewClient;
 import com.dabangvr.util.TextUtil;
 
 public class DeatilsView extends LinearLayout {
-
-
-    //商家头像
-    private ImageView ivDepHead;
-
-    //商家名称
-    private TextView tvDepName;
-
-    //店铺销量
-   // private TextView tvDepSale;
-
     //商品详细的WebView
     private WebView webView;
-
-    private String depId;
-
-
     private Context context;
     public DeatilsView(Context context) {
         this(context, null);
@@ -54,42 +39,9 @@ public class DeatilsView extends LinearLayout {
 
     private void init(final Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.hxxq_view_detalis, this, true);
-
-        //商家头像
-        ivDepHead = view.findViewById(R.id.dep_head);
-
-        //商家名称
-        tvDepName = view.findViewById(R.id.dep_name);
-
-        //进店点击跳转
-        view.findViewById(R.id.go_dep).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, DepMessActivity.class);
-                intent.putExtra("depId",depId);
-                context.startActivity(intent);
-            }
-        });
-
-        //店铺销量
-        //tvDepSale = view.findViewById(R.id.dep_sale);
-
         //商品详细的WebView
         webView = view.findViewById(R.id.hx_bom_web_view);
     }
-
-    public void setIvDepHead(String url) {
-        Glide.with(MyApplication.getInstance()).load(url).into(ivDepHead);
-    }
-
-    public void setTvDepName(String depName) {
-        tvDepName.setText(depName);
-    }
-
-//    public void setTvDepSale(String depSale){
-//        tvDepSale.setText(TextUtil.isNull(depSale));
-//    }
-
     public void setWebView(String html) {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);// 不使用缓存
@@ -99,9 +51,5 @@ public class DeatilsView extends LinearLayout {
         webView.getSettings().setDomStorageEnabled(true);
         webView.setWebViewClient(new MyWebViewClient(webView));
         webView.loadData(html, "text/html", "UTF-8");
-    }
-
-    public void setDepId(String depId) {
-        this.depId = depId;
     }
 }

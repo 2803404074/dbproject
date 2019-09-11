@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingVertical="@dimen/dp_5"
+    android:paddingHorizontal="@dimen/dp_10"
+    android:layout_marginVertical="@dimen/dp_5"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+
+            android:src="@drawable/zf_yes"/>
+        <TextView
+            android:id="@+id/tv_key"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorGray4"
+            android:textSize="@dimen/sp_15"
+            android:layout_height="wrap_content"
+            android:text="品牌"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_value"
+        android:textColor="@color/colorGray4"
+        android:textSize="@dimen/sp_15"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="海跳"/>
+</LinearLayout>

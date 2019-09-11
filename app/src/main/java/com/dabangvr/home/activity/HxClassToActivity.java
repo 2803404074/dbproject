@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.dabangvr.R;
 import com.dabangvr.base.BaseNewActivity;
@@ -34,6 +35,9 @@ import config.JsonUtil;
  * 海鲜跳转的页面
  */
 public class HxClassToActivity extends BaseNewActivity {
+
+    @BindView(R.id.iv_tips)
+    ImageView ivTips;
 
     @BindView(R.id.search_edit)
     VerticalTextview verticalTextview;
@@ -103,6 +107,13 @@ public class HxClassToActivity extends BaseNewActivity {
                     JSONObject object = new JSONObject(result);
                     String str = object.optString("goodsCategoryList");
                     List<TypeBean> list = JsonUtil.string2Obj(str,List.class,TypeBean.class);
+
+                    if (null == list || list.size() == 0){
+                        ivTips.setVisibility(View.VISIBLE);
+                    }else {
+                        ivTips.setVisibility(View.GONE);
+                    }
+
                     //设置分类
                     setTab(list);
                     setLoaddingView(false);

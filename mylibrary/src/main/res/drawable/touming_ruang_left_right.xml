@@ -4,12 +4,8 @@
 
     <item android:gravity="center_horizontal">
         <shape>
-
-            <size
-                android:width="@dimen/dp_20"
-                android:height="4dp" />
-            <corners android:radius="4dp"/>
-            <solid android:color="@color/white" />
+            <corners android:radius="20dp"/>
+            <solid android:color="#80000000" />
         </shape>
     </item>
 
