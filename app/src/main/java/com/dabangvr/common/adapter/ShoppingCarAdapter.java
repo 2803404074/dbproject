@@ -296,15 +296,11 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
         map.put(DyUrl.TOKEN_NAME,token);
         map.put("cartIds",ids);
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.confirmGoods2Cart, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-
             @Override
             public void onUi(String result) {
                 if(!StringUtils.isEmpty(result)){
                     Intent intent = new Intent(context, OrderActivity.class);
-                    intent.putExtra("token",token);
-                    intent.putExtra("type","cart");
-                    intent.putExtra("dropType",0);
-                    intent.putExtra("payOrderSnType","orderSnTotal");
+                    intent.putExtra("dropType",1);
                     context.startActivity(intent);
                 }
             }

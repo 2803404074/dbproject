@@ -1,6 +1,7 @@
 package com.dabangvr.home.fragment.hxxq;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -24,11 +25,19 @@ import com.dabangvr.R;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.common.weight.ViewPagerTransform;
+import com.dabangvr.home.activity.HxxqLastActivity;
+import com.dabangvr.home.activity.OrderActivity;
+import com.dabangvr.home.weight.ShoppingSelectDialog;
+import com.dabangvr.home.weight.ShoppingSelectHome;
+import com.dabangvr.home.weight.ShoppingSelectNews;
 import com.dabangvr.model.goods.GoodsDetails;
 import com.dabangvr.model.goods.ParameterMo;
 import com.dabangvr.util.CountDownUtil;
 import com.dabangvr.util.DialogUtilT;
+import com.dabangvr.util.ScreenUtils;
 import com.dabangvr.util.TextUtil;
+import com.dabangvr.util.ToastUtil;
+import com.rey.material.app.BottomSheetDialog;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -49,6 +58,9 @@ public class TopMessView extends LinearLayout {
 
     //滑动轮播图变化的翻页数字
     private TextView tvImgNum;
+
+    //底部弹窗购买工具
+    private ShoppingSelectDialog dialogView;
 
     //销售价
     private TextView tvPrice;
@@ -73,6 +85,12 @@ public class TopMessView extends LinearLayout {
     //服务弹窗的数据
     private List<ParameterMo>mServerData = new ArrayList<>();
 
+    private LoadingListener thisLoadingListener;
+    //加载动画
+    public interface LoadingListener{
+        void showAndHideView(boolean isShow);
+    }
+
     public interface TimeCall{
         void isEnd(boolean b);
     }
@@ -88,6 +106,10 @@ public class TopMessView extends LinearLayout {
         this.timeCall = timeCall;
     }
 
+    public void setLoadingListener(LoadingListener loadingListener) {
+        this.thisLoadingListener = loadingListener;
+    }
+
     public TopMessView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -97,9 +119,11 @@ public class TopMessView extends LinearLayout {
         init(context);
     }
 
+    private BottomSheetDialog dialog;
+
+
     private void init(final Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.hxxq_view_top, this, true);
-
         //3D画廊
         viewPager = (ViewPagerTransform) view.findViewById(R.id.viewpager);
         viewPager.setPageMargin(20);
@@ -138,23 +162,27 @@ public class TopMessView extends LinearLayout {
         tvServer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogUtilT dialogUtilT = new DialogUtilT(context) {
+                dialog = new BottomSheetDialog(context);
+                View view = LayoutInflater.from(context).inflate(R.layout.dialog_server, null);
+                RecyclerView serverRecyc =  view.findViewById(R.id.recy_server);
+                serverRecyc.setLayoutManager(new LinearLayoutManager(context));
+                BaseLoadMoreHeaderAdapter serverAdapter = new BaseLoadMoreHeaderAdapter<ParameterMo>
+                        (context,serverRecyc,mServerData,R.layout.key_value_img_item) {
                     @Override
-                    public void convert(BaseRecyclerHolder holder) {
-                        RecyclerView serverRecyc =  holder.getView(R.id.recy_server);
-                        serverRecyc.setLayoutManager(new LinearLayoutManager(context));
-                        BaseLoadMoreHeaderAdapter serverAdapter = new BaseLoadMoreHeaderAdapter<ParameterMo>
-                                (context,serverRecyc,mServerData,R.layout.key_value_img_item) {
-                            @Override
-                            public void convert(Context mContext, BaseRecyclerHolder holder, ParameterMo o) {
-                                holder.setText(R.id.tv_key,o.getKey());
-                                holder.setText(R.id.tv_value,o.getValue());
-                            }
-                        };
-                        serverRecyc.setAdapter(serverAdapter);
+                    public void convert(Context mContext, BaseRecyclerHolder holder, ParameterMo o) {
+                        holder.setText(R.id.tv_key,o.getKey());
+                        holder.setText(R.id.tv_value,o.getValue());
                     }
                 };
-                dialogUtilT.show(R.layout.dialog_server);
+                serverRecyc.setAdapter(serverAdapter);
+
+                int hight = (int) (Double.valueOf(ScreenUtils.getScreenHeight(context)) / 1.3);
+                dialog.contentView(view)
+                        .heightParam(hight)
+                        .inDuration(200)
+                        .outDuration(200)
+                        .cancelable(true)
+                        .show();
             }
         });
     }
@@ -250,7 +278,7 @@ public class TopMessView extends LinearLayout {
     /**
      * 商品基本信息
      */
-    public void setMess(int type, GoodsDetails mData) {
+    public void setMess(final int type, final GoodsDetails mData) {
         //设置轮播
          setViewPagerAdapter(mData.getImgList());
 
@@ -292,7 +320,12 @@ public class TopMessView extends LinearLayout {
         tvSalseNum.setText("已售"+mData.getSalesVolume());
 
         //默认规格
-        tvProduct.setText("默认规格....");
+        if (mData.getProductInfoList() == null || mData.getProductInfoList().size() == 0){
+            tvProduct.setText("已选：标准");
+        }else {
+            tvProduct.setText("已选："+mData.getProductInfoList().get(0).getName());
+        }
+
 
         //邮费
         tvYfPrice.setText(StringUtils.isEmpty(mData.getLogisticsPrice())?"免邮":mData.getLogisticsPrice());
@@ -308,5 +341,53 @@ public class TopMessView extends LinearLayout {
         mServerData.add(new ParameterMo("公益宝贝","萨的方式打撒旦盛大的啊啊撒啊阿斯顿阿萨奥迪"));
         mServerData.add(new ParameterMo("蚂蚁花呗","爱上大大撒旦阿大湿答答asd阿大啊打上单啊打上单安师大打色大时代的asdasd是哒是哒打色"));
         mServerData.add(new ParameterMo("信用卡支付","爱上大大撒旦阿大湿答答asd阿大啊打上单啊打上单安师大打色大时代的asdasd是哒是哒打色按时打撒打色asd"));
+
+        tvProduct.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogView = new ShoppingSelectDialog(context,type);
+                dialogView.setListener(new ShoppingSelectDialog.OnClickAddCartOrConfirmListener() {
+                    //加入购物车或确认订单时的回掉，显示加载动画
+                    @Override
+                    public void showLoadingView() {
+                        if (thisLoadingListener!=null){
+                            thisLoadingListener.showAndHideView(true);
+                        }
+                    }
+                    //加入购物车后的回掉，释放加载动画
+                    @Override
+                    public void addCartOk(String mess) {
+                        if (thisLoadingListener!=null){
+                            thisLoadingListener.showAndHideView(false);
+                        }
+                        dialogView.desDialogView();
+                        ToastUtil.showShort(context,mess);
+                    }
+                    //确认订单后的回掉,跳转订单页面
+                    @Override
+                    public void confirmOk(String mess) {
+                        if (thisLoadingListener!=null){
+                            thisLoadingListener.showAndHideView(false);
+                        }
+                        dialogView.desDialogView();
+                        Intent intent = new Intent(context, OrderActivity.class);
+                        context.startActivity(intent);
+                    }
+
+                    @Override
+                    public void error(String msg) {
+                        thisLoadingListener.showAndHideView(false);
+                        ToastUtil.showShort(context,msg);
+                        dialogView.desDialogView();
+                    }
+                });
+                dialogView.showDialog(mData);
+            }
+        });
+    }
+    public void desTop(){
+        if (dialogView!=null){
+            dialogView.desDialogView();
+        }
     }
 }

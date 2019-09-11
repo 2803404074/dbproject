@@ -30,6 +30,7 @@ import com.dabangvr.home.fragment.hxxq.CommentView;
 import com.dabangvr.home.fragment.hxxq.DeatilsView;
 import com.dabangvr.home.fragment.hxxq.GoodsView;
 import com.dabangvr.home.fragment.hxxq.TopMessView;
+import com.dabangvr.home.weight.ShoppingSelectDialog;
 import com.dabangvr.home.weight.ShoppingSelectHome;
 import com.dabangvr.model.Goods;
 import com.dabangvr.model.GoodsComment;
@@ -44,6 +45,7 @@ import com.dabangvr.widget.GridDividerItemDecoration;
 import com.example.hxxq.CustomScrollView;
 import com.google.gson.Gson;
 import com.rey.material.app.BottomSheetDialog;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -58,6 +60,7 @@ import java.util.Map;
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import Utils.PdUtil;
+import Utils.TObjectCallback;
 import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
@@ -69,21 +72,9 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
     private int type;//页面类型，0普通，1拼团，2秒杀
 
-    private String jfNum;//商品积分量
-
     private GoodsDetails mData;//商品信息
     private List<GoodsComment> commentMoList;
-
-    public static Bitmap bottomDialogImg;
     public static HxxqLastActivity instants;
-    private BottomSheetDialog bottomInterPasswordDialog;
-
-    //规格控件
-    private ShoppingSelectHome selectView;
-    private TextView number;//底部弹窗的数量控件
-    private TextView bottomTvStok;//底部弹窗 的库存
-    private TextView countPrice;//底部弹窗 的价钱
-
 
     //立即购买按钮
     @BindView(R.id.hx_shop)
@@ -99,31 +90,32 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     //统一商品价钱
     public static String unifiedPrice;
 
-
     //其他商品
     private RecyclerView goodsRecy;
     private BaseLoadMoreHeaderAdapter goodsAdapter;
     private List<Goods> goodsData = new ArrayList<>();
     private int page;
 
-    //底部按钮
-    @BindView(R.id.cb_collection_id)
-    CheckBox CbCollection;
+    //收藏动画控件
+    @BindView(R.id.bt_collect)
+    ShineButton btCollect;
 
-    @BindView(R.id.hx_sc)
-    CheckBox sc;
+    //收藏文字（用于点击收藏变色）
+    @BindView(R.id.tv_collection)
+    TextView tvCollect;
+
+    //店铺按钮
+    @BindView(R.id.ll_dep)
+    LinearLayout llDep;
+
+    //服务按钮
+    @BindView(R.id.ll_server)
+    LinearLayout llServer;
+
 
     @BindView(R.id.hx_jg)
     RadioButton jg;
 
-    /**
-     * 占位tablayout，用于滑动过程中去确定实际的tablayout的位置
-     */
-    //private TabLayout holderTabLayout;
-    /**
-     * 实际操作的tablayout，
-     */
-    //private LinearLayout llTop;
     private TabLayout realTabLayout;
     private CustomScrollView scrollView;
     private LinearLayout container;
@@ -161,32 +153,21 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         scrollView = findViewById(R.id.scrollView);
         container = findViewById(R.id.container);
         instants = this;
-
         //返回
         findViewById(R.id.backe).setOnClickListener(this);
 
-        //底部按钮
-        sc = findViewById(R.id.hx_sc);
-        CbCollection.setOnClickListener(this);
-        sc.setOnClickListener(this);
+        //收藏
+        btCollect.init(this);
+
         jg.setOnClickListener(this);
         if (type != 0){
             jg.setVisibility(View.GONE);
         }
-
-        BottomImgSize bis = new BottomImgSize<>(this);
-        bis.setImgSize(64, 64, 1, CbCollection, R.drawable.shop_selector);
-        bis.setImgSize(64, 64, 1, sc, R.drawable.hxxq_sc_bottom);
-//        bis.setImgSize(69, 69, 1, jg, R.drawable.hx_jg);
-
         //立即购买
         tvBuy.setOnClickListener(this);
-
         //拼团购买
         tvBuyGroup = findViewById(R.id.hx_shop_pt);
         tvBuyGroup.setOnClickListener(this);
-
-
         goodsRecy = findViewById(R.id.orther_recy);
         GridLayoutManager manager = new GridLayoutManager(this,2);
         goodsRecy.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(this,7), ContextCompat.getColor(this,R.color.white)));
@@ -214,14 +195,22 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                 finish();
             }
         });
+
+        //收藏点击
+        btCollect.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(View view, boolean checked) {
+                if (null == mData)return;
+                if (checked) {
+                    tvCollect.setTextColor(getResources().getColor(R.color.colorDb3));
+                } else {
+                    tvCollect.setTextColor(getResources().getColor(R.color.colorGray6));
+                }
+                collectionGoods();
+            }
+        });
     }
 
-
-    /**
-     * 底部菜单点击监听
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -229,63 +218,16 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                 finish();
                 break;
             }
-            case R.id.hx_shop: {//0立即购买,2单独购买
-                if (type == 0) {
-                    showBottomDialog(type);
-                } else {
-                    showBottomDialog(2);
-                }
+            case R.id.hx_shop: {//普通购买
+                showBottomDialog(type);
                 break;
             }
-            case R.id.hx_shop_pt: {//拼团购买,秒杀购买
-                if (type == 1) {
-                    showBottomDialog(3);
-                }
-                if (type == 2) {
-                    showBottomDialog(4);
-                }
-                break;
-            }
-            case R.id.hx_sc: {//收藏
-                String token = getSPKEY(this,"token");
-                if (StringUtils.isEmpty(token)){
-                    ToastUtil.showShort(this,"登录后才能收藏哦");
-                    sc.setChecked(false);
-                    return;
-                }
-                Map<String, String> map = new HashMap<>();
-                map.put("goodsId", mData.getId());
-                unifiedRequest(map, DyUrl.getGoodsCollectSave, 100);
+            case R.id.hx_shop_pt: {//拼团购买
+                showBottomDialog(type);
                 break;
             }
             case R.id.hx_jg: {//加购
-                showBottomDialog(1);
-                break;
-            }
-            case R.id.cb_collection_id:
-                Intent intent = new Intent(this, DepMessActivity.class);
-                intent.putExtra("depId",mData.getDeptId());
-                this.startActivity(intent);
-                break;
-            case R.id.di_iv_sub: {//减
-                String size = number.getText().toString();
-                if (size.equals("1")) {
-                    return;
-                }
-                int num = Integer.parseInt(size) - 1;
-                number.setText(String.valueOf(num));
-                //sendMessage(1);
-                break;
-            }
-            case R.id.di_iv_add: {//加
-                if (Integer.parseInt(number.getText().toString()) > Integer.parseInt(bottomTvStok.getText().toString())) {
-                    ToastUtil.showShort(HxxqLastActivity.this, "库存已经没有那么多啦，试试其他的规格吧");
-                    return;
-                }
-                String size = number.getText().toString();
-                int num = Integer.parseInt(size) + 1;
-                number.setText(String.valueOf(num));
-                //sendMessage(0);
+                showBottomDialog(type);
                 break;
             }
             default:
@@ -294,207 +236,65 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     }
 
     /**
-     * 收藏、加购、立即购买统一请求
-     *
-     * @param map 请求参数
-     * @param url 请求地址
+     * 收藏
      */
-    private void unifiedRequest(Map<String, String> map, String url, final int requestType) {
-        map.put(DyUrl.TOKEN_NAME, getSPKEY(HxxqLastActivity.this, "token"));
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(url, map, new GsonObjectCallback<String>(DyUrl.BASE) {
+    private void collectionGoods() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("goodsId",mData.getGoodsId());
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.getGoodsCollectSave, map,getToken(this),new TObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
-                try {
-                    setLoaddingView(false);
-                    JSONObject object = new JSONObject(result);
-                    if (500 == object.optInt("code")) {
-                        ToastUtil.showShort(HxxqLastActivity.this, "服务异常");
-
-                    }
-                    int err = object.optInt("errno");
-                    if (err == 0) {
-                        if (500 == object.optInt("code")){
-                            ToastUtil.showShort(HxxqLastActivity.this,"获取失败");
-                            return;
-                        }
-
-                        //0立即购买,，1加购，2单独购买，3拼团购买，4秒杀购买,100收藏
-                        if (requestType == 100) {//收藏请求
-                            ToastUtil.showShort(HxxqLastActivity.this, "收藏成功");
-                        }
-
-                        if (requestType == 0) {//立即购买请求
-                            Intent intent = new Intent(HxxqLastActivity.this, OrderActivity.class);
-                            intent.putExtra("type", "buy");
-                            intent.putExtra("payOrderSnType", "orderSnTotal");
-                            intent.putExtra("dropType", 1);
-                            startActivity(intent);
-                        }
-
-                        if (requestType == 1) {//加入购物车
-                            ToastUtil.showShort(HxxqLastActivity.this, "加购成功");
-                        }
-
-                        if (requestType == 2) {//单独购买
-                            Intent intent = new Intent(HxxqLastActivity.this, OrderActivity.class);
-                            intent.putExtra("type", "buy");
-                            intent.putExtra("payOrderSnType", "orderSnTotal");
-                            intent.putExtra("dropType", 1);
-                            startActivity(intent);
-                        }
-                        if (requestType == 3) {//拼团购买
-                            Intent intent = new Intent(HxxqLastActivity.this, OrderActivity.class);
-                            intent.putExtra("type", "group2");
-                            intent.putExtra("payOrderSnType", "orderSnTotal");
-                            intent.putExtra("dropType", 2);
-                            startActivity(intent);
-                        }
-                        if (requestType == 4) {//秒杀购买
-                            Intent intent = new Intent(HxxqLastActivity.this, OrderActivity.class);
-                            intent.putExtra("type", "seconds");
-                            intent.putExtra("payOrderSnType", "orderSnTotal");
-                            intent.putExtra("dropType", 3);
-                            startActivity(intent);
-                        }
-
-                    } else {
-                        ToastUtil.showShort(HxxqLastActivity.this, object.optString("errmsg"));
-                    }
-
-                    if (null != bottomInterPasswordDialog){
-                        bottomInterPasswordDialog.dismiss();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                //设置收藏动画
             }
 
             @Override
-            public void onFailed(Call call, IOException e) {
-                setLoaddingView(false);
+            public void onFailed(String msg) {
+                ToastUtil.showShort(getContext(),msg);
             }
         });
     }
 
+    private ShoppingSelectDialog dialogView;
     /**
-     * 底部弹窗
-     *
-     * @param index 0立即购买,1加购，2单独购买，3拼团购买，4秒杀购买
+     * 底部弹窗购买
+     * @param index 0普通商品，1拼团购买，2秒杀购买
      */
     private void showBottomDialog(final int index) {
-
-        //初始化底部弹窗
-        if (null ==bottomInterPasswordDialog){
-            bottomInterPasswordDialog = new BottomSheetDialog(this);
-
-        }
-        //初始化 - 底部弹出框布局
-        View view = LayoutInflater.from(this).inflate(R.layout.hxxq_bottom_dilog, null);
-
-        //商品图片
-        ImageView imageView = view.findViewById(R.id.hx_dilog_img);
-        if (null != bottomDialogImg) {
-            imageView.setImageBitmap(bottomDialogImg);
-        } else {
-            Glide.with(getApplicationContext()).load(mData.getListUrl()).into(imageView);
-        }
-        //库存
-        bottomTvStok = view.findViewById(R.id.stock);
-        bottomTvStok.setText(unifiedStok);
-
-        //价钱
-        countPrice = view.findViewById(R.id.count_money);
-        countPrice.setText(unifiedPrice);
-
-        //加减控件
-        TextView sub = view.findViewById(R.id.di_iv_sub);//减
-        TextView add = view.findViewById(R.id.di_iv_add);//加
-
-        //数量
-        number = view.findViewById(R.id.di_iv_num);//数量
-        sub.setOnClickListener(this);
-        add.setOnClickListener(this);
-
-        //确定按钮
-        TextView hxxq_dilog_ok = view.findViewById(R.id.hxxq_dilog_ok);
-        hxxq_dilog_ok.setOnClickListener(new View.OnClickListener() {
+        dialogView = new ShoppingSelectDialog(this,index);
+        dialogView.setListener(new ShoppingSelectDialog.OnClickAddCartOrConfirmListener() {
+            //加入购物车或确认订单时的回掉，显示加载动画
             @Override
-            public void onClick(View v) {
-                Map<String, String> map = new HashMap<>();
-                map.put(DyUrl.TOKEN_NAME, getSPKEY(HxxqLastActivity.this, "token"));
-                map.put("goodsId", mData.getId());
-                map.put("number", number.getText().toString());
+            public void showLoadingView() {
+                setLoaddingView(true);
+            }
+            //加入购物车后的回掉，释放加载动画
+            @Override
+            public void addCartOk(String mess) {
+                setLoaddingView(false);
+                dialogView.desDialogView();
+            }
+            //确认订单后的回掉,跳转订单页面
+            @Override
+            public void confirmOk(String mess) {
+                setLoaddingView(false);
+                dialogView.desDialogView();
+                Intent intent = new Intent(getContext(), OrderActivity.class);
+                startActivity(intent);
+            }
 
-                if (null != mData.getProductInfoList()) {
-                    if (null != selectView && mData.getProductInfoList().size() > 0) {
-                        map.put("productId", String.valueOf(selectView.getProductId()));
-                    }
-                }
-                //0立即购买，1加购，2单独购买，3拼团购买，4秒杀购买
-                if (index == 0) {
-                    setLoaddingView(true);
-                    unifiedRequest(map, DyUrl.confirmGoods, index);
-                } else if (index == 1) {
-                    unifiedRequest(map, DyUrl.addToCart, index);
-                } else if (index == 2) {
-                    //301直接购买，302发起拼团，303参加拼团
-                    map.put("initiateType", "301");
-                    setLoaddingView(true);
-                    unifiedRequest(map, DyUrl.confirmGoods2groupbuy, index);
-                } else if (index == 3) {
-                    //301直接购买，302发起拼团，303参加拼团
-                    setLoaddingView(true);
-                    map.put("initiateType", "302");
-                    unifiedRequest(map, DyUrl.confirmGoods2groupbuy, index);
-                } else {//index == 4,秒杀
-                    setLoaddingView(true);
-                    unifiedRequest(map, DyUrl.confirmGoods2seconds, index);
-                }
+            @Override
+            public void error(String msg) {
+                setLoaddingView(false);
+                dialogView.desDialogView();
             }
         });
-
-        //规格信息(如果存在规格)
-        if (null != mData.getSpecList() && mData.getSpecList().size() > 0) {
-
-            selectView = view.findViewById(R.id.v_home);//规格控件
-            selectView.setData(mData.getSpecList());//规格数组
-            selectView.setTextViewAndGGproject(index, number, countPrice, hxxq_dilog_ok, bottomTvStok, mData.getProductInfoList());
-            if (selectView.getHasSpe()){
-                hxxq_dilog_ok.setBackgroundColor(getResources().getColor(R.color.colorAccentNo));
-                hxxq_dilog_ok.setClickable(false);
-            }else {
-                hxxq_dilog_ok.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                hxxq_dilog_ok.setClickable(true);
-            }
-        } else {
-            hxxq_dilog_ok.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-            hxxq_dilog_ok.setClickable(true);
-        }
-
-        bottomInterPasswordDialog
-                .contentView(view)/*加载视图*/
-                /*.heightParam(height/2),显示的高度*/
-                /*动画设置*/
-                .inDuration(200)
-                .outDuration(200)
-                /*.inInterpolator(new BounceInterpolator())
-                .outInterpolator(new AnticipateInterpolator())*/
-                .cancelable(true)
-                .show();
-        bottomInterPasswordDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                bottomInterPasswordDialog = null;
-            }
-        });
-
+        dialogView.showDialog(mData);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (bottomInterPasswordDialog!=null)bottomInterPasswordDialog = null;
-        if (selectView!=null)selectView = null;
+        topMessView.desTop();//释放第一部分视图资源
     }
 
     /**
@@ -542,24 +342,28 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                 unifiedStok = mData.getRemainingSecondsNumber();
                 break;
         }
-
-        //已收藏标志
-        if (!StringUtils.isEmpty(mData.getCollectTag()) && !mData.getCollectTag().equals("null") && mData.getCollectTag().equals("1")){
-            sc.setChecked(true);
-        }
     }
 
     /**
-     * 评论信息，详细信息。其他商品推荐
+     * 评论信息，详细信息
      */
+    private TopMessView topMessView;
+
     private void setAdapter() {
         int type = getIntent().getIntExtra("type", 0);
+        //0普通，1拼团，2秒杀
         if (type == 1 || type == 2){
             jg.setClickable(false);
         }
         //商品基本信息视图
-        TopMessView topMessView = new TopMessView(this,this);
+        topMessView = new TopMessView(this,this);
         topMessView.setMess(type, mData);
+        topMessView.setLoadingListener(new TopMessView.LoadingListener() {
+            @Override
+            public void showAndHideView(boolean isShow) {
+                setLoaddingView(isShow);
+            }
+        });
 
         //评论视图
         CommentView commentView = new CommentView(this);
@@ -665,9 +469,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         setOrtherData(false);
     }
 
-    private void setScrollViewGoTop(){
-        scrollView.fullScroll(View.FOCUS_UP);
-    }
     @Override
     public void initData() {
         setLoaddingView(true);
@@ -696,10 +497,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                             return;
                         }
                         JSONObject object1 = object.optJSONObject("data");
-
-                        //获取商品积分
-                        jfNum= object1.optString("integral");
-
                         String str = object1.optString("goodsDetails");
                         Gson gson = new Gson();
                         mData = gson.fromJson(str, GoodsDetails.class);
@@ -724,7 +521,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
             //请求失败
             @Override
             public void onFailed(Call call, IOException e) {
-                sc.setClickable(false);
                 jg.setClickable(false);
                 setLoaddingView(false);
             }
@@ -736,7 +532,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                 Looper.prepare();
                 ToastUtil.showShort(HxxqLastActivity.this,"电波无法到达，请检查您的网络~~");
                 Looper.loop();
-                sc.setClickable(false);
                 jg.setClickable(false);
             }
         });
@@ -749,7 +544,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         lastPos = newPos;
     }
 
-
+    //获取推荐商品
     public void setOrtherData(final boolean isLoad) {
         if (isLoad) {
             page ++;
@@ -803,7 +598,6 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
             tvBuyGroup.setClickable(false);
             tvBuyGroup.setBackgroundResource(R.color.colorGray2);
             tvBuyGroup.setText("活动已结束");
-            sc.setClickable(false);
             jg.setClickable(false);
         }
     }

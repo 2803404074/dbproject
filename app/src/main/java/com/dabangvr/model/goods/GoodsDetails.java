@@ -143,6 +143,7 @@ public class GoodsDetails implements Serializable {
 
     public static class ProductInfoVoList{
         private String id;//产品id
+        private String pictureUrl;//产品图片
         private String name;//产品规格
         private String number;//库存
         private String retailPrice;//普通价
@@ -152,6 +153,10 @@ public class GoodsDetails implements Serializable {
         private String secondsPrice;//秒杀价
 
         public ProductInfoVoList() {
+        }
+
+        public String getPictureUrl() {
+            return pictureUrl;
         }
 
         public ProductInfoVoList(String id, String name, String number, String retailPrice, String marketPrice, String groupPrice, String goodsSpecIds, String secondsPrice) {

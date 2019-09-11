@@ -1,0 +1,26 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval"
+    android:useLevel="false" >
+    <solid android:color="#80000000" />
+    <!--这里宽高要一样 -->
+    <size android:width="@dimen/dp_20"
+        android:height="@dimen/dp_20" />
+    <!-- rectangle表示为矩形 -->
+
+    <!-- 填充的颜色 -->
+    <solid
+        android:color="#fff"
+        />
+
+    <!-- 边框的颜色和粗细 -->
+    <stroke
+        android:width="@dimen/dp_1"
+        android:color="#787878"
+        />
+
+    <!-- android:radius 圆角的半径 -->
+    <corners
+        android:radius="@dimen/dp_20"
+        />
+
+</shape>

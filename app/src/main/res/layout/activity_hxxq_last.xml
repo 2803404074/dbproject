@@ -62,6 +62,7 @@
             app:tabTextAppearance="@style/TabLayoutTextStyle"
             />
 
+        <!---->
         <ImageView
             android:id="@+id/backe"
             android:layout_width="@dimen/dp_25"
@@ -88,32 +89,70 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/cb_collection_id"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/shop_selector"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginBottom="@dimen/dp_4"
-            android:text="店铺"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:orientation="vertical">
+            <com.sackcentury.shinebuttonlib.ShineButton
+                android:id="@+id/bt_collect"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
+                android:layout_centerHorizontal="true"
+                app:btn_color="@color/colorGray6"
+                android:layout_gravity="center"
+                app:btn_fill_color="@color/colorDb3"
+                app:enable_flashing="true"
+                app:shine_size="40dp"
+                app:siShape="@raw/star" />
+            <TextView
+                android:id="@+id/tv_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorGray6"
+                android:text="收藏"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_dep"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
+                android:src="@drawable/shop_selector"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorGray6"
+                android:text="店铺"/>
+        </LinearLayout>
 
 
-        <CheckBox
-            android:id="@+id/hx_sc"
+        <LinearLayout
+            android:id="@+id/ll_server"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/hxxq_sc_bottom"
-            android:text="收藏"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginBottom="@dimen/dp_4"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
+                android:src="@drawable/ic_empty_picture"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorGray6"
+                android:text="客服"/>
+        </LinearLayout>
 
         <!--android:drawableTop="@drawable/hx_jg"-->
         <RadioButton

@@ -78,7 +78,7 @@ public class HxClassToActivity extends BaseNewActivity {
         titleList.add("海鲜干货");
 
         verticalTextview.setTextList(titleList);
-        verticalTextview.setText(10, 2, Color.BLACK);//设置属性
+        verticalTextview.setText(15, 2, Color.GRAY);//设置属性
         verticalTextview.setTextStillTime(3000);//设置停留时长间隔
         verticalTextview.setAnimTime(300);//设置进入和退出的时间间隔
         verticalTextview.setOnItemClickListener(new VerticalTextview.OnItemClickListener() {

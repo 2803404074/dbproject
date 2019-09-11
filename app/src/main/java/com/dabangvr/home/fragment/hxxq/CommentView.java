@@ -132,6 +132,7 @@ public class CommentView extends LinearLayout {
 
         //参数列表
         recyclerView = view.findViewById(R.id.recy_details);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         //点击展开参数列表的控件

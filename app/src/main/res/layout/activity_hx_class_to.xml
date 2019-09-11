@@ -23,7 +23,7 @@
         <LinearLayout
             android:id="@+id/home_search"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_25"
+            android:layout_height="@dimen/dp_28"
             android:layout_marginVertical="@dimen/dp_5"
             android:layout_marginHorizontal="@dimen/dp_30"
             android:layout_gravity="center"
@@ -32,8 +32,8 @@
 
             <ImageView
                 android:id="@+id/start_search"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
+                android:layout_width="@dimen/dp_18"
+                android:layout_height="@dimen/dp_18"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_3"
                 android:src="@mipmap/h_search" />
@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/color_939393"
-                android:textSize="@dimen/text_normal" />
+                android:textSize="@dimen/sp_18" />
 
         </LinearLayout>
     </LinearLayout>

@@ -1,40 +1,42 @@
 package com.dabangvr.home.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dabangvr.R;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.activity.AddressActivity;
 import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.common.weight.MyTextChangedListener;
+import com.dabangvr.home.weight.PayDialog;
+import com.dabangvr.model.CouponMo;
+import com.dabangvr.model.goods.ParameterMo;
 import com.dabangvr.model.order.DepGoods;
 import com.dabangvr.model.order.OrderMo;
 import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.ScreenUtils;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.TextUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.util.WXPayUtils;
+import com.dabangvr.wxapi.AppManager;
 import com.rey.material.app.BottomSheetDialog;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,39 +44,46 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
 
-public class OrderActivity extends BaseActivity implements View.OnClickListener{
-    private int dropType;//跳转状态 1普通,  2拼团,  3秒杀,   4重新支付 ,5购物车
+public class OrderActivity extends BaseNewActivity implements View.OnClickListener{
+    private int dropType;//跳转状态 直接购买0、购物车购买1、团购购买2(未设置),重新购买3（未设置）
 
-    private TextView ad_name;//收货人
-    private TextView ad_address;//详细地址
-    private TextView ad_phone;//联系人
-    private TextView or_money_count;//总计
-    private RecyclerView recyclerView;//商品列表
+    @BindView(R.id.orther_address_name)
+    TextView ad_name;//收货人
+
+    @BindView(R.id.orther_address)
+    TextView ad_address;//详细地址
+
+    @BindView(R.id.orther_address_phone)
+    TextView ad_phone;//联系人
+
+    @BindView(R.id.ll_Coupon)
+    LinearLayout llCoupon;//优惠券
+
+    @BindView(R.id.or_money_count)
+    TextView or_money_count;//总计
+
+    @BindView(R.id.ms_recycler_view)
+    RecyclerView recyclerView;//商品列表
+
     public Map<String, String> contents = new HashMap<>();//留言
-
-    private RadioButton rb;//选择支付类型的RadioButton
-
-
-    public static OrderActivity instants;
-
-    private String payOrderSnType;//支付类型
-    private String orderSn;
-
     protected String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setRootViewFitsSystemWindows(this, false);
-        instants = this;
+        AppManager.getAppManager().addActivity(this);
     }
 
     @Override
@@ -82,47 +91,26 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         return R.layout.activity_order;
     }
 
-
     public static boolean isLbroad = false;//是否是直播跳转的页面，是的话监听用户下单，下单后通知主播和其它人下单信息
+
     public static String tag;//直播间身份
 
     /**
      * 控件初始化
      */
     @Override
-    protected void initView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(OrderActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                //没有权限则申请权限
-                ActivityCompat.requestPermissions(OrderActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-            }
-        }
-
+    public void initView() {
+        dropType = getIntent().getIntExtra("dropType", 0);
         isLbroad = getIntent().getBooleanExtra("lbroadcast", false);
         tag = getIntent().getStringExtra("tag");
 
-        ad_name = findViewById(R.id.orther_address_name);//收货人
-        ad_phone = findViewById(R.id.orther_address_phone);//收货人手机号
-        ad_address = findViewById(R.id.orther_address);//收货地址
-        recyclerView = findViewById(R.id.ms_recycler_view);//商品列表
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(OrientationHelper.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-
-        or_money_count = findViewById(R.id.or_money_count);//合计
-        tvJf = findViewById(R.id.tv_jf);//提示折扣了多少钱
-        tvMyJf = findViewById(R.id.tv_my_jf);//我的积分
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         findViewById(R.id.orther_ok).setOnClickListener(this);//提交订单
 
-        Intent intent = getIntent();
-        dropType = intent.getIntExtra("dropType", 100);
-
-        if (dropType != 4) {
-            //设置地址点击监听事件
+        //如果不是重新支付则设置地址点击监听事件
+        if (dropType != 3) {
             findViewById(R.id.orther_set_address).setOnClickListener(this);
         }
-
         findViewById(R.id.comment_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,50 +118,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             }
         });
 
-        final Switch sw = findViewById(R.id.sw_jf);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {//使用
-
-                    //抵扣后的订单总价为空
-                    if (StringUtils.isEmpty(orderMo.getDeductPrice())){
-                        ToastUtil.showShort(OrderActivity.this,"抱歉，该订单不支持积分抵扣");
-                        sw.setChecked(false);
-                    }else {
-                        integralTag = "1";
-                        or_money_count.setText(orderMo.getDeductOrderPrice());
-                        tvJf.setVisibility(View.VISIBLE);
-                        tvJf.setText("已使用积分抵扣:"+orderMo.getDeductPrice()+"元");
-                    }
-
-                } else {//不使用
-                    integralTag = "-1";
-                    or_money_count.setText(orderMo.getOrderTotalPrice());
-                    tvJf.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-
+        llCoupon.setOnClickListener(this);
     }
 
     private OrderMo orderMo;
-    private TextView tvJf;//显示已经折扣了多少钱
-    private TextView tvMyJf;//我的积分
-
     @Override
-    protected void initData() {
+    public void initData() {
+        orderId = getIntent().getStringExtra("orderId");
         HashMap<String, String> map = new HashMap<>();
-        Intent intent = getIntent();
-        payOrderSnType = intent.getStringExtra("payOrderSnType");
-        String token = getSPKEY(this, "token");
-        orderId = intent.getStringExtra("orderId");
-        if (!StringUtils.isEmpty(orderId)) {
-            map.put("orderId", orderId);
-            setSPKEY(this, "orderId", orderId);
-        }
-        map.put(DyUrl.TOKEN_NAME, token);
+        map.put(DyUrl.TOKEN_NAME, getSPKEY(this, "token"));
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getConfirmGoods, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
@@ -196,11 +149,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                         ToastUtil.showShort(OrderActivity.this,object.optString("errmsg"));
                     }
                 } catch (JSONException e) {
-                    //e.printStackTrace();
                     ToastUtil.showShort(OrderActivity.this, "收货地址是空的...");
                 }
             }
-
             @Override
             public void onFailed(Call call, IOException e) {
                 ToastUtil.showShort(OrderActivity.this, "获取失败");
@@ -209,24 +160,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     }
 
-
-    /**
-     * 填充数据
-     * 1）：商品列表
-     * 2）：收货地址信息
-     * 3）：合计
-     *
-     * @param
-     */
-
     private void setDate() {
         //收货地址
         ad_name.setText(TextUtil.isNull2Url(orderMo.getReceivingAddress().getConsigneeName()));
         ad_phone.setText(TextUtil.isNull2Url(orderMo.getReceivingAddress().getConsigneePhone()));
         ad_address.setText(TextUtil.isNull2Url(orderMo.getReceivingAddress().getAddress()));
-
-        //我的积分
-        tvMyJf.setText(TextUtil.isNull(getSPKEY(this,"integral")));
 
         //订单总价
         or_money_count.setText(orderMo.getOrderTotalPrice());//总计(商品总价+物流总价)
@@ -273,14 +211,22 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             }
         };
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            //优惠券
+            case R.id.ll_Coupon:
+                showCoupon();
+                break;
             case R.id.orther_ok: {
-                showDialog();
+                if (orderMo.getReceivingAddress() != null && !TextUtil.isNullFor(orderMo.getReceivingAddress().getId())){
+                    showDialog();
+                }else {
+                    ToastUtil.showShort(getContext(),"完善收货地址~~有助于快速到货哦");
+                }
+
                 break;
             }
             case R.id.orther_set_address: {
@@ -291,232 +237,72 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
+    private PayDialog payDialog;
     /**
      * 支付弹窗
      */
     private void showDialog() {
-        //初始化底部弹窗
-        final BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(this);
-        //初始化 - 底部弹出框布局
-        View view = LayoutInflater.from(this).inflate(R.layout.orther_dialog, null);
-        TextView tvPrice = view.findViewById(R.id.dialog_price);
-        tvPrice.setText(or_money_count.getText().toString());
-        RadioGroup radioGroup = view.findViewById(R.id.orther_radio_group);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        if (dropType == 3){//代表重新支付跳转过来的
+            payDialog = new PayDialog(this,orderId);
+        }else {
+            //留言
+            String liveMsg = JsonUtil.obj2String(contents);
+            payDialog = new PayDialog(this,dropType,orderId,liveMsg,orderMo.getReceivingAddress().getId());
+        }
+        payDialog.showDialog(or_money_count.getText().toString());
+    }
+
+    /**
+     * 优惠券相关
+     */
+    private BottomSheetDialog dialog;
+    private List<CouponMo> couponMoList = new ArrayList<>();
+    private void showCoupon(){
+        couponMoList.add(new CouponMo(true));
+        couponMoList.add(new CouponMo(false));
+        couponMoList.add(new CouponMo(false));
+        couponMoList.add(new CouponMo(false));
+        couponMoList.add(new CouponMo(false));
+
+        dialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_coupon, null);
+        TextView tvSize = view.findViewById(R.id.tv_couponSize);
+        tvSize.setText("可用优惠券("+couponMoList.size()+")");
+        RecyclerView recyc =  view.findViewById(R.id.recy_coupon);
+        recyc.setLayoutManager(new LinearLayoutManager(this));
+        final BaseLoadMoreHeaderAdapter couAdapter = new BaseLoadMoreHeaderAdapter<CouponMo>
+                (this,recyc,couponMoList,R.layout.coupon_item) {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                rb = group.findViewById(checkedId);
-                //ToastUtil.showShort(OrderActivity.this,"选中的是id = "+checkedId+","+rb.getText().toString());
+            public void convert(Context mContext, BaseRecyclerHolder holder, CouponMo o) {
+                CheckBox checkBox = holder.getView(R.id.cb_check);
+                checkBox.setChecked(o.isCheck());
             }
-        });
-        //立即支付，当前跳过支付，直接提交
-        view.findViewById(R.id.zf_now).setOnClickListener(new View.OnClickListener() {
+        };
+        recyc.setAdapter(couAdapter);
+
+        couAdapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                if (dropType == 4) {//重新支付
-                    prepayOrderAgain();
-                    bottomInterPasswordDialog.dismiss();
-                } else if (TextUtil.isNullFor(orderMo.getReceivingAddress().getId())) {//首次支付，需要地址id
-                    ToastUtil.showShort(OrderActivity.this, "请添加收货地址");
-                } else {
-                    comitOrther();
-                    bottomInterPasswordDialog.dismiss();
+            public void onItemClick(View view, int position) {
+                for (int i = 0; i < couponMoList.size(); i++) {
+                    couponMoList.get(position).setCheck(i==position?true:false);
+                    if (position == i){
+                        couponMoList.get(position).setCheck(true);
+                        continue;
+                    }
+                    couponMoList.get(i).setCheck(false);
                 }
+                couAdapter.updateDataa(couponMoList);
             }
         });
 
-        bottomInterPasswordDialog
-                .contentView(view)/*加载视图*/
-                /*.heightParam(height/1)*//*显示的高度*/
-                /*动画设置*/
+        int hight = (int) (Double.valueOf(ScreenUtils.getScreenHeight(this)) / 1.3);
+        dialog.contentView(view)
+                .heightParam(hight)
                 .inDuration(200)
                 .outDuration(200)
-                /* .inInterpolator(new BounceInterpolator())
-                 .outInterpolator(new AnticipateInterpolator())*/
                 .cancelable(true)
                 .show();
     }
-
-    /**
-     * 重新支付
-     */
-    private void prepayOrderAgain() {
-        HashMap<String, String> map = new HashMap<>();
-        String token = getSPKEY(this, "token");
-        Intent intent = getIntent();
-        String orderId = intent.getStringExtra("orderId");
-        map.put(DyUrl.TOKEN_NAME, token);
-        map.put("orderId", orderId);
-        map.put("payOrderSnType", payOrderSnType);// 直接购买用orderSnTotal；重新付款用orderSn
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.prepayOrderAgain, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-
-            @Override
-            public void onUi(String result) {
-                if (StringUtils.isEmpty(result)) {
-                    return;
-                }
-                try {
-                    JSONObject object = new JSONObject(result);
-                    int errno = object.optInt("errno");
-                    if (errno == 0) {
-                        if (500 == object.optInt("code")) {
-                            return;
-                        }
-                        toWXPay(object.optJSONObject("data"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
-
-    }
-
-    private String integralTag = "-1";//是否使用积分，1使用，-1不使用
-
-    /**
-     * 第一步
-     * 提交订单方法
-     */
-    private void comitOrther() {
-        HashMap<String, String> map = new HashMap<>();
-        String token = getSPKEY(this, "token");
-        map.put(DyUrl.TOKEN_NAME, token);
-        //直接购买(buy),购物车购买(cart),团购购买(groupbuy)
-        Intent intent = getIntent();
-        String type = intent.getStringExtra("type");
-        map.put("submitType", type);
-        map.put("addressId", String.valueOf(orderMo.getReceivingAddress().getId()));//收货地址id
-        if (contents != null) {
-            map.put("leaveMessage", contents.toString());//留言
-        }
-        if (type.equals("live")) {
-            String anchorId = intent.getStringExtra("anchorId");
-            map.put("anchorId", anchorId);
-        }
-        map.put("integralTag", integralTag);//1使用，-1不使用
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.submitOrder, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-            @Override
-            public void onUi(String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    int errno = object.optInt("errno");
-                    if (errno == 0) {//得到微信支付需要的东西
-                        if (500 == object.optInt("code")) {
-                            return;
-                        }
-                        getWXMESS(object.optString("orderSn"));//再次请求后端获取微信支付需要的参数值
-                    } else if (errno == 1) {
-                        ToastUtil.showShort(OrderActivity.this, object.optString("errmsg"));
-                    } else {
-                        ToastUtil.showShort(OrderActivity.this, object.optString("errmsg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
-
-    }
-
-    /**
-     * 第二步，获取微信支付需要的参数值
-     *
-     * @param orderSn 订单号
-     *                支付类型
-     *                * orderSnTotal和orderSn只能二选一
-     *                * 1：立即购买=》直接支付     使用orderSnTotal
-     *                * 2：立即购买=》取消=》重新付款     使用orderSnTotal
-     *                * 3：立即购买=》取消=》查看订单=》订单详情=》去付款    使用orderSn
-     *                * 4：购物车=》去付款    使用orderSnTotal
-     *                * 5：购物车=》去付款=》取消=》重新付款    使用orderSnTotal
-     *                * 6：购物车=》去付款=》取消=》查看订单=》订单详情=》去付款    使用orderSn
-     */
-    private void getWXMESS(String orderSn) {
-        this.orderSn = orderSn;
-        HashMap<String, String> map = new HashMap<>();
-
-        String token = getSPKEY(this, "token");
-        map.put(DyUrl.TOKEN_NAME, token);
-        map.put("orderSn", orderSn);
-        map.put("payOrderSnType", payOrderSnType);//orderSnTotal
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.prepayOrder, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-            @Override
-            public void onUi(String result) {
-                //第三步，唤起微信支付
-                try {
-                    JSONObject object = new JSONObject(result);
-                    int errno = object.optInt("errno");
-                    if (errno == 0) {
-                        if (500 == object.optInt("code")) {
-                            return;
-                        }
-                        JSONObject dataObj = object.optJSONObject("data");
-                        setSPKEY(OrderActivity.this, "orderId", object.optString("orderId"));
-                        toWXPay(dataObj);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
-    }
-
-    /**
-     * 微信支付
-     *
-     * @param object
-     */
-    private void toWXPay(JSONObject object) {
-        setSPKEY(this,"payType","goods");//支付什么东西，用于微信支付成功失败回调的处理
-        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-        builder.setAppId(object.optString("appid"))
-                .setPartnerId(object.optString("partnerid"))
-                .setPrepayId(object.optString("prepayid"))
-                .setPackageValue(object.optString("package"))
-                .setNonceStr(object.optString("noncestr"))
-                .setTimeStamp(object.optString("timestamp"))
-                .setSign(object.optString("sign"))
-                .build().toWXPayNotSign(OrderActivity.this);
-        ToastUtil.showShort(this, "正在打开微信...");
-    }
-
-
-    /**
-     * 权限申请
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                } else {
-                    Toast.makeText(this, "申请失败", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
