@@ -38,6 +38,7 @@ import com.dabangvr.my.activity.StartOpenShopActivity;
 import com.dabangvr.util.BannerStart;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
+import com.dabangvr.util.SPUtils2;
 import com.example.mylibrary.ViewPagerForScrollView;
 import com.youth.banner.Banner;
 
@@ -161,7 +162,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         GridLayoutManager menuManager = new GridLayoutManager(context, 5);
         menuRecy.setLayoutManager(menuManager);
 
-        String str = MainActivity.getSPKEY(FragmentHome.this.getActivity(), "menuData");
+        String str = (String) SPUtils2.instance(getContext()).getkey("menuData","");
         if (!StringUtils.isEmpty(str)) {
             menuData = JsonUtil.string2Obj(str, List.class, MenuMo.class);
             view.findViewById(R.id.menu_ll).setVisibility(View.VISIBLE);
@@ -365,7 +366,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                             if (code == 0) {//成功
                                 JSONObject data = object.optJSONObject("data");
                                 String str = data.optString("channelMenuList");
-                                MainActivity.setSPKEY(FragmentHome.this.getActivity(), "menuData", str);
+                                SPUtils2.instance(getContext()).put("menuData",str);
                                 menuData = JsonUtil.string2Obj(str, List.class, MenuMo.class);
                                 menuAdapter.updateData(menuData);
                                 view.findViewById(R.id.menu_ll).setVisibility(View.VISIBLE);

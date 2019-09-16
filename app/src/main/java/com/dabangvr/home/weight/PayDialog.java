@@ -103,7 +103,7 @@ public class PayDialog {
             public void onCheckedChanged(RadioGroup group, int cId) {
                 //获取下标
                 checkPayId = group.indexOfChild(group.findViewById(cId));
-                ToastUtil.showShort(mContext,String.valueOf(checkPayId));
+                //ToastUtil.showShort(mContext,String.valueOf(checkPayId));
             }
         });
         //立即支付，当前跳过支付，直接提交

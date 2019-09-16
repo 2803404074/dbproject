@@ -378,10 +378,6 @@ public class FragmentMy extends MyFragment implements View.OnClickListener {
                             if (null !=userMess.getToken()){
                                 setSPKEY(context,"token",userMess.getToken());
                             }
-                            if (1 == userMess.getIsAnchor()){
-                                MainActivity.isAnchor = true;
-                            }
-
                             setUserMess();
                         }
                     }

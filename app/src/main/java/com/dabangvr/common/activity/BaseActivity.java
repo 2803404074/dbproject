@@ -30,6 +30,7 @@ import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.my.activity.SbActivity;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.TextUtil;
 import com.dabangvr.util.ToastUtil;
@@ -50,19 +51,7 @@ import config.DyUrl;
 import okhttp3.Call;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    private static SPUtils spUtils;
-    private static String isAnch; //1是主播
-    private static String anchId;
-
-    private static int REQUEST_PERMISSION_CODE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-            , Manifest.permission.RECORD_AUDIO};
-
     private Unbinder mUnbinder;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,32 +75,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            //这样半透明+白=灰, 状态栏的文字能看得清
 //            StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.white));
 //        }
-
         initView();
         initData();
         initPermissions();
-
-
     }
-
-    public static String getSPKEY(Activity activity,String key){
-        if(null == spUtils){
-            spUtils = new SPUtils(activity,"db_user");
-        }
-        return (String) spUtils.getkey(key,"");
+    public String getSPKEY(Activity activity,String key){
+        return (String) SPUtils2.instance(activity).getkey(key,"");
     }
-
-    public static void setSPKEY(Activity activity,String key,String values){
-        if(null == spUtils){
-            spUtils = new SPUtils(activity,"db_user");
-        }
-        spUtils.put(key,values);
+    public void setSPKEY(Activity activity,String key,String values){
+        SPUtils2.instance(activity).put(key,values);
     }
     public static void removeSPKEY(Activity activity,String key){
-        if(null == spUtils){
-            spUtils = new SPUtils(activity,"db_user");
-        }
-        spUtils.remove(key);
+        SPUtils2.instance(activity).remove(key);
     }
 
     // 设置布局
@@ -216,29 +191,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void initPermissions() {
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-//            }
-//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-//            }
-//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-//            }
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            String[] permissions = {
-//                    Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    Manifest.permission.READ_PHONE_STATE,
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-//            };
-//            if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED) {
-//                requestPermissions(permissions, 0);
-//            }
-//        }
-
         //申请存储权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -255,112 +207,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                     2);
         }
     }
-
-
-
-    public static UserMess getUserInfo (final Activity activity){
-        HashMap<String, String> map = new HashMap<>();
-        map.put(DyUrl.TOKEN_NAME,getSPKEY(activity,"token"));
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.USER_INFO, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-            @Override
-            public void onUi(String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    int errno = object.optInt("errno");
-                    if (errno == 0) {
-                        if (500 == object.optInt("code")) {
-                            removeSPKEY(activity,"token");
-                            removeSPKEY(activity,"user");
-                            Intent intent = new Intent(activity, LoginActivity.class);
-                            activity.startActivity(intent);
-                            ToastUtil.showShort(activity,"登录失败,请重新登录");
-                            activity.finish();
-                            return ;
-                        }
-                        String data = object.optString("data");
-                        UserMess userMess = JsonUtil.string2Obj(data, UserMess.class);
-                        if (null != userMess){
-                            setSPKEY(activity,"user",data);
-                            setSPKEY(activity,"userId",String.valueOf(userMess.getId()));
-                            setSPKEY(activity,"isAnchor",String.valueOf(userMess.getIsAnchor()));
-                            setSPKEY(activity,"token",userMess.getToken());
-                            //setSPKEY(activity,"anchorId",userMess.getAnchorId());
-                            anchId = userMess.getAnchorId();
-                            isAnch = String.valueOf(userMess.getIsAnchor());
-                            setSPKEY(activity,"head",TextUtil.isNull2Url(userMess.getHeadUrl()));
-                            setSPKEY(activity,"name",userMess.getNickName());
-                            setSPKEY(activity,"integral",userMess.getIntegral());
-                            if (TextUtil.isNullFor(userMess.getIsNew()) || userMess.getIsNew().equals("true")){//新人弹窗
-                                final Dialog dialog = new Dialog(activity, R.style.BottomDialogStyle);
-                                View viewM = View.inflate(activity, R.layout.user_new_dialog, null);
-                                viewM.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                dialog.setContentView(viewM);
-                                dialog.setCanceledOnTouchOutside(false);
-                                dialog.setCancelable(false);
-                                Window dialogWindow = dialog.getWindow();
-                                WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-                                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                                lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                                lp.gravity = Gravity.CENTER;
-                                dialogWindow.setAttributes(lp);
-                                dialog.show();
-                            }
-                        }else {
-                            removeSPKEY(activity,"token");
-                            removeSPKEY(activity,"user");
-                            Intent intent = new Intent(activity, LoginActivity.class);
-                            activity.startActivity(intent);
-                            ToastUtil.showShort(activity,"登录失败，请重新登录");
-                            activity.finish();
-                        }
-                    }else {
-                        removeSPKEY(activity,"token");
-                        removeSPKEY(activity,"user");
-                        Intent intent = new Intent(activity, LoginActivity.class);
-                        activity.startActivity(intent);
-                        ToastUtil.showShort(activity,"登录已失效，请重新登录");
-                        activity.finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailed(Call call, IOException e) {
-                Toast.makeText(activity, "网络无法达到哦", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                super.onFailure(call, e);
-                //Toast.makeText(MainActivity.this, "网络无法达到哦", Toast.LENGTH_LONG).show();
-            }
-        });
-        return null;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         OkHttp3Utils.desInstance();
-        spUtils = null;
         mUnbinder.unbind();
-    }
-
-
-    public static boolean isAnch(){
-        if (isAnch.equals("1")){
-            return true;
-        }
-        return false;
-    }
-
-    public String getAnchId(){
-        return anchId;
     }
 }

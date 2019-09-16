@@ -42,32 +42,28 @@ import com.dabangvr.video.utils.ToastUtils;
 import com.dabangvr.view.home.CartFragment;
 import com.dabangvr.view.home.HomeFragment;
 
+import butterknife.BindView;
+
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ChangeRadioButtonCallBack {
 
     public static MainActivity instants;
+
+    @BindView(R.id.main_orther)
+    TextView tvShow;
+
     private Dialog mShareDialog;
     private RadioGroup radioGroup;
     private FragmentManager fragmentManager;
-    private FragmentHome fg_00;
-    //private FragmentZhibo fg_01;
     private FragmentZhiboCopy fg_01;
-
-    private FragmentDynamic fg_03;
-    //private VideoFragment fg_03;
-
     private FragmentMy fg_04;
-    public static boolean isAnchor = false;
     private BottomImgSize bis;
-    private String base;
-
     private RadioButton radioButton_00, radioButton_01, radioButton_03, radioButton_04;
-    private TextView tvShow;
+
     private ImageView imgCent;
 
-    private HomeFragment homeFragment;
     private int height;
     private FrameLayout fg_content;
-    private View view_line;
+
     private CartFragment cartFragment03;
     private ZhiBoPage zhiBoPage01;
 
@@ -92,10 +88,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         radioGroup = findViewById(R.id.main_radiogrop);
         radioGroup.setOnCheckedChangeListener(this);
         radioButton_00 = findViewById(R.id.main_home);
-        view_line = findViewById(R.id.view);
         fg_content = findViewById(R.id.fg_content);
         radioButton_01 = findViewById(R.id.main_zhibo);
-        tvShow = findViewById(R.id.main_orther);
         imgCent = (ImageView) findViewById(R.id.iv_cent_id);
         radioButton_03 = findViewById(R.id.main_video);
         radioButton_04 = findViewById(R.id.main_my);
@@ -125,12 +119,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 fg_content.setPadding(0, 0, 0, height);
             }
         });
-
     }
 
     @Override
     protected void initData() {
-        getUserInfo(this);
     }
 
     /**

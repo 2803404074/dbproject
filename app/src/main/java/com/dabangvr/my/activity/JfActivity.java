@@ -55,20 +55,10 @@ public class JfActivity extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.tv_live:
-                if (isAnch()){
-                    Intent intent = new Intent(JfActivity.this, PlayZhiBoActivity.class);
-                    startActivity(intent);
-                }else {
-                    show(JfActivity.this, 1, "只有通过实名认证才能开直播哦", "去认证");
-                }
+
                 break;
             case R.id.tv_short:
-                if (isAnch()){
-                    Intent intent = new Intent(JfActivity.this, PlayZhiBoActivity.class);
-                    startActivity(intent);
-                }else {
-                    show(JfActivity.this, 1, "只有通过实名认证才能发视频哦", "去认证");
-                }
+
                 break;
             case R.id.tv_goods:
                 Intent intent = new Intent(JfActivity.this, HxClassActivity.class);
