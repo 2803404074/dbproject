@@ -18,6 +18,7 @@
             android:layout_marginTop="@dimen/dp_5">
 
             <TextView
+                android:textColor="@color/b_text"
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
                 android:textSize="@dimen/sp_15" />
 
             <TextView
+                android:textColor="@color/b_text"
                 android:id="@+id/ad_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,21 +49,22 @@
             android:padding="@dimen/dp_10">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:layout_gravity="center"
                 android:padding="@dimen/dp_5"
                 android:src="@drawable/add_location"
                 android:visibility="gone" />
 
             <TextView
+                android:textColor="@color/b_text"
                 android:id="@+id/ad_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:lines="2"
                 android:text="广西+++++++++++++++++++++++++++++++"
-                android:textSize="13sp" />
+                android:textSize="@dimen/sp_13" />
         </LinearLayout>
     </LinearLayout>
 
@@ -86,7 +89,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:gravity="center"
-            android:text="设为默认" />
+            android:text="  设为默认" />
 
         <TextView
             android:layout_width="1dp"
@@ -101,6 +104,7 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/add_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
@@ -108,7 +112,7 @@
 
 
             <ImageView
-                android:id="@+id/add_delete"
+
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
                 android:layout_gravity="center"
@@ -116,6 +120,7 @@
                 android:src="@mipmap/add_delete" />
 
             <TextView
+                android:textColor="@color/b_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

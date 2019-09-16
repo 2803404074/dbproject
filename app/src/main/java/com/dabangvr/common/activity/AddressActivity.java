@@ -56,7 +56,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_address);
         initView();
         initData();
-    }
+}
 
     private void initData() {
         HashMap<String, String> map = new HashMap<>();
@@ -119,6 +119,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         spUtils = new SPUtils(this, "db_user");
         findViewById(R.id.linear_address).setOnClickListener(this);
         findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.text_addads).setOnClickListener(this);
         recyclerView = findViewById(R.id.recy);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -127,7 +128,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             public void convert(Context mContext, BaseRecyclerHolder holder, final AddressBean o) {
                 holder.setText(R.id.tv_title, o.getConsigneeName());//收货人
                 if (!TextUtils.isEmpty(o.getConsigneePhone())) {
-
                     holder.setText(R.id.ad_phone, StringUtils.hidePhoneNum(o.getConsigneePhone()));//电话
                 }
 
@@ -226,6 +226,12 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.linear_address: {
+                Intent intent = new Intent(this, SetAdreessActivity.class);
+                startActivityForResult(intent, 100);
+                overridePendingTransition(R.anim.activity_open_right, R.anim.activity_open_left);
+                break;
+            }
+            case R.id.text_addads: {
                 Intent intent = new Intent(this, SetAdreessActivity.class);
                 startActivityForResult(intent, 100);
                 overridePendingTransition(R.anim.activity_open_right, R.anim.activity_open_left);

@@ -14,35 +14,35 @@
         android:layout_height="wrap_content"
         android:background="@color/colorDb"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="@dimen/dp_5">
 
         <ImageView
             android:id="@+id/set_backe"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:layout_gravity="center"
-            android:padding="5dp"
+            android:padding="@dimen/dp_5"
             android:src="@drawable/back" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
             android:text="添加收货地址"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
 
         <TextView
             android:id="@+id/set_add_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="3dp"
+            android:padding="@dimen/dp_3"
             android:text="保存"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:padding="10dp" />
+            android:padding="@dimen/dp_10" />
 
     </LinearLayout>
 
@@ -80,7 +80,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="手机号:"
             android:textColor="@color/black" />
 
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:padding="10dp" />
+            android:padding="@dimen/dp_10" />
     </LinearLayout>
 
     <View
@@ -104,20 +104,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/set_address"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="省市区:"
             android:textColor="@color/black" />
 
-        <LinearLayout
-            android:id="@+id/set_ssq"
+        <TextView
+            android:id="@+id/set_address"
+            android:hint="请选择"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="10dp"></LinearLayout>
+            android:padding="@dimen/dp_10"/>
     </LinearLayout>
 
     <View
@@ -133,16 +134,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="详细地址:"
             android:textColor="@color/black" />
 
         <EditText
+            android:hint="请详细到门牌号"
             android:id="@+id/set_detailed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:padding="10dp" />
+            android:padding="@dimen/dp_10" />
     </LinearLayout>
 
     <View
@@ -154,7 +156,7 @@
         android:id="@+id/switch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/dp_5"
         android:background="#fff"
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"

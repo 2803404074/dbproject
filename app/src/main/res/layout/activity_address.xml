@@ -13,14 +13,14 @@
         android:layout_height="wrap_content"
         android:background="@color/colorDb3"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="@dimen/dp_5">
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:layout_gravity="center"
-            android:padding="5dp"
+            android:padding="@dimen/dp_5"
             android:src="@drawable/back" />
 
         <TextView
@@ -31,16 +31,17 @@
             android:gravity="center"
             android:text="收货地址"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
 
         <TextView
+            android:id="@+id/text_addads"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/dp_30"
             android:layout_gravity="center"
-            android:padding="5dp"
+            android:padding="@dimen/dp_5"
             android:text="添加"
             android:textColor="#fff"
-            android:visibility="invisible" />
+            android:visibility="visible" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -55,15 +56,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/dp_5"
         android:orientation="horizontal"
         android:padding="5dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/add_top_img"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:layout_gravity="center"
             android:src="@drawable/add_positon" />
 
@@ -77,8 +78,8 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:padding="@dimen/dp_5"

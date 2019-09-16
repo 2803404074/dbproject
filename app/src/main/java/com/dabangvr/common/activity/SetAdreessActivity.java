@@ -66,7 +66,6 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
 
         String id = getIntent().getStringExtra("id");
 
-        findViewById(R.id.set_ssq).setOnClickListener(this);//选择省市区的控件按钮
         findViewById(R.id.set_add_save).setOnClickListener(this);//保存按钮
         findViewById(R.id.set_backe).setOnClickListener(this);//左上角返回
         setAdress = findViewById(R.id.set_address);//省市区
@@ -74,10 +73,11 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
         set_phone = findViewById(R.id.set_phone);
         set_detailed = findViewById(R.id.set_detailed);
         switch1 = findViewById(R.id.switch1);
+        setAdress.setOnClickListener(this);//选择省市区的控件按钮
 
 
-        if (!StringUtils.isEmpty(id)){//更新
-            setAdress.setText(getIntent().getStringExtra("provinceOne")+"-"+getIntent().getStringExtra("cityOne")+"-"+getIntent().getStringExtra("areaOne"));//省市县
+        if (!StringUtils.isEmpty(id)) {//更新
+            setAdress.setText(getIntent().getStringExtra("provinceOne") + "-" + getIntent().getStringExtra("cityOne") + "-" + getIntent().getStringExtra("areaOne"));//省市县
             set_name.setText(getIntent().getStringExtra("consigneeName"));//收货人
             set_phone.setText(getIntent().getStringExtra("consigneePhone"));//电话
             set_detailed.setText(getIntent().getStringExtra("address"));//详细信息
@@ -86,9 +86,9 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
             city = getIntent().getStringExtra("city");
             district = getIntent().getStringExtra("area");
 
-            if (getIntent().getIntExtra("isDefault",0) == 1){
+            if (getIntent().getIntExtra("isDefault", 0) == 1) {
                 switch1.setChecked(true);
-            }else {
+            } else {
                 switch1.setChecked(false);
             }
 
@@ -98,17 +98,17 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.set_ssq: {
+            case R.id.set_address: {
                 buttomDialog();
                 break;
             }
             case R.id.set_add_save: {
-                if (!StringUtils.isEmpty(getIntent().getStringExtra("id"))){
+                if (!StringUtils.isEmpty(getIntent().getStringExtra("id"))) {
                     //修改地址请求
-                    setHttp(DyUrl.addressUpdate,getIntent().getStringExtra("id"));
-                }else {
+                    setHttp(DyUrl.addressUpdate, getIntent().getStringExtra("id"));
+                } else {
                     //添加地址请求
-                    setHttp(DyUrl.AddressAdd,"");
+                    setHttp(DyUrl.AddressAdd, "");
                 }
                 break;
             }
@@ -121,11 +121,10 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     *
      * @param url
      * @param id  存在该id的就是修改否则是添加
      */
-    private void setHttp(String url,String id) {
+    private void setHttp(String url, String id) {
         String name = set_name.getText().toString();
         String phone = set_phone.getText().toString();
         String detailed = set_detailed.getText().toString();
@@ -148,8 +147,8 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
         map.put("address", set_detailed.getText().toString());//详细
         map.put("zipCode", "");//邮编
 
-        if (!StringUtils.isEmpty(id)){
-            map.put("id",id);
+        if (!StringUtils.isEmpty(id)) {
+            map.put("id", id);
         }
         if (switch1.isChecked()) {
             map.put("isDefault", "1");//默认
@@ -165,14 +164,14 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
                     JSONObject object = new JSONObject(result);
                     int errno = object.optInt("errno");
                     if (errno == 0) {
-                        if(500 == object.optInt("code")){
-                            return ;
+                        if (500 == object.optInt("code")) {
+                            return;
                         }
-                        ToastUtil.showShort(SetAdreessActivity.this,"添加成功");
+                        ToastUtil.showShort(SetAdreessActivity.this, "添加成功");
                         setResult(100);
                         finish();
-                    }else {
-                        ToastUtil.showShort(SetAdreessActivity.this,"添加失败");
+                    } else {
+                        ToastUtil.showShort(SetAdreessActivity.this, "添加失败");
                     }
 
                 } catch (JSONException e) {
@@ -201,29 +200,29 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //ToastUtil.showShort(SetAdreessActivity.this, "点击了name = " + list.get(position).getName() + ",id=" + list.get(position).getId());
 
-                if(type==0){
+                if (type == 0) {
                     getAddress(listView, list.get(position).getId(), "1");
                     pcdName = list.get(position).getName();
 
                     province = list.get(position).getId();
 
                     pcd.setText(pcdName);
-                    type+=1;
-                }else if(type==1){
+                    type += 1;
+                } else if (type == 1) {
                     getAddress(listView, list.get(position).getId(), "2");
-                    pcdName +="-" + list.get(position).getName();
+                    pcdName += "-" + list.get(position).getName();
 
                     city = list.get(position).getId();
 
                     pcd.setText(pcdName);
-                    type +=1;
-                }else {
-                    pcdName +="-" + list.get(position).getName();
+                    type += 1;
+                } else {
+                    pcdName += "-" + list.get(position).getName();
 
                     district = list.get(position).getId();
 
                     pcd.setText(pcdName);
-                    type=0;
+                    type = 0;
 
                     //设置控件
                     setAdress.setText(pcdName);
@@ -252,7 +251,7 @@ public class SetAdreessActivity extends AppCompatActivity implements View.OnClic
         HashMap<String, String> map = new HashMap<>();
         map.put("areaId", areaId);
         map.put("type", type);
-        map.put(DyUrl.TOKEN_NAME, (String) spUtils.getkey("token",""));
+        map.put(DyUrl.TOKEN_NAME, (String) spUtils.getkey("token", ""));
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.proviceList, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
