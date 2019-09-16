@@ -417,6 +417,7 @@ public class HomeFragment extends BaseFragment {
      * 获取渠道列表
      */
     private void getMenu() {
+
         Map<String, String> map = new HashMap<>();
         map.put("mallSpeciesId", "1");
         map.put("parentId", "1");

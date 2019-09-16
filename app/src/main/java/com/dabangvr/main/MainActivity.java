@@ -46,8 +46,6 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ChangeRadioButtonCallBack {
 
-    public static MainActivity instants;
-
     @BindView(R.id.main_orther)
     TextView tvShow;
 
@@ -71,8 +69,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instants = this;
-
         StatusBarUtil.setRootViewFitsSystemWindows(this, false);
     }
 
@@ -133,38 +129,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-
         switch (checkedId) {
             case R.id.main_home: {
                 changeFragment(0);
-//                radioGroup.getBackground().setAlpha(255);
-//                fg_content.setPadding(0, 0, 0, height);
-//                view_line.setVisibility(View.VISIBLE);
                 break;
             }
             case R.id.main_zhibo: {
-                //show("该功能正在努力升级中，敬请期待!");
                 changeFragment(1);
-//                radioGroup.getBackground().setAlpha(0);
-//                fg_content.setPadding(0, 0, 0, 0);
-//                view_line.setVisibility(View.GONE);
                 break;
             }
             case R.id.main_video: {
                 changeFragment(3);
-//                Intent cintent = new Intent(this, CartActivity.class);
-//                startActivity(cintent);
-                //show(1,"该功能正在努力升级中，敬请期待!");
-//                radioGroup.getBackground().setAlpha(255);
-//                fg_content.setPadding(0, 0, 0, height);
-//                view_line.setVisibility(View.VISIBLE);
                 break;
             }
             case R.id.main_my: {
                 changeFragment(4);
-//                radioGroup.getBackground().setAlpha(255);
-//                fg_content.setPadding(0, 0, 0, height);
-//                view_line.setVisibility(View.VISIBLE);
                 break;
             }
         }
@@ -180,28 +159,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         // 根据不同的标签页执行不同的操作
         switch (index) {
             case 1:
-                /*****/
-//                if (fg_00 == null) {
-//                    fg_00 = FragmentHome.newInstance();
-//                    beginTransaction.add(R.id.fg_content, fg_00);
-//                } else {
-//                    beginTransaction.show(fg_00);
-//                }
-
-
-//                if (homeFragment == null) {
-//                    homeFragment = new HomeFragment();
-//                    beginTransaction.add(R.id.fg_content, homeFragment);
-//                } else {
-//                    beginTransaction.show(homeFragment);
-//                }
                 if (zhiBoPage01 == null) {
                     zhiBoPage01 = new ZhiBoPage(0);
                     beginTransaction.add(R.id.fg_content, zhiBoPage01);
                 } else {
                     beginTransaction.show(zhiBoPage01);
                 }
-
                 break;
             case 0:
                 if (fg_01 == null) {
@@ -212,20 +175,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 break;
             case 3: //购物车
-//                if (fg_03 == null) {
-//                    fg_03 = FragmentDynamic.newInstance(0);
-//                    beginTransaction.add(R.id.fg_content, fg_03);
-//                } else {
-//                    beginTransaction.show(fg_03);
-//                }
                 if (cartFragment03 == null) {
-
                     cartFragment03 = CartFragment.newInstance(3);
                     beginTransaction.add(R.id.fg_content, cartFragment03);
                 } else {
                     beginTransaction.show(cartFragment03);
                 }
-
                 break;
             case 4:
                 if (fg_04 == null) {
@@ -238,22 +193,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             default:
                 break;
         }
-
         //需要提交事务
         beginTransaction.commit();
     }
 
     private void hideFragments(FragmentTransaction transaction) {
 
-//        if (fg_00 != null) {
-//            transaction.hide(fg_00);
-//        }
-
         /*****/
         if (zhiBoPage01 != null) {
             transaction.hide(zhiBoPage01);
         }
-
 
         if (fg_01 != null) {
             transaction.hide(fg_01);
@@ -398,7 +347,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
-                //弹出提示，可以有多种方式
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +16,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dabangvr.R;
+import com.dabangvr.contens.ParameterContens;
+import com.dabangvr.model.MenuMo;
+import com.dabangvr.model.TypeBean;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils;
@@ -28,7 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
@@ -64,10 +71,9 @@ public class WellcomActivity extends AppCompatActivity {
         initUserData(token);
 
         //获取首页数据
-        initHomeData();
-
+        getMenu();
+        getType();
     }
-
 
     /**
      * 获取用户信息
@@ -104,9 +110,97 @@ public class WellcomActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取首页数据
+     * 获取首页渠道数据
      */
-    private void initHomeData() {
+    private void getMenu() {
+        Map<String, String> map = new HashMap<>();
+        map.put("mallSpeciesId", "1");
+        map.put("parentId", "1");
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getChannelMenuList, map,
+                new GsonObjectCallback<String>(DyUrl.BASE) {
+                    @Override
+                    public void onUi(String msg) {
+                        try {
+                            JSONObject object = new JSONObject(msg);
+                            int code = object.optInt("errno");
+                            if (code == 0) {//成功
+                                JSONObject data = object.optJSONObject("data");
+                                String str = data.optString("channelMenuList");
+                                SPUtils2.instance(WellcomActivity.this).put("channelMenuList",str);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //请求失败
+                    @Override
+                    public void onFailed(Call call, IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        super.onFailure(call, e);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                            }
+                        });
+                    }
+                });
+    }
+
+    /**
+     * 获取首页分类列表
+     */
+    private void getType() {
+        Map<String, String> map = new HashMap<>();
+        map.put("parentId", "1");
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsCategoryList, map,
+                new GsonObjectCallback<String>(DyUrl.BASE) {
+                    //主线程处理
+                    @Override
+                    public void onUi(String msg) {
+                        try {
+                            JSONObject object = new JSONObject(msg);
+                            int code = object.optInt("errno");
+                            if (code == 0) {//成功
+                                JSONObject data = object.optJSONObject("data");
+                                String str = data.optString("goodsCategoryList");
+                                SPUtils2.instance(WellcomActivity.this).put("goodsCategoryList",str);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //请求失败
+                    @Override
+                    public void onFailed(Call call, IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        super.onFailure(call, e);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                            }
+                        });
+                    }
+                });
     }
 }
