@@ -41,6 +41,7 @@ import com.dabangvr.video.utils.PermissionChecker;
 import com.dabangvr.video.utils.ToastUtils;
 import com.dabangvr.view.home.CartFragment;
 import com.dabangvr.view.home.HomeFragment;
+import com.dabangvr.wxapi.AppManager;
 
 import butterknife.BindView;
 
@@ -70,6 +71,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setRootViewFitsSystemWindows(this, false);
+        AppManager.getAppManager().addActivity(this);
     }
 
     @Override

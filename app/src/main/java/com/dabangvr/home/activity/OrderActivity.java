@@ -51,6 +51,7 @@ import java.util.Map;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import Utils.TObjectCallback;
 import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
@@ -222,6 +223,7 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
                 break;
             case R.id.orther_ok: {
                 if (orderMo.getReceivingAddress() != null && !TextUtil.isNullFor(orderMo.getReceivingAddress().getId())){
+                    setLoaddingView(true);
                     showDialog();
                 }else {
                     ToastUtil.showShort(getContext(),"完善收货地址~~有助于快速到货哦");
@@ -238,18 +240,49 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
     }
 
     private PayDialog payDialog;
+
+
     /**
-     * 支付弹窗
+     * 提交订单-成功就弹出支付窗口
      */
     private void showDialog() {
-        if (dropType == 3){//代表重新支付跳转过来的
-            payDialog = new PayDialog(this,orderId);
-        }else {
-            //留言
-            String liveMsg = JsonUtil.obj2String(contents);
-            payDialog = new PayDialog(this,dropType,orderId,liveMsg,orderMo.getReceivingAddress().getId());
+        HashMap<String, Object> map = new HashMap<>();
+        //购买类型
+        if (dropType == 0){//普通购买
+            map.put("submitType", "buy");
         }
-        payDialog.showDialog(or_money_count.getText().toString());
+        if (dropType == 1){//购物车购买
+            map.put("submitType", "cart");
+        }
+        if (dropType == 2){//团购购买
+            map.put("submitType", "groupbuy");
+        }
+        //收货地址id
+        map.put("addressId", String.valueOf(orderMo.getReceivingAddress().getId()));
+
+        //各店铺的留言
+        if (contents != null) {
+            map.put("leaveMessage", contents.toString());//留言
+        }
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.submitOrder, map, getToken(this), new TObjectCallback<String>(DyUrl.BASE) {
+            @Override
+            public void onUi(String result) throws JSONException {
+                setLoaddingView(false);
+                JSONObject object = new JSONObject(result);
+                String orderSn = object.optString("orderSn");
+                if (payDialog == null)payDialog = new PayDialog(getContext(),orderSn,"orderSnTotal","");
+                payDialog.showDialog(or_money_count.getText().toString());
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                setLoaddingView(false);
+                ToastUtil.showShort(getContext(),msg);
+                if (null != payDialog){
+                    payDialog.desDialogView();
+                }
+            }
+        });
     }
 
     /**

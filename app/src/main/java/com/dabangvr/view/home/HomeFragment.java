@@ -37,6 +37,7 @@ import com.dabangvr.my.activity.StartOpenShopActivity;
 import com.dabangvr.util.BannerStart;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.ItemOnClickListener;
 import com.dabangvr.video.utils.ToastUtils;
@@ -159,7 +160,6 @@ public class HomeFragment extends BaseFragment {
     public void initData() {
         getMenu();
         getType();
-
     }
 
 
@@ -414,118 +414,63 @@ public class HomeFragment extends BaseFragment {
 
 
     /**
+     *已经在欢迎页获取请求了数据进行缓存
+     * 在这里只拿缓存的数据
      * 获取渠道列表
      */
     private void getMenu() {
-
-        Map<String, String> map = new HashMap<>();
-        map.put("mallSpeciesId", "1");
-        map.put("parentId", "1");
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getChannelMenuList, map,
-                new GsonObjectCallback<String>(DyUrl.BASE) {
-                    //主线程处理
-                    @Override
-                    public void onUi(String msg) {
-
-                        try {
-                            JSONObject object = new JSONObject(msg);
-                            int code = object.optInt("errno");
-                            if (code == 0) {//成功
-                                JSONObject data = object.optJSONObject("data");
-                                String str = data.optString("channelMenuList");
-//                                MainActivity.setSPKEY(HomeFragment.this.getActivity(), "menuData", str);
-                                List<MenuMo> list = JsonUtil.string2Obj(str, List.class, MenuMo.class);
-                                for (int i = 0; i < list.size(); i++) {
-                                    if (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.HXFL) || (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.TTTEJ)) || (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.QBFL))) {
-                                        TypeBean typeBean = new TypeBean();
-                                        typeBean.setJumpUrl(list.get(i).getJumpUrl());
-                                        typeBean.setName(list.get(i).getTitle());
-                                        typeBean.setCategoryImg(list.get(i).getIconUrl());
-                                        typeData1.add(typeBean);
-                                    } else {
-                                        menuData.add(list.get(i));
-                                    }
-                                }
-
-                                channelAdapter.setData(menuData);
-//                                menuAdapter.updateData(menuData);
-//                                view.findViewById(R.id.menu_ll).setVisibility(View.VISIBLE);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    //请求失败
-                    @Override
-                    public void onFailed(Call call, IOException e) {
-                    }
-
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        super.onFailure(call, e);
-                    }
-                });
+        String str = (String) SPUtils2.instance(getContext()).getkey("menuList","");
+        List<MenuMo> list = JsonUtil.string2Obj(str, List.class, MenuMo.class);
+        if (null != list && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.HXFL)
+                        || (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.TTTEJ))
+                        || (TextUtils.equals(list.get(i).getJumpUrl(), ParameterContens.QBFL))) {
+                    TypeBean typeBean = new TypeBean();
+                    typeBean.setJumpUrl(list.get(i).getJumpUrl());
+                    typeBean.setName(list.get(i).getTitle());
+                    typeBean.setCategoryImg(list.get(i).getIconUrl());
+                    typeData1.add(typeBean);
+                } else {
+                    menuData.add(list.get(i));
+                }
+            }
+            channelAdapter.setData(menuData);
+        }
     }
 
     /**
+     * 已经在欢迎页获取请求了数据进行缓存
+     * 在这里只拿缓存的数据
      * 获取分类列表
      */
     private void getType() {
-        Map<String, String> map = new HashMap<>();
-        map.put("parentId", "1");
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsCategoryList, map,
-                new GsonObjectCallback<String>(DyUrl.BASE) {
-                    //主线程处理
-                    @Override
-                    public void onUi(String msg) {
-                        try {
-                            JSONObject object = new JSONObject(msg);
-                            int code = object.optInt("errno");
-                            if (code == 0) {//成功
-                                JSONObject data = object.optJSONObject("data");
-                                String str = data.optString("goodsCategoryList");
-                                List<TypeBean> list1 = JsonUtil.string2Obj(str, List.class, TypeBean.class);
-                                List<TypeBean> list = new ArrayList<>();
-                                for (int i = 0; i < 8; i++) {
-                                    list.add(list1.get(i));
-                                }
-                                for (int j = 0; j < list.size(); j++) {
-                                    typeData.add(list.get(j));
-                                }
-                                if (typeData1 != null && typeData1.size() > 0) {
-                                    for (int i = 0; i < typeData1.size(); i++) {
-                                        if (TextUtils.equals(typeData1.get(i).getJumpUrl(), ParameterContens.TTTEJ)) {
-                                            typeData.add(typeData1.get(i));
-                                        }
-                                    }
-                                }
-                                if (typeData1 != null && typeData1.size() > 0) {
-                                    for (int i = 0; i < typeData1.size(); i++) {
-                                        if (TextUtils.equals(typeData1.get(i).getJumpUrl(), ParameterContens.QBFL)) {
-                                            typeData.add(typeData1.get(i));
-                                        }
-                                    }
-                                }
-
-                                typeRVAdapter.setData(typeData);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        String str = (String) SPUtils2.instance(getContext()).getkey("typeList","");
+        List<TypeBean> typeList = JsonUtil.string2Obj(str, List.class, TypeBean.class);
+        if (null != typeList && typeList.size()>0){
+            List<TypeBean> list = new ArrayList<>();
+            for (int i = 0; i < 8; i++) {
+                list.add(typeList.get(i));
+            }
+            for (int j = 0; j < list.size(); j++) {
+                typeData.add(list.get(j));
+            }
+            if (typeData1 != null && typeData1.size() > 0) {
+                for (int i = 0; i < typeData1.size(); i++) {
+                    if (TextUtils.equals(typeData1.get(i).getJumpUrl(), ParameterContens.TTTEJ)) {
+                        typeData.add(typeData1.get(i));
                     }
-
-                    //请求失败
-                    @Override
-                    public void onFailed(Call call, IOException e) {
-
+                }
+            }
+            if (typeData1 != null && typeData1.size() > 0) {
+                for (int i = 0; i < typeData1.size(); i++) {
+                    if (TextUtils.equals(typeData1.get(i).getJumpUrl(), ParameterContens.QBFL)) {
+                        typeData.add(typeData1.get(i));
                     }
-
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        super.onFailure(call, e);
-                    }
-                });
+                }
+            }
+            typeRVAdapter.setData(typeData);
+        }
     }
 
 

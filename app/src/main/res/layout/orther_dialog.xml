@@ -28,13 +28,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_15"
+            android:textSize="@dimen/sp_18"
             android:textColor="@color/colorGray6"
             android:text="支付金额:"/>
         <TextView
             android:id="@+id/dialog_price"
             android:textColor="@color/colorAccentButton"
-            android:textSize="@dimen/sp_15"
+            android:textSize="@dimen/sp_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="---"/>
@@ -54,8 +54,9 @@
            android:orientation="vertical">
            <RadioButton
                android:id="@+id/rb_wx"
-               android:text="微信支付"
+               android:text="微信支付(推荐)"
                android:button="@null"
+               android:checked="true"
                android:drawablePadding="10dp"
                android:textSize="@dimen/sp_15"
                android:textColor="@color/colorGray6"

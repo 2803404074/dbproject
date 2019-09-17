@@ -33,6 +33,7 @@ import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.wxapi.AppManager;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.apache.commons.lang.StringUtils;
@@ -324,9 +325,7 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
-                if (MainActivity.instants != null){
-                    MainActivity.instants.finish();
-                }
+                AppManager.getAppManager().finishActivity(MainActivity.class);
             }
 
             @Override
@@ -338,9 +337,7 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
-                if (MainActivity.instants != null){
-                    MainActivity.instants.finish();
-                }
+                AppManager.getAppManager().finishActivity(MainActivity.class);
             }
         });
 

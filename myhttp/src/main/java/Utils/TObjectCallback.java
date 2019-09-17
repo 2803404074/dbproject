@@ -27,7 +27,7 @@ public abstract class TObjectCallback<T> implements Callback {
     private Handler handler = OkHttp3Utils.getInstance(BASE_PATH).getHandler();
 
     //主线程处理
-    public abstract void onUi(T result);
+    public abstract void onUi(T result) throws JSONException;
 
     //主线程处理
     public abstract void onFailed(String msg);
@@ -45,12 +45,12 @@ public abstract class TObjectCallback<T> implements Callback {
 
     //请求json 并直接返回泛型的对象 主线程处理
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(Call call, final Response response) throws IOException {
         final String json = response.body().string();
         try {
             final JSONObject object = new JSONObject(json);
             if (object.optInt("errno")== 0){
-                if (object.optInt("errno") == 500){
+                if (object.optInt("code") == 500){
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -62,14 +62,19 @@ public abstract class TObjectCallback<T> implements Callback {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        onUi((T) object.optString("data"));
+                        try {
+                            onUi((T) object.optString("data"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }else {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        onFailed(object.optString("errmsg"));
+                        String str = object.optString("errmsg");
+                        onFailed(str.equals("")||str==null?response.toString():str);
                     }
                 });
             }

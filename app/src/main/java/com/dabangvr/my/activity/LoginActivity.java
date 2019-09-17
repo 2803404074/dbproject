@@ -13,9 +13,11 @@ import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.lbroadcast.widget.MediaController;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.MyApplication;
+import com.dabangvr.main.WellComePageActivity;
 import com.dabangvr.util.GlideLoadUtils;
 import com.dabangvr.util.LoadingDialog;
 import com.dabangvr.util.SPUtils;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
@@ -270,12 +272,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (errno == 0){
                         if (code == 500) return ;
                         JSONObject data = object.optJSONObject("data");
-                        String token = data.optString("token");
-                        spUtils.put("isLogin","true");
-                        spUtils.put("token",token);
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();//结束当前页面
+                        if (null != data){
+                            String token = data.optString("token");
+                            SPUtils2.instance(LoginActivity.this).put("token",token);
+                            //如果是第一次登陆，则跳到闪屏
+                            boolean isNews = (boolean) SPUtils2.instance(LoginActivity.this).getkey("isNews",true);
+                            if (isNews){
+                                Intent intent = new Intent(LoginActivity.this, WellComePageActivity.class);
+                                startActivity(intent);
+                            }else {
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                            finish();
+
+                        }else {
+                            ToastUtil.showShort(LoginActivity.this,"网络繁忙，请稍候再试试？");
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -285,7 +298,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onFailed(Call call, IOException e) {
                 Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
-                //loadingDialog.dismiss();
             }
         });
     }

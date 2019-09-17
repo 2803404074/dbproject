@@ -1,42 +1,29 @@
 package com.dabangvr.main;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
+import android.widget.TextView;
 import com.dabangvr.R;
-import com.dabangvr.contens.ParameterContens;
 import com.dabangvr.model.MenuMo;
 import com.dabangvr.model.TypeBean;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.JsonUtil;
-import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.SPUtils2;
-import com.dabangvr.util.StatusBarUtil;
-import com.dabangvr.util.TextUtil;
 import com.dabangvr.util.ToastUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import Utils.TObjectCallback;
@@ -44,41 +31,60 @@ import bean.UserMess;
 import config.DyUrl;
 import okhttp3.Call;
 
-public class WellcomActivity extends AppCompatActivity {
+/**
+ * 欢迎页
+ *  （1）如果第一次进入app：
+ *              1.5秒的启动页 -> 登陆 -> 闪屏 -> 首页
+ *  （2）退出登陆再登陆：
+ *              1.5秒的启动页 -> 首页
+ *  （3）版本更新后再次打开app：
+ *              1.5秒的启动页 -> 闪屏 -> 首页
+ *
+ * 逻辑简述：判断是否是第一次安装app
+ *
+ *
+ */
+public class WellcomActivity extends AppCompatActivity{
+    private TextView text_version;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wellcom);
 
-        ImageView imageView = findViewById(R.id.application_head);
-        //网络图片
-        Glide.with(WellcomActivity.this).load("http://test.fuxingsc.com/upload/20190325/110257757795a7.png").into(imageView);
 
-        //新用户,直接跳到登陆页
-        String token = (String) SPUtils2.instance(this).getkey("token","");
-        if (StringUtils.isEmpty(token)){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(WellcomActivity.this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            },1500);
-            return;
-        }
-        //获取用户信息
-        initUserData(token);
-
+        checkUser();
         //获取首页数据
         getMenu();
         getType();
+        setContentView(R.layout.activity_wellcom);
+        text_version = this.findViewById(R.id.text_version);
+        text_version.setText("V" + getVersion());
+
     }
 
-    /**
-     * 获取用户信息
-     */
-    private void initUserData(String token) {
+    private void checkUser() {
+        String token = (String) SPUtils2.instance(this).getkey("token","");
+        if (StringUtils.isEmpty(token)){
+            goTActivity(LoginActivity.class);
+        }else {
+            getUserInfo(token);
+            getType();
+            getMenu();
+        }
+    }
+
+    private void goTActivity(final Class T){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(WellcomActivity.this,T);
+                startActivity(intent);
+                finish();
+            }
+        },1500);
+    }
+
+    protected void getUserInfo(String token) {
         HashMap<String, Object> map = new HashMap<>();
         OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.USER_INFO, map, token, new TObjectCallback<String>(DyUrl.BASE) {
             @Override
@@ -87,14 +93,9 @@ public class WellcomActivity extends AppCompatActivity {
                 if (userMess!=null){
                     SPUtils2.instance(WellcomActivity.this).put("user",result);
                     SPUtils2.instance(WellcomActivity.this).put("token",userMess.getToken());
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(WellcomActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    },1500);
+                    goTActivity(MainActivity.class);
+                }else {
+                    goTActivity(LoginActivity.class);
                 }
             }
             @Override
@@ -102,9 +103,7 @@ public class WellcomActivity extends AppCompatActivity {
                 ToastUtil.showShort(WellcomActivity.this,"登录失败,请重新登录");
                 SPUtils2.instance(WellcomActivity.this).remove("user");
                 SPUtils2.instance(WellcomActivity.this).remove("token");
-                Intent intent = new Intent(WellcomActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                goTActivity(LoginActivity.class);
             }
         });
     }
@@ -126,7 +125,7 @@ public class WellcomActivity extends AppCompatActivity {
                             if (code == 0) {//成功
                                 JSONObject data = object.optJSONObject("data");
                                 String str = data.optString("channelMenuList");
-                                SPUtils2.instance(WellcomActivity.this).put("channelMenuList",str);
+                                SPUtils2.instance(WellcomActivity.this).put("menuList",str);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -173,7 +172,7 @@ public class WellcomActivity extends AppCompatActivity {
                             if (code == 0) {//成功
                                 JSONObject data = object.optJSONObject("data");
                                 String str = data.optString("goodsCategoryList");
-                                SPUtils2.instance(WellcomActivity.this).put("goodsCategoryList",str);
+                                SPUtils2.instance(WellcomActivity.this).put("typeList",str);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -202,5 +201,24 @@ public class WellcomActivity extends AppCompatActivity {
                         });
                     }
                 });
+    }
+
+    //获取版本号
+    private String getVersion() {
+        PackageManager packageManager = getPackageManager();
+        PackageInfo packInfo = null;
+        try {
+            packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            return packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException eArp) {
+        }
+        return "";
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        OkHttp3Utils.desInstance();
+        super.onDestroy();
     }
 }
