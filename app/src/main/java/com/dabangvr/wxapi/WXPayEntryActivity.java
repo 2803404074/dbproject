@@ -12,6 +12,7 @@ import com.dabangvr.dep.activity.OrderDepActivity;
 import com.dabangvr.home.activity.OrderActivity;
 import com.dabangvr.home.activity.OrtherOKActivity;
 import com.dabangvr.lbroadcast.activity.PlayActivity;
+import com.dabangvr.my.activity.OrderDetailedActivity;
 import com.dabangvr.util.SPUtils2;
 import com.example.mina.SessionManager;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -52,16 +53,20 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onResp(BaseResp resp) {
-        int key = (int) SPUtils2.instance(this).getkey(PayType.PAY_KEY,0);
-        Intent intent = new Intent(WXPayEntryActivity.this, OrtherOKActivity.class);
+        //如果存在订单页面，结束掉
+        AppManager.getAppManager().finishActivity(OrderActivity.class);
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            //说明从订单页面支付的，需要结束
-            if (key !=0 && key == PayType.ORDER_PAGE){
-                AppManager.getAppManager().finishActivity(OrderActivity.class);
+            if (resp.errCode == 0){
+                //跳转支付成功页面
+                Intent intent = new Intent(WXPayEntryActivity.this, OrtherOKActivity.class);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(WXPayEntryActivity.this, OrderDetailedActivity.class);
+                intent.putExtra("orderId",(String)SPUtils2.instance(this).getkey("payOrderId",""));
+                startActivity(intent);
             }
-            intent.putExtra("code",resp.errCode==0?200:400);//200成功   400失败
         }
-        startActivity(intent);
+
         finish();
     }
 }

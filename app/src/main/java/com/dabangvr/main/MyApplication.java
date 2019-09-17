@@ -12,6 +12,8 @@ import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MyApplication extends Application {
     private static Context mContext;
     public static String APP_ID="wx2351c48134140a3c";
@@ -35,6 +37,9 @@ public class MyApplication extends Application {
         api = WXAPIFactory.createWXAPI(this,APP_ID,true);
         api.registerApp(APP_ID);
 
+        //极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
         //网络变化
         if (netWorkStateReceiver == null) {

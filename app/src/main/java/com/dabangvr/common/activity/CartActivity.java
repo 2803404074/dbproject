@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.adapter.ShoppingCarAdapter;
 import com.dabangvr.R;
 import com.dabangvr.model.ShoppingCarDataBean;
@@ -31,16 +33,15 @@ import java.util.Map;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
 
 /**
  * 购物车
  */
-public class CartActivity extends BaseActivity implements View.OnClickListener{
+public class CartActivity extends BaseNewActivity implements View.OnClickListener, ShoppingCarAdapter.SendServerCallback {
 
-
-    private TextView tvTitlebarCenter;
     private TextView tvTitlebarRight;
     private ExpandableListView elvShoppingCar;
     private ImageView ivSelectAll;
@@ -50,24 +51,16 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
     private TextView tvTotalPrice;
     private RelativeLayout rlTotalPrice;
     private RelativeLayout rl;
-    private ImageView ivNoContant;
     private RelativeLayout rlNoContant;
     private String token;
-    //TextView tvTitlebarLeft;
 
     private List<ShoppingCarDataBean.DatasBean> datas;
     private Context context;
     private ShoppingCarAdapter shoppingCarAdapter;
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setRootViewFitsSystemWindows(this, false);
-
     }
 
     @Override
@@ -79,7 +72,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
     public void initView() {
         context = this;
         token = getSPKEY(CartActivity.this,"token");
-        tvTitlebarCenter = findViewById(R.id.tv_titlebar_center);
+
         tvTitlebarRight = findViewById(R.id.tv_titlebar_right);
         elvShoppingCar = findViewById(R.id.elv_shopping_car);
         ivSelectAll = findViewById(R.id.iv_select_all);
@@ -89,7 +82,6 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
         tvTotalPrice = findViewById(R.id.tv_total_price);
         rlTotalPrice = findViewById(R.id.rl_total_price);
         rl = findViewById(R.id.rl);
-        ivNoContant = findViewById(R.id.iv_no_contant);
         rlNoContant = findViewById(R.id.rl_no_contant);
         findViewById(R.id.tv_titlebar_left).setOnClickListener(this);
         findViewById(R.id.tv_titlebar_right).setOnClickListener(this);
@@ -125,7 +117,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
      * 初始化数据
      */
     @Override
-    protected void initData() {
+    public void initData() {
         HashMap<String, String> map = new HashMap<>();
         map.put(DyUrl.TOKEN_NAME, token);
         map.put("page", "1");
@@ -192,8 +184,8 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
      */
     private void initExpandableListView() {
         shoppingCarAdapter = new ShoppingCarAdapter(context,token, llSelectAll, ivSelectAll, btnOrder, btnDelete, rlTotalPrice, tvTotalPrice);
+        shoppingCarAdapter.setSendServerCallback(this);
         elvShoppingCar.setAdapter(shoppingCarAdapter);
-
         //删除的回调
         shoppingCarAdapter.setOnDeleteListener(new ShoppingCarAdapter.OnDeleteListener() {
             @Override
@@ -427,4 +419,13 @@ public class CartActivity extends BaseActivity implements View.OnClickListener{
         }
     };
 
+    @Override
+    public void show() {
+        setLoaddingView(true);
+    }
+
+    @Override
+    public void hide() {
+        setLoaddingView(false);
+    }
 }

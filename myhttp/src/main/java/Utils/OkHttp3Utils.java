@@ -94,9 +94,9 @@ public class OkHttp3Utils {
 
     public synchronized static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
+            okHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
                     //添加OkHttp3的拦截器
-                    .writeTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(20, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
                     .build();
         }
         return okHttpClient;

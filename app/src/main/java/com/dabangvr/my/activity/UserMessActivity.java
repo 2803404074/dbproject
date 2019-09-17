@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dabangvr.R;
+import com.dabangvr.base.plush.SPTAG;
 import com.dabangvr.common.activity.AddressActivity;
 import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.main.MainActivity;
@@ -52,6 +53,7 @@ import java.util.HashMap;
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import bean.UserMess;
+import cn.jpush.android.api.JPushInterface;
 import config.DyUrl;
 import okhttp3.Call;
 
@@ -285,7 +287,6 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
             }
             case R.id.linear_redis: {
                 show(1, "清除缓存会导致应用所加载数据清空，但不包括您的个人信息，是否确定？");
-
                 break;
             }
             case R.id.linear_check_update: {
@@ -322,6 +323,7 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
                 //移除本地缓存
                 removeSPKEY(UserMessActivity.this, "token");
                 removeSPKEY(UserMessActivity.this, "isLogin");
+                JPushInterface.removeLocalNotification(UserMessActivity.this, SPTAG.SEQUENCE);
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();

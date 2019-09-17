@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dabangvr.util.LoaddingUtils;
 import com.dabangvr.util.SPUtils2;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 
@@ -39,6 +40,19 @@ public abstract class BaseFragment extends Fragment {
         }
         unbinder = ButterKnife.bind(this, rootView);
         return  rootView;
+    }
+
+    private LoaddingUtils mLoaddingUtils;
+
+    public void setLoaddingView(boolean isLoadding){
+        if(mLoaddingUtils==null){
+            mLoaddingUtils=new LoaddingUtils(BaseFragment.this.getContext());
+        }
+        if(isLoadding){
+            mLoaddingUtils.show();
+        }else{
+            mLoaddingUtils.dismiss();
+        }
     }
 
     @Override

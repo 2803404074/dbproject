@@ -270,8 +270,25 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
                 setLoaddingView(false);
                 JSONObject object = new JSONObject(result);
                 String orderSn = object.optString("orderSn");
-                if (payDialog == null)payDialog = new PayDialog(getContext(),orderSn,"orderSnTotal","");
+                String orderId = object.optString("orderId");
+                if (payDialog == null)payDialog = new PayDialog(getContext(),orderSn,"orderSnTotal",orderId);
                 payDialog.showDialog(or_money_count.getText().toString());
+                payDialog.setRequestPay(new PayDialog.RequestPay() {
+                    @Override
+                    public void show() {
+                        setLoaddingView(true);
+                    }
+
+                    @Override
+                    public void hied() {
+                        setLoaddingView(false);
+                    }
+                });
+                payDialog.setAddressMess(
+                        orderMo.getReceivingAddress().getConsigneeName(),
+                        orderMo.getReceivingAddress().getConsigneePhone(),
+                        orderMo.getReceivingAddress().getAddress(),
+                        or_money_count.getText().toString());
             }
 
             @Override

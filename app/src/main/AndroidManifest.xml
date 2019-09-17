@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dabangvr">
 
+    <!-- 激光推送Required -->
+    <uses-permission android:name="com.dabangvr.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在 6.0 系统上的层叠窗口权限 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission
         android:name="android.permission.WRITE_APN_SETTINGS"
@@ -276,7 +285,28 @@
 
         <activity
             android:name=".common.activity.DiscussActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+
+        <service
+            android:name=".base.plush.PushService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".base.plush.JPushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <category android:name="com.dabangvr" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

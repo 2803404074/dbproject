@@ -16,6 +16,12 @@ android {
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "380956f57f80a3cb9b1b1fbe", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     signingConfigs {
@@ -167,4 +173,10 @@ dependencies {
     implementation 'com.sackcentury:shinebutton:0.2.0'
     //superbutton 按钮
     implementation 'top.androidman:superbutton:1.1.1'
+
+    /**
+     * 激光推送
+     */
+    implementation 'cn.jiguang.sdk:jpush:3.3.4'  // 此处以JPush 3.3.4 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.1.2'  // 此处以JCore 2.1.2 版本为例。
 }

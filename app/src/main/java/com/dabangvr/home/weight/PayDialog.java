@@ -33,12 +33,23 @@ import config.DyUrl;
 import okhttp3.Call;
 
 public class PayDialog {
+
     private Context mContext;
     private BottomSheetDialog dialog;
     private String orderSn;
     private String payType;//直接购买用orderSnTotal；重新付款用orderSn
     private int checkPayId;//支付类型，0微信、2支付宝
     private String orderId;//重新支付需要
+
+    private RequestPay requestPay;
+    public interface RequestPay{
+        void show();
+        void hied();
+    }
+
+    public void setRequestPay(RequestPay requestPay) {
+        this.requestPay = requestPay;
+    }
 
     public PayDialog(Context mContext, String orderSn, String payType, String orderId) {
         this.mContext = mContext;
@@ -69,7 +80,12 @@ public class PayDialog {
             @Override
             public void onClick(View v) {
                 if (checkPayId == 0) {//微信支付
-                    getWXMESS();
+                    requestPay.show();
+                    if (null == orderSn||StringUtils.isEmpty(orderSn)){
+                        prepayOrderAgain();//重新支付
+                    }else {
+                        getWXMESS();//直接支付
+                    }
                 }
                 if (checkPayId == 2) {//支付宝支付
                     ToastUtil.showShort(mContext, "支付宝支付维护中，将于2019.10.11开放");
@@ -135,11 +151,13 @@ public class PayDialog {
             @Override
             public void onFailed(String msg) {
                 ToastUtil.showShort(mContext, msg);
+                requestPay.hied();
             }
         });
     }
 
     private void toWXPay(JSONObject object) {
+        SPUtils2.instance(mContext).put("payOrderId",orderId);
         WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
         builder.setAppId(object.optString("appid"))
                 .setPartnerId(object.optString("partnerid"))
@@ -150,11 +168,21 @@ public class PayDialog {
                 .setSign(object.optString("sign"))
                 .build().toWXPayNotSign(mContext);
         ToastUtil.showShort(mContext, "正在打开微信...");
+        requestPay.hied();
     }
+
+
 
     public void desDialogView() {
         if (dialog != null) {
             dialog.dismiss();
         }
+    }
+
+    public void setAddressMess(String name,String phone,String addressStr,String priceStr){
+        SPUtils2.instance(mContext).put("addName",name);
+        SPUtils2.instance(mContext).put("addPhone",phone);
+        SPUtils2.instance(mContext).put("addStr",addressStr);
+        SPUtils2.instance(mContext).put("orderPriceStr",priceStr);
     }
 }

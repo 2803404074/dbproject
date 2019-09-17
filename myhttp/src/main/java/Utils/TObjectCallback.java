@@ -23,7 +23,6 @@ public abstract class TObjectCallback<T> implements Callback {
     public TObjectCallback(String BASE_PATH) {
         this.BASE_PATH = BASE_PATH;
     }
-
     private Handler handler = OkHttp3Utils.getInstance(BASE_PATH).getHandler();
 
     //主线程处理
@@ -54,7 +53,7 @@ public abstract class TObjectCallback<T> implements Callback {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            onFailed(object.optString("errmsg"));
+                            onFailed(object.optString("msg"));
                         }
                     });
                     return;
@@ -78,9 +77,14 @@ public abstract class TObjectCallback<T> implements Callback {
                     }
                 });
             }
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onFailed(e.getMessage());
+                }
+            });
         }
-
     }
 }

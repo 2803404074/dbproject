@@ -4,8 +4,9 @@ apply from: "config.gradle"
 buildscript {
     
     repositories {
-        google()
+
         jcenter()
+        google()
         mavenCentral()
     }
     dependencies {
@@ -19,8 +20,9 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
+
         jcenter()
+        google()
         maven { url "https://jitpack.io" }
         mavenCentral()
     }

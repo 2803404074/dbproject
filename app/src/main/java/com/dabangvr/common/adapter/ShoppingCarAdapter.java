@@ -48,6 +48,18 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
     private boolean isSelectAll = false;
     private double total_price;
     private String token;
+
+    private SendServerCallback sendServerCallback;
+
+    public void setSendServerCallback(SendServerCallback sendServerCallback) {
+        this.sendServerCallback = sendServerCallback;
+    }
+
+    public interface SendServerCallback{
+        void show();
+        void hide();
+    }
+
     public ShoppingCarAdapter(Context context, String token, LinearLayout llSelectAll,
                               ImageView ivSelectAll, Button btnOrder, Button btnDelete,
                               RelativeLayout rlTotalPrice, TextView tvTotalPrice) {
@@ -227,6 +239,7 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 //创建临时的List，用于存储被选中的商品
+                sendServerCallback.show();
                 List<ShoppingCarDataBean.DatasBean.GoodsBean> temp = new ArrayList<>();
                 for (int i = 0; i < data.size(); i++) {
                     List<ShoppingCarDataBean.DatasBean.GoodsBean> goods = data.get(i).getGcvList();
@@ -261,6 +274,7 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
                     getDateFromHttpCart(ids);
 
                 } else {
+                    sendServerCallback.hide();
                     ToastUtil.showShort(context, "请选择要购买的商品");
                 }
             }
@@ -270,8 +284,6 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
                 /**
                  * 实际开发中，通过回调请求后台接口实现删除操作
@@ -303,10 +315,12 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
                     intent.putExtra("dropType",1);
                     context.startActivity(intent);
                 }
+                sendServerCallback.hide();
             }
             @Override
             public void onFailed(Call call, IOException e) {
                 ToastUtil.showShort(context,"获取失败");
+                sendServerCallback.hide();
             }
         });
     }

@@ -44,7 +44,7 @@ import okhttp3.Call;
 /**
  * 购物车
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener {
+public class CartFragment extends BaseFragment implements View.OnClickListener, ShoppingCarAdapter.SendServerCallback {
 
 
 //    private TextView tvTitlebarRight;
@@ -213,6 +213,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
      */
     private void initExpandableListView() {
         shoppingCarAdapter = new ShoppingCarAdapter(context, token, llSelectAll, ivSelectAll, btnOrder, btnDelete, rlTotalPrice, tvTotalPrice);
+
+        shoppingCarAdapter.setSendServerCallback(this);
+
         elvShoppingCar.setAdapter(shoppingCarAdapter);
 
         //删除的回调
@@ -257,13 +260,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 if (500 == object.optInt("code")) {
                                     return;
                                 }
-                                ToastUtil.showShort(context, "操作成功");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onFailed(Call call, IOException e) {
 
@@ -449,4 +450,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         }
     };
 
+    @Override
+    public void show() {
+        setLoaddingView(true);
+    }
+
+    @Override
+    public void hide() {
+        setLoaddingView(false);
+    }
 }

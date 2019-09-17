@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.dabangvr.R;
+import com.dabangvr.base.plush.SPTAG;
 import com.dabangvr.model.MenuMo;
 import com.dabangvr.model.TypeBean;
 import com.dabangvr.my.activity.LoginActivity;
@@ -28,6 +29,7 @@ import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import Utils.TObjectCallback;
 import bean.UserMess;
+import cn.jpush.android.api.JPushInterface;
 import config.DyUrl;
 import okhttp3.Call;
 
@@ -91,6 +93,7 @@ public class WellcomActivity extends AppCompatActivity{
             public void onUi(String result) {
                 UserMess userMess = JsonUtil.string2Obj(result, UserMess.class);
                 if (userMess!=null){
+                    JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE,String.valueOf(userMess.getId()));
                     SPUtils2.instance(WellcomActivity.this).put("user",result);
                     SPUtils2.instance(WellcomActivity.this).put("token",userMess.getToken());
                     goTActivity(MainActivity.class);

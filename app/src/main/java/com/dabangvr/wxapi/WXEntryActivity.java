@@ -11,6 +11,7 @@ import com.dabangvr.main.MyApplication;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.ToastUtil;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -65,7 +66,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         Log.d("wechat", "onResp");
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                //ToastUtil.showShort(WXEntryActivity.this, "请求成功");
+                if (resp.getType() == ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX) {
+                    finish();
+                    return;
+                }
                 String code = ((SendAuth.Resp) resp).code;
                 getAccessToken(code);
                 break;
@@ -75,9 +79,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 ToastUtil.showShort(WXEntryActivity.this, "请求拒绝");
+                finish();
                 break;
             default:
                 //发送返回
+                finish();
                 break;
         }
     }
