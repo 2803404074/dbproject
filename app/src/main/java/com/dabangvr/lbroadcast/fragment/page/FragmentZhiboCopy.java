@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.dabangvr.R;
 import com.dabangvr.common.activity.CartActivity;
+import com.dabangvr.contens.ParameterString;
 import com.dabangvr.home.activity.HxClassActivity;
 import com.dabangvr.home.activity.SearchActivity;
 import com.dabangvr.lbroadcast.activity.ZbSearchActivity;
@@ -122,7 +123,6 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
         search_edit.startAutoScroll();
     }
 
-    private String TAG = "luhuas";
 
     public View tab_icon(String name, int iconID) {
         View newtab = LayoutInflater.from(getActivity()).inflate(R.layout.icon_view, null);
@@ -175,7 +175,7 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //当前选中
-                Log.d(TAG, "onTabSelected: " + tab.getPosition());
+                Log.d(ParameterString.TAG, "onTabSelected: " + tab.getPosition());
             }
 
             @Override

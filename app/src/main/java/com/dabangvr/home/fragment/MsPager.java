@@ -70,7 +70,10 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
     private int page = 1;
     private LoadingDialog loadingDialog;
     private BGARefreshLayout mRefreshLayout;
-
+    private long mMorePageNumber = 1;
+    private long mNewPageNumber = 1;
+    private int porss = 80;
+    private int porssmax = 156;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if (!IS_LOADED) {
@@ -79,18 +82,13 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
                     case 100: {
                         int type = msg.getData().getInt("type");
                         String rankingType = msg.getData().getString("rankingType");
-                        getDataFromHttp(type, rankingType);
+                        getDataFromHttp(type, rankingType,page);
                     }
                 }
             }
             return;
         }
     };
-    private long mMorePageNumber = 0;
-    private long mNewPageNumber = 0;
-    private int porss = 80;
-    private int porssmax = 156;
-
     public MsPager(int serial) {
         mSerial = serial;
     }
@@ -115,14 +113,11 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
         BGANormalRefreshViewHolder moocStyleRefreshViewHolder = new BGANormalRefreshViewHolder(getActivity(), true);
         moocStyleRefreshViewHolder.setRefreshLayout(mRefreshLayout);
         mRefreshLayout.setRefreshViewHolder(moocStyleRefreshViewHolder);
-
         mRefreshLayout.setDelegate(this);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-
         //View header = LayoutInflater.from(context).inflate(R.layout.ms_tips, null);
         adapter = new BaseLoadMoreHeaderAdapter<GoodsVo>(context, recyclerView, list, R.layout.ms_now_item) {
             @Override
@@ -197,7 +192,7 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
      * @param rankingType：排名类型：1默认时间排序，2销量排行
      * @param isFlush                        是否刷新
      */
-    private void getDataFromHttp(final int isFlush, String rankingType) {
+    private void getDataFromHttp(final int isFlush, String rankingType,long page) {
         Map<String, String> map = new HashMap<>();
         map.put("hoursTime", hoursTime);
         map.put("rankingType", rankingType);
@@ -244,7 +239,7 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                getDataFromHttp(0, "2");
+                getDataFromHttp(0, "2",1);
             }
         };
         broadcastManager.registerReceiver(mReceiver, intentFilter);
@@ -254,40 +249,27 @@ public class MsPager extends Fragment implements BGARefreshLayout.BGARefreshLayo
     //下拉刷新，上拉加载更多
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-
         mNewPageNumber++;
-        if (mNewPageNumber > 4) {
-            mRefreshLayout.endRefreshing();
-            ToastUtil.showShort(getActivity(), "没有最新数据了");
-            return;
-        }
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
+                getDataFromHttp(1, "2",mNewPageNumber);
                 mRefreshLayout.endRefreshing();
 
             }
-        }, 1500);
+        }, 500);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-
-
         mMorePageNumber++;
-        if (mMorePageNumber > 4) {
-            mRefreshLayout.endLoadingMore();
-            ToastUtil.showShort(getActivity(), "没有更多数据了");
-            return false;
-        }
-
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
+                getDataFromHttp(1, "2",mMorePageNumber);
                 mRefreshLayout.endLoadingMore();
             }
-        }, 1500);
-
+        }, 500);
 
         return true;
     }

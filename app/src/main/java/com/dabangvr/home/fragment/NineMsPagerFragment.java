@@ -34,10 +34,12 @@ import com.dabangvr.model.Goods;
 import com.dabangvr.model.GoodsVo;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.LoaddingUtils;
 import com.dabangvr.util.LoadingDialog;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.BGANormalRefreshViewHolder;
 import com.dabangvr.video.adapter.ThreadUtil;
+import com.facebook.common.logging.LoggingDelegate;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -75,6 +77,8 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     private boolean isFirst = true;
     private int page = 1;
     private BGARefreshLayout mRefreshLayout;
+    private long mMorePageNumber = 1;
+    private long mNewPageNumber = 1;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if (!IS_LOADED) {
@@ -83,15 +87,15 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                     case 100: {
                         int type = msg.getData().getInt("type");
                         String rankingType = msg.getData().getString("rankingType");
-                        getDataFromHttp(type, rankingType);
+                        getDataFromHttp(type, rankingType, 1);
                     }
                 }
             }
             return;
         }
     };
-    private long mMorePageNumber = 0;
-    private long mNewPageNumber = 0;
+    private LoadingDialog loadingDialog;
+
 
     public NineMsPagerFragment(int serial) {
         mSerial = serial;
@@ -109,11 +113,12 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
             sendMessage(0, "1");
             isFirst = false;
         }
-        getDataFromHttp(0, "1");
+        getDataFromHttp(0, "1", 1);
         return view;
     }
 
     private void initView(View view) {
+        loadingDialog = new LoadingDialog(getContext());
         mRefreshLayout = view.findViewById(R.id.refreshLayout);
         BGANormalRefreshViewHolder moocStyleRefreshViewHolder = new BGANormalRefreshViewHolder(getActivity(), true);
         moocStyleRefreshViewHolder.setRefreshLayout(mRefreshLayout);
@@ -124,7 +129,6 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
         LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-
         //View header = LayoutInflater.from(context).inflate(R.layout.ms_tips, null);
         adapter = new BaseLoadMoreHeaderAdapter<Goods>(context, recyclerView, list, R.layout.ms_nine_item) {
             @Override
@@ -154,7 +158,6 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
                 }
             }
         };
-        //adapter.addHeadView(header);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
             @Override
@@ -167,6 +170,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
             }
         });
     }
+
     /**
      * @param type        刷新标志
      * @param rankingType 排序 1时间，2销量
@@ -190,16 +194,17 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     public void setTabPos(int mTabPos, String hoursTime) {
         this.mTabPos = mTabPos;
         this.hoursTime = hoursTime;
+        Log.d("luhuas", "setTabPos: " + hoursTime);
     }
 
     /**
      * @param rankingType：排名类型：1默认时间排序，2销量排行
      * @param isFlush                        是否刷新
      */
-    private void getDataFromHttp(final int isFlush, String rankingType) {
+    private void getDataFromHttp(final int isFlush, String rankingType, long page) {
         Map<String, String> map = new HashMap<>();
-//        map.put("hoursTime", hoursTime);
         map.put("priceRange", hoursTime);
+        map.put("rankingType", rankingType);
         map.put("page", String.valueOf(page));
         map.put("limit", "10");
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsLists, map,
@@ -240,8 +245,6 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
      * 第一个item   my_orther_item_dep
      * 第二个item   my_orther_item_goods
      */
-
-
     //处理通知或状态
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
@@ -251,7 +254,7 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                getDataFromHttp(0, "2");
+                getDataFromHttp(0, "2", 1);
             }
         };
         broadcastManager.registerReceiver(mReceiver, intentFilter);
@@ -261,37 +264,34 @@ public class NineMsPagerFragment extends Fragment implements BGARefreshLayout.BG
     //下拉刷新，上拉加载更多
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-
         mNewPageNumber++;
-        if (mNewPageNumber > 4) {
-            mRefreshLayout.endRefreshing();
-            ToastUtil.showShort(getActivity(), "没有最新数据了");
-            return;
-        }
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
+                getDataFromHttp(0, "1", mNewPageNumber);
                 mRefreshLayout.endRefreshing();
 
             }
-        }, 1500);
+        }, 500);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
         mMorePageNumber++;
-        if (mMorePageNumber > 4) {
-            mRefreshLayout.endLoadingMore();
-            ToastUtil.showShort(getActivity(), "没有更多数据了");
-            return false;
-        }
 
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
+                if (loadingDialog != null && loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
+                getDataFromHttp(0, "1", mMorePageNumber);
                 mRefreshLayout.endLoadingMore();
             }
-        }, 1500);
+        }, 500);
         return true;
     }
 }

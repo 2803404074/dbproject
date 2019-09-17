@@ -29,30 +29,8 @@ public abstract class BaseLoadMoreHeaderAdapter<T> extends RecyclerView.Adapter<
         this.mContext = mContext;
         this.mDatas = mDatas;
         this.mLayoutId = mLayoutId;
-        init(recyclerView);
     }
 
-    private void init(RecyclerView recyclerView) {
-        //mRecyclerView添加滑动事件监听
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                int totalItemCount = linearLayoutManager.getItemCount();
-//                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                if (!isLoading && dy > 0 && lastVisibleItemPosition >= totalItemCount - 1) {
-//                    //此时是刷新状态
-//                    if (mOnLoadMoreListener != null) {
-//                        mOnLoadMoreListener.onLoadMore();
-//                    }
-//                    isLoading = true;
-//                }
-//            }
-//        });
-
-
-    }
 
     public void updateData(List<T> data) {
         mDatas.clear();
@@ -141,27 +119,6 @@ public abstract class BaseLoadMoreHeaderAdapter<T> extends RecyclerView.Adapter<
             return;
         }
     }
-
-//
-//        if(mDatas.size()>0){
-//            convert(mContext, holder,mDatas.get(position));
-//
-//            convert(mContext, holder, mDatas.get(position));
-//            ((BaseRecyclerHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mItemClickListener.onItemClick(v, position - 1);
-//                }
-//            });
-//            ((BaseRecyclerHolder) holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    mLongItemClickListener.onLongItemClick(v, position - 1);
-//                    return true;
-//                }
-//            });
-//        }
-
 
     @Override
     public int getItemViewType(int position) {

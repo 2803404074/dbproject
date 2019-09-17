@@ -191,6 +191,9 @@
             android:name=".home.activity.NineMsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".home.activity.XrflActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".my.activity.MyMessageActivity"
             android:screenOrientation="portrait" />
         <activity
