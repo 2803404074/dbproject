@@ -1,23 +1,19 @@
 package com.dabangvr.base.plush;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import com.dabangvr.R;
+import com.dabangvr.common.activity.CartActivity;
 import com.dabangvr.home.activity.HxxqLastActivity;
-import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.WellcomActivity;
 import com.dabangvr.my.activity.OrderDetailedActivity;
 import org.json.JSONException;
@@ -69,7 +65,8 @@ public class JPushReceiver extends JPushMessageReceiver {
     @Override
     public void onNotifyMessageArrived(Context context, NotificationMessage notificationMessage) {
         super.onNotifyMessageArrived(context, notificationMessage);
-        Log.e(TAG, notificationMessage.toString());
+        Log.e(TAG, "消息进入"+notificationMessage.toString());
+        //processCustomMessage(context, notificationMessage.notificationTitle,notificationMessage.notificationContent);
     }
 
     /**
@@ -106,9 +103,11 @@ public class JPushReceiver extends JPushMessageReceiver {
                 }else {
                     //其他页面
                 }
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }else{
                 Intent intent = new Intent(context, WellcomActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         } catch (JSONException e) {
@@ -127,25 +126,11 @@ public class JPushReceiver extends JPushMessageReceiver {
     @Override
     public void onMessage(Context context, CustomMessage customMessage) {
         super.onMessage(context, customMessage);
-        Log.e(TAG, "onMessage");
-        processCustomMessage(context, customMessage.title,customMessage.message);
+        Log.e(TAG, "消息进入onMessage");
     }
 
-    /**
-     *
-     * @param context
-     * @param message 消息内容
-     */
-    private void processCustomMessage(Context context, String title,String message) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //大于等于8.0时 设置通知渠道 这里只写了一个渠道 id 是 "notify" name "重要通知"
-            String channelId = "notify";
-            String channelName = "重要通知";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            createNotificationChannel(context,channelId, channelName, importance);
-        }
-        sendMsg(context,"您的免费试用已到期");
-    }
+
+
     /**
      * 判断是否在前台
      * @return
@@ -158,39 +143,5 @@ public class JPushReceiver extends JPushMessageReceiver {
             return true;
         }
         return false;
-    }
-
-
-    /**
-     * 生成通知消息 EasyVariable.mContext 替换成Application的context就行
-     */
-    public static void sendMsg(Context context,String content) {
-        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "notify");
-        builder.setContentTitle("通知测试");
-        builder.setContentText(content);
-        builder.setWhen(System.currentTimeMillis());
-        //调用系统默认响铃,设置此属性后setSound()会无效
-        builder.setDefaults(Notification.DEFAULT_SOUND);
-        //图片资源请自行替换成自己的
-        builder.setSmallIcon(R.mipmap.app_logo);
-        builder.setColor(Color.parseColor("#F2C239"));
-
-        builder.setAutoCancel(true);
-
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        builder.setContentIntent(pendingIntent);
-
-        Notification notification = builder.build();
-        manager.notify(1, notification);
-    }
-
-    //大于等于8.0 创建通知渠道的方法 这里的EasyVariable.mContext替换成Application的context就可以
-    @TargetApi(Build.VERSION_CODES.O)
-    private static void createNotificationChannel(Context context,String channelId, String channelName, int importance) {
-        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(channel);
     }
 }
