@@ -56,7 +56,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_address);
         initView();
         initData();
-}
+    }
 
     private void initData() {
         HashMap<String, String> map = new HashMap<>();
@@ -196,7 +196,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                                     addressBean.setCheck(false);
                                     addressBean.setIsDefault(0);
                                 }
-
                             }
                             adapter.updateData(datas);
                             for (AddressBean addressBean : datas) {

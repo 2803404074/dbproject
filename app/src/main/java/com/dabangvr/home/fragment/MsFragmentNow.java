@@ -59,7 +59,6 @@ public class MsFragmentNow extends Fragment {
         TextView tabtv = (TextView) newtab.findViewById(R.id.tab_time);
         TextView tabim = (TextView) newtab.findViewById(R.id.tab_state);
         newtab.setPadding(28, 0, 10, 0);
-        Log.d("luhuas", "tab_icon: " + time + "===" + state);
         if (!TextUtils.isEmpty(state) && !TextUtils.isEmpty(time)) {
             try {
                 int intstate = Integer.parseInt(state);

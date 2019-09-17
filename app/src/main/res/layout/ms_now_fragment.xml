@@ -14,9 +14,9 @@
         android:background="@drawable/ms_bg_jp"
         app:tabGravity="fill"
         app:tabIndicatorColor="#00ffffff"
-        app:tabIndicatorHeight="4dp"
-        app:tabMaxWidth="200dp"
-        app:tabMinWidth="50dp"
+        app:tabIndicatorHeight="@dimen/dp_4"
+        app:tabMaxWidth="@dimen/dp_200"
+        app:tabMinWidth="@dimen/dp_50"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorDb2"
         app:tabTextColor="#000" />

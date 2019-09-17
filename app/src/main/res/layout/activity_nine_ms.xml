@@ -11,16 +11,16 @@
 </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp_50"
         android:background="@drawable/ms_bg_jp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
             android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:src="@drawable/back" />
 
         <ImageView

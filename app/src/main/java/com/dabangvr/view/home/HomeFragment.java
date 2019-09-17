@@ -358,6 +358,9 @@ public class HomeFragment extends BaseFragment {
                     case ParameterContens.MS:  //美食
                         T = MsActivity.class;
                         break;
+                    case ParameterContens.XRFL:  //美食
+                        T = MsActivity.class;
+                        break;
                     default:
                         T = HxClassToActivity.class;
                         break;

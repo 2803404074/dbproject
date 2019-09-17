@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dabangvr.R;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.home.fragment.NineMsFragment;
 import com.dabangvr.home.fragment.NineMsPagerFragment;
@@ -20,7 +21,7 @@ import com.dabangvr.view.home.TabLayoutFragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NineMsActivity extends BaseActivity implements View.OnClickListener {
+public class NineMsActivity extends BaseNewActivity implements View.OnClickListener {
 
     private ImageView title;
 
@@ -48,7 +49,7 @@ public class NineMsActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         title = findViewById(R.id.ms_title);
         vp_pager = findViewById(R.id.m_viewpager);
         tev_nine = findViewById(R.id.tev_nine);
@@ -106,7 +107,7 @@ public class NineMsActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 
