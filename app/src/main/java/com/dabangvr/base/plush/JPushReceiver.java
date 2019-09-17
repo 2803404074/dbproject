@@ -120,8 +120,6 @@ public class JPushReceiver extends JPushMessageReceiver {
      * TODO 接收到推送下来的自定义消息
      *      自定义消息不是通知，默认不会被SDK展示到通知栏上，极光推送仅负责透传给SDK。其内容和展示形式完全由开发者自己定义。
      *      自定义消息主要用于应用的内部业务逻辑和特殊展示需求
-     *
-     *      CustomMessage{messageId='29273426906431070', extra='{"url":"1024"}', message='订单已发货', contentType='', title='订单已发货',senderId='380956f57f80a3cb9b1b1fbe', appId='com.dabangvr'}
      */
     @Override
     public void onMessage(Context context, CustomMessage customMessage) {
