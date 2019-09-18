@@ -12,17 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dabangvr.R;
-import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
 import com.dabangvr.model.MsDataMo;
-import com.dabangvr.util.BannerStart;
-import com.dabangvr.util.GlideLoadUtils;
-import com.dabangvr.util.TextUtil;
 import com.dabangvr.view.home.TabLayoutFragmentPagerAdapter;
-import com.youth.banner.Banner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,8 +35,6 @@ public class MsFragmentNow extends Fragment {
     private Context context;
     private TabLayoutFragmentPagerAdapter adapter;
     private MsPager fragment;
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

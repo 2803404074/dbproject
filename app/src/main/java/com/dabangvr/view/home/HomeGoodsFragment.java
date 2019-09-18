@@ -48,9 +48,9 @@ public class HomeGoodsFragment extends BaseFragment {
     Banner goods_banner;
     private int intPage = 1;
 
+    private List<Goods> mData = new ArrayList<>();
     private HGoodsAdapter goodsAdapter;
     private HGoodsLabelAdapter goodsLabelAdapter;
-    private List<Goods> mData = new ArrayList<>();
     private List<GoodsLabelBean> mDataLabel = new ArrayList<>();
     private int type = 0;
 

@@ -3,56 +3,123 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/xrfl_bg_jp"
     android:focusable="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:background="@color/white"></LinearLayout>
+        android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="@dimen/dp_35"
-            android:layout_height="@dimen/dp_35"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/dp_10"
-            android:src="@drawable/back" />
-
-        <TextView
-            android:id="@+id/ms_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="新人福利"
-            android:textColor="@color/b_text"
-            android:textSize="@dimen/dp_20"
-            android:textStyle="italic|bold" />
-
-        <ImageView
-            android:id="@+id/ms_message"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/bl_id"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:padding="@dimen/sp_15"
-            android:src="@mipmap/share" />
-    </RelativeLayout>
+            android:background="@drawable/xrfl_bg_jp"
+            android:orientation="vertical"
+            app:layout_behavior=".widget.FlingBehavior">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
-        android:scaleType="fitXY"
-        android:src="@mipmap/ic_camera" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_20"
+                    android:background="@color/white" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="@dimen/dp_35"
+                        android:layout_height="@dimen/dp_35"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/left_black" />
 
+                    <TextView
+                        android:id="@+id/ms_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="新人福利"
+                        android:textColor="@color/b_text"
+                        android:textSize="@dimen/dp_20"
+                        android:textStyle="italic|bold" />
+
+                    <ImageView
+                        android:id="@+id/ms_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/sp_15"
+                        android:src="@mipmap/share_black" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_100"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_camera" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:src="@mipmap/xryl_bg" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/hongbao_bg">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_380"
+                        android:layout_marginLeft="@dimen/dp_30"
+                        android:layout_marginRight="@dimen/dp_30"
+                        android:background="@mipmap/xrfl_bg"
+                        android:padding="@dimen/dp_10">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/xrfl_recy_discount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_5"
+                            android:background="@color/white" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:src="@mipmap/xrtj_bg"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/xrfl_recy_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

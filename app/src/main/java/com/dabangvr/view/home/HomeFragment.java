@@ -27,6 +27,7 @@ import com.dabangvr.home.activity.HxClassActivity;
 import com.dabangvr.home.activity.HxClassToActivity;
 import com.dabangvr.home.activity.MsActivity;
 import com.dabangvr.home.activity.NineMsActivity;
+import com.dabangvr.home.activity.XrflActivity;
 import com.dabangvr.home.activity.XsMsActivity;
 import com.dabangvr.home.activity.NewReleaseActivity;
 import com.dabangvr.home.activity.PtActivityType;
@@ -295,12 +296,6 @@ public class HomeFragment extends BaseFragment {
      * 初始化渠道列表
      */
     private void initRecylerViewChannel() {
-//        String str = MainActivity.getSPKEY(HomeFragment.this.getActivity(), "menuData");
-//        if (!StringUtils.isEmpty(str)) {
-//            menuData = JsonUtil.string2Obj(str, List.class, MenuMo.class);
-////            view.findViewById(R.id.menu_ll).setVisibility(View.VISIBLE);
-//        } else {
-//        }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         rvChannel.setNestedScrollingEnabled(false);
@@ -335,6 +330,9 @@ public class HomeFragment extends BaseFragment {
 
                     case ParameterContens.QDHB: //签到红包
                         T = XsMsActivity.class;
+//                        break;
+                    case ParameterContens.XRFL: //新人福利
+                        T = XrflActivity.class;
                         break;
                     case ParameterContens.ZB:  //直播
                         if (callBack == null) {
@@ -356,9 +354,6 @@ public class HomeFragment extends BaseFragment {
                         T = StartOpenShopActivity.class;
                         break;
                     case ParameterContens.MS:  //美食
-                        T = MsActivity.class;
-                        break;
-                    case ParameterContens.XRFL:  //美食
                         T = MsActivity.class;
                         break;
                     default:

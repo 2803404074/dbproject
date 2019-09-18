@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.dabangvr.util.LoaddingUtils;
 import com.dabangvr.util.SPUtils2;
+
 import butterknife.ButterKnife;
 
 /**
@@ -25,13 +26,13 @@ public abstract class BaseNewActivity extends AppCompatActivity {
 
     private LoaddingUtils mLoaddingUtils;
 
-    public void setLoaddingView(boolean isLoadding){
-        if(mLoaddingUtils==null){
-            mLoaddingUtils=new LoaddingUtils(this);
+    public void setLoaddingView(boolean isLoadding) {
+        if (mLoaddingUtils == null) {
+            mLoaddingUtils = new LoaddingUtils(this);
         }
-        if(isLoadding){
+        if (isLoadding) {
             mLoaddingUtils.show();
-        }else{
+        } else {
             mLoaddingUtils.dismiss();
         }
     }
@@ -43,23 +44,25 @@ public abstract class BaseNewActivity extends AppCompatActivity {
     // 设置布局
     public abstract int setLayout();
 
-    public String getSPKEY(Activity activity, String key){
-        return (String) SPUtils2.instance(activity).getkey(key,"");
+    public String getSPKEY(Activity activity, String key) {
+        return (String) SPUtils2.instance(activity).getkey(key, "");
     }
 
-    public void setSPKEY(Activity activity, String key, String values){
-        SPUtils2.instance(activity).put(key,values);
+    public void setSPKEY(Activity activity, String key, String values) {
+        SPUtils2.instance(activity).put(key, values);
     }
 
-    public String getToken (Activity activity){
-        return (String) SPUtils2.instance(activity).getkey("token","");
+    public String getToken(Activity activity) {
+        return (String) SPUtils2.instance(activity).getkey("token", "");
     }
+
     @Override
     protected void onDestroy() {
         setLoaddingView(false);
         super.onDestroy();
     }
-    public Context getContext(){
+
+    public Context getContext() {
         return this;
     }
 }
