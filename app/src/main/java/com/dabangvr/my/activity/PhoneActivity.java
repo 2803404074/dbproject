@@ -21,7 +21,9 @@ import com.dabangvr.main.MainActivity;
 import com.dabangvr.util.DateUtil;
 import com.dabangvr.util.LoadingDialog;
 import com.dabangvr.util.SPUtils;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.wxapi.AppManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -164,9 +166,7 @@ public class PhoneActivity extends AppCompatActivity {
         }
     };
     private void loginMyServer(String uName) {
-        final Intent intent = new Intent("android.intent.action.USER_LOGIN");
         HashMap<String,String> map = new HashMap<>();
-
         map.put("nickName", uName);
         map.put("loginType", "phone");
         map.put("phone", uName);
@@ -185,14 +185,14 @@ public class PhoneActivity extends AppCompatActivity {
                         return;
                     }
                     JSONObject data = jsonObject.optJSONObject("data");
+                    String userStr = data.optString("user");
+                    SPUtils2.instance(PhoneActivity.this).put("user",userStr);
                     spUtils.put("token",data.optString("token"));
                     spUtils.put("isLogin","true");
                     Intent intent = new Intent(PhoneActivity.this,MainActivity.class);
                     startActivity(intent);
                     finish();
-                    if (LoginActivity.instant != null){
-                        LoginActivity.instant.finish();
-                    }
+                    AppManager.getAppManager().finishActivity(LoginActivity.class);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

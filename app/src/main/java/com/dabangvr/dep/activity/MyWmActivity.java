@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
 import com.dabangvr.dep.fragment.MyOrderWmFragment;
 import com.dabangvr.util.StatusBarUtil;
@@ -14,7 +14,7 @@ import com.dabangvr.util.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyWmActivity extends BaseActivity {
+public class MyWmActivity extends BaseNewActivity {
     public static final String[] tabTitles = new String[]{"全部订单", "待评价", "退款"};
     public static final String[] tabTitlesId = new String[]{"", "301", "400"};
     private TabLayout mTabLayout;
@@ -33,7 +33,7 @@ public class MyWmActivity extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 
         mTabLayout = findViewById(R.id.tablayout);
         mViewPager = findViewById(R.id.viewpager);
@@ -72,7 +72,7 @@ public class MyWmActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 }

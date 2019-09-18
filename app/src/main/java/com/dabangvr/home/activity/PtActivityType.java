@@ -8,14 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
-import com.dabangvr.home.fragment.HomeTabGoodsFragment;
 import com.dabangvr.home.fragment.PtFragment;
 import com.dabangvr.model.TypeBean;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.StatusBarUtil;
-import com.example.mylibrary.ViewPagerForScrollView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +29,7 @@ import Utils.OkHttp3Utils;
 import config.DyUrl;
 import okhttp3.Call;
 
-public class PtActivityType extends BaseActivity{
+public class PtActivityType extends BaseNewActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -49,7 +47,7 @@ public class PtActivityType extends BaseActivity{
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -62,7 +60,7 @@ public class PtActivityType extends BaseActivity{
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         Map<String, String> map = new HashMap<>();
         map.put(DyUrl.TOKEN_NAME,getSPKEY(this,"token"));
         map.put("parentId", "1");

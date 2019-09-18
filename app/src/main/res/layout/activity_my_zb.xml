@@ -69,7 +69,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_80"
                 android:layout_height="@dimen/dp_80"
-                android:src="@mipmap/jf_success"/>
+                android:src="@mipmap/user_new"/>
 
             <TextView
                 android:layout_width="1dp"

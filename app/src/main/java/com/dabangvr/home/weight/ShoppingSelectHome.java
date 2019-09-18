@@ -9,10 +9,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dabangvr.R;
-import com.dabangvr.home.activity.HxxqActivity;
-import com.dabangvr.model.GGobject;
-import com.dabangvr.model.ProductInfoVoList;
-import com.dabangvr.model.Specifications;
 import com.dabangvr.model.goods.GoodsDetails;
 import com.dabangvr.util.ToastUtil;
 
@@ -235,7 +231,6 @@ public class ShoppingSelectHome<T> extends LinearLayout {
                         stock.setText(productInfo.get(i).getNumber());
                         clike.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                         clike.setClickable(true);
-                        HxxqActivity.isGG = true;
                         //设置productId
                         productId = Integer.parseInt(productInfo.get(i).getId());
                         break;

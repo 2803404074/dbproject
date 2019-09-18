@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--个人信息-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_200"
+            android:background="@drawable/list_style_theme_top">
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:padding="@dimen/dp_5"
+                android:src="@mipmap/ms_search"/>
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdvHead"
+                android:layout_centerHorizontal="true"
+                android:layout_width="@dimen/dp_75"
+                android:layout_height="@dimen/dp_75"
+                fresco:roundAsCircle="true" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_below="@+id/sdvHead"
+                android:textSize="@dimen/sp_18"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:drawableRight="@mipmap/go_right"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dp_5"
+                android:textColor="@android:color/white"
+                android:text="无敌风火轮"/>
+
+            <ImageView
+                android:layout_toLeftOf="@+id/iv_message"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:padding="@dimen/dp_5"
+                android:src="@drawable/p_setup"/>
+
+            <ImageView
+                android:id="@+id/iv_message"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:padding="@dimen/dp_5"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/p_setup"/>
+
+            <!--会员等级-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tv_name"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@drawable/touming_ruang_left_right"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:src="@drawable/search_love"/>
+                <TextView
+                    android:textSize="@dimen/sp_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="青铜会员"/>
+            </LinearLayout>
+
+            <!--动态、关注、粉丝、跳币-->
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

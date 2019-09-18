@@ -32,7 +32,6 @@ import butterknife.Unbinder;
 public abstract class BaseFragmentFromType extends Fragment {
 
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -12,12 +12,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.home.fragment.MsFragmentMy;
 import com.dabangvr.home.fragment.MsFragmentNow;
 import com.dabangvr.my.StatusBarUtil;
 
-public class XsMsActivity_bf extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+public class XsMsActivity_bf extends BaseNewActivity implements RadioGroup.OnCheckedChangeListener {
 
     private RadioGroup radioGroup;
     private FragmentManager fragmentManager;
@@ -41,7 +41,7 @@ public class XsMsActivity_bf extends BaseActivity implements RadioGroup.OnChecke
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         title = findViewById(R.id.ms_title);
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -62,7 +62,7 @@ public class XsMsActivity_bf extends BaseActivity implements RadioGroup.OnChecke
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 

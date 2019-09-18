@@ -49,6 +49,7 @@
             android:drawablePadding="@dimen/dp_2"
             android:gravity="center"
             android:text="首页"
+            android:textColor="@color/colorDb3"
             android:textSize="@dimen/text_small" />
 
         <RadioButton
@@ -58,6 +59,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:button="@null"
+            android:textColor="@color/colorDb3"
             android:drawableTop="@drawable/main_zhibo"
             android:drawablePadding="@dimen/dp_2"
             android:gravity="center"
@@ -80,6 +82,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:button="@null"
+            android:textColor="@color/colorDb3"
             android:drawableTop="@drawable/main_cart"
             android:drawablePadding="@dimen/dp_2"
             android:gravity="center"
@@ -94,6 +97,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:button="@null"
+            android:textColor="@color/colorDb3"
             android:drawableTop="@drawable/main_my"
             android:drawablePadding="@dimen/dp_2"
             android:gravity="center"

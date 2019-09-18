@@ -1,12 +1,16 @@
 package com.dabangvr.main;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,32 +24,35 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
-import com.dabangvr.common.activity.CartActivity;
+import com.dabangvr.base.BaseNewActivity;
+import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.dynamic.activity.DynamicActivity;
-import com.dabangvr.dynamic.fragment.FragmentDynamic;
-import com.dabangvr.home.fragment.FragmentHome;
+import com.dabangvr.home.activity.XrflActivity;
 import com.dabangvr.home.interf.ChangeRadioButtonCallBack;
 import com.dabangvr.lbroadcast.activity.PlayZhiBoActivity;
-import com.dabangvr.lbroadcast.fragment.FragmentZhibo;
 import com.dabangvr.lbroadcast.fragment.page.FragmentZhiboCopy;
 import com.dabangvr.lbroadcast.fragment.page.ZhiBoPage;
+import com.dabangvr.my.activity.ApplyAnchorActivity;
+import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.my.fragment.FragmentMy;
 import com.dabangvr.util.BottomImgSize;
+import com.dabangvr.util.CheckPage;
+import com.dabangvr.util.DialogUtilT;
+import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.play.VideoRecordActivity;
 import com.dabangvr.video.utils.PermissionChecker;
 import com.dabangvr.video.utils.ToastUtils;
 import com.dabangvr.view.home.CartFragment;
-import com.dabangvr.view.home.HomeFragment;
 import com.dabangvr.wxapi.AppManager;
 
+import bean.UserMess;
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, ChangeRadioButtonCallBack {
+public class MainActivity extends BaseNewActivity implements RadioGroup.OnCheckedChangeListener, ChangeRadioButtonCallBack {
 
     @BindView(R.id.main_orther)
     TextView tvShow;
@@ -81,7 +88,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     //初始化控件
     @Override
-    protected void initView() {
+    public void initView() {
         fragmentManager = getSupportFragmentManager();
         radioGroup = findViewById(R.id.main_radiogrop);
         radioGroup.setOnCheckedChangeListener(this);
@@ -119,8 +126,62 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         });
     }
 
+
+    private DialogUtilT dialogUtilT;
     @Override
-    protected void initData() {
+    public void initData() {
+        //判断是否是8.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //判断8.0是否有通知权限
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled()){
+                //是否之前弹窗过并且点击了不再提醒
+                boolean isNotify = (boolean) SPUtils2.instance(MainActivity.this).getkey("no_notify",false);
+                if (isNotify){
+                    return;
+                }
+                //没有该权限则弹窗提示
+                dialogUtilT = new DialogUtilT(this) {
+                    @Override
+                    public void convert(BaseRecyclerHolder holder) {
+                        holder.getView(R.id.tv_go).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                CheckPage.gotoNotificationSetting(MainActivity.this);
+                            }
+                        });
+                    }
+                };
+                dialogUtilT.setCallBack(new DialogUtilT.CloseCallBack() {
+                    @Override
+                    public void close() {
+                        SPUtils2.instance(MainActivity.this).put("no_notify",true);
+                    }
+                });
+                dialogUtilT.show(R.layout.dialog_set);
+            }else {
+                if (dialogUtilT!=null){
+                    dialogUtilT.des();
+                }
+            }
+        }
+
+        String user = getSPKEY(this,"user");
+        UserMess userMess = JsonUtil.string2Obj(user, UserMess.class);
+        if (true){
+            dialogUtilT = new DialogUtilT(this) {
+                @Override
+                public void convert(BaseRecyclerHolder holder) {
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), XrflActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            };
+            dialogUtilT.show(R.layout.user_new_dialog);
+        }
     }
 
     /**
@@ -357,6 +418,43 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void show(final Activity activity, final int index, String mess, String btnStr) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                .setTitle("海风暴")
+                .setMessage(mess)
+                .setIcon(R.mipmap.application)
+                .setPositiveButton(btnStr, new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (index == 0) {
+                            Intent intent = new Intent(activity, LoginActivity.class);
+                            activity.startActivity(intent);
+                        }
+                        if (index == 1) {
+                            Intent intent = new Intent(activity, ApplyAnchorActivity.class);
+                            activity.startActivity(intent);
+                        }
+                    }
+                })
+                .setNeutralButton("取消", new DialogInterface.OnClickListener() {//添加普通按钮
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).create();
+        alertDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CheckPage.NOTIFY_RESULT_CODE){
+            if (dialogUtilT!=null){
+                dialogUtilT.des();
+            }
+        }
     }
 }
 

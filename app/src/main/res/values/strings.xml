@@ -118,4 +118,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+
+    <!--设置字符串-->
+    <string name="setStr">您现在无法收到新消息通知。请到系统“设置”-“通知”- 找到“海跳跳”进行开启。</string>
 </resources>

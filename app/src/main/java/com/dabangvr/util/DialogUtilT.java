@@ -18,6 +18,15 @@ public abstract class DialogUtilT{
     private Context context;
     private AlertDialog dialog;
 
+    private CloseCallBack callBack;
+    public interface CloseCallBack{
+        void close();
+    }
+
+    public void setCallBack(CloseCallBack callBack) {
+        this.callBack = callBack;
+    }
+
     public DialogUtilT(Context context) {
         this.context = context;
     }
@@ -27,6 +36,17 @@ public abstract class DialogUtilT{
      */
     public void show(int layout) {
         View view = LayoutInflater.from(context).inflate(layout, null, false);
+
+        view.findViewById(R.id.dialog_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (callBack!=null){
+                    callBack.close();
+                }
+                dialog.dismiss();
+            }
+        });
+
         BaseRecyclerHolder holder = BaseRecyclerHolder.getRecyclerHolder(context, view);
         convert(holder);
 

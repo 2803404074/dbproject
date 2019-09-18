@@ -9,7 +9,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dabangvr.R;
-import com.dabangvr.home.activity.HxxqActivity;
+
 import com.dabangvr.model.goods.GoodsDetails;
 import com.dabangvr.util.TextUtil;
 import com.dabangvr.util.ToastUtil;

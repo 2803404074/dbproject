@@ -1,7 +1,6 @@
 package com.dabangvr.my.activity;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -9,7 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.adapter.PagerAdapter;
 import com.dabangvr.my.fragment.CommitOk;
 import com.dabangvr.my.fragment.FragmentBusinessIden;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 
 import static com.dabangvr.my.fragment.FragmentBusinessMess.textView;
 
-public class BusinessActivity extends BaseActivity implements CommitOk.OnOkClike {
+public class BusinessActivity extends BaseNewActivity implements CommitOk.OnOkClike {
 
     private ArrayList<Fragment> fragments;
     private PagerAdapter adapter;
@@ -46,7 +45,7 @@ public class BusinessActivity extends BaseActivity implements CommitOk.OnOkClike
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 
         spUtils = new SPUtils(this,"db_user");
         spUtils.remove("SJRZ");
@@ -75,7 +74,7 @@ public class BusinessActivity extends BaseActivity implements CommitOk.OnOkClike
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 

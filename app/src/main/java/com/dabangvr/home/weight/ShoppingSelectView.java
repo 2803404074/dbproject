@@ -9,7 +9,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dabangvr.R;
-import com.dabangvr.home.activity.HxxqActivity;
 import com.dabangvr.model.GGobject;
 import com.dabangvr.model.ProductInfoVoList;
 import com.dabangvr.model.Specifications;
@@ -217,7 +216,6 @@ public class ShoppingSelectView extends LinearLayout {
                         stock.setText(productInfo.get(i).getNumber());
                         clike.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                         clike.setClickable(true);
-                        HxxqActivity.isGG = true;
                         //设置productId
                         productId = productInfo.get(i).getId();
                         break;

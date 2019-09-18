@@ -15,20 +15,17 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.dep.model.DepCart;
 import com.dabangvr.home.weight.ShoppingSelectWM;
-import com.dabangvr.util.CheckPage;
 import com.dabangvr.util.GlideLoadUtils;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.StatusBarUtil;
@@ -64,7 +61,7 @@ import okhttp3.Call;
 /**
  *店铺详情
  */
-public class DepMessActivity extends BaseActivity implements CheckListener, View.OnClickListener, SortDetailFragment.onClickGoods, HideScrollListener {
+public class DepMessActivity extends BaseNewActivity implements CheckListener, View.OnClickListener, SortDetailFragment.onClickGoods, HideScrollListener {
 
     private double startPrice;
     private boolean isSeller = false;//是否营业中，1为营业中
@@ -121,7 +118,7 @@ public class DepMessActivity extends BaseActivity implements CheckListener, View
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         mContext = this;
         pdUtil = new PdUtil(this);
 
@@ -164,7 +161,7 @@ public class DepMessActivity extends BaseActivity implements CheckListener, View
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         depId = getIntent().getStringExtra("depId");
         Map<String, String> map = new HashMap<>();
         map.put("deptId",depId);
@@ -335,10 +332,6 @@ public class DepMessActivity extends BaseActivity implements CheckListener, View
     private void comfirmOrder() {
         Map<String, String> map = new HashMap<>();
         map.put("deptId", depId);
-        if (StringUtils.isEmpty(getSPKEY(this, "token"))) {
-            show(this, 0, "登录后才能下单哦", "去登陆");
-            return;
-        }
         map.put(DyUrl.TOKEN_NAME, getSPKEY(this, "token"));
         map.put("goodsList", JsonUtil.obj2String(mDepCart));
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.confirmGoods2Delivery, map, new GsonObjectCallback<String>(DyUrl.BASE) {

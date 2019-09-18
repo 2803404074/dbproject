@@ -1,14 +1,19 @@
 package com.dabangvr.my.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.dabangvr.R;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.home.activity.HxxqLastActivity;
@@ -25,17 +30,26 @@ import java.util.List;
 import java.util.Map;
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
 
 /**
  * 个人中心-收藏
  */
-public class MyScActivity extends BaseActivity {
+public class MyScActivity extends BaseNewActivity {
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.sc_recycler)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.rl_no_contant)
+    RelativeLayout layout;
+
+    @BindView(R.id.back)
+    ImageView back;
+
     private List<ShouCangMo>lists;
-    private RelativeLayout layout;
+    private BaseLoadMoreHeaderAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,28 +63,40 @@ public class MyScActivity extends BaseActivity {
 
 
     @Override
-    protected void initView() {
-        layout = findViewById(R.id.rl_no_contant);
-        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+    public void initView() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
         recyclerView = findViewById(R.id.sc_recycler);
-        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutmanager);
-        getDataFromHttp();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new BaseLoadMoreHeaderAdapter<ShouCangMo>(this,recyclerView,lists,R.layout.sc_recy_item) {
+            @Override
+            public void convert(Context mContext, BaseRecyclerHolder holder, ShouCangMo o) {
+                holder.setImageByUrl(R.id.sc_img,o.getListUrl());
+                holder.setText(R.id.sc_title,o.getGoodsName());
+                holder.setText(R.id.sc_markp,o.getMarketPrice());
+                holder.setText(R.id.sc_price,o.getSellingPrice());
+            }
+        };
+        adapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ShouCangMo shouCangMo = (ShouCangMo) adapter.getData().get(position);
+                Intent intent = new Intent(MyScActivity.this, HxxqLastActivity.class);
+                intent.putExtra("id", shouCangMo.getGoodsId());
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    private void getDataFromHttp() {
+    public void initData() {
         Map<String,String>map = new HashMap<>();
-
         String token = getSPKEY(this,"token");
         map.put(DyUrl.TOKEN_NAME,token);
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsCollectList, map, new GsonObjectCallback<String>(DyUrl.BASE) {
@@ -92,29 +118,9 @@ public class MyScActivity extends BaseActivity {
                         lists = JsonUtil.string2Obj(str,List.class, ShouCangMo.class);
                         if(lists == null || lists.size()<1){
                             layout.setVisibility(View.VISIBLE);
+                        }else {
+                            adapter.updateDataa(lists);
                         }
-                        //看具体数据
-
-                        BaseRecyclerAdapter adapter = new BaseRecyclerAdapter<ShouCangMo>(MyScActivity.this,lists,R.layout.sc_recy_item) {
-                            @Override
-                            public void convert(BaseRecyclerHolder holder, ShouCangMo item, int position, boolean isScrolling) {
-                                holder.setImageByUrl(R.id.sc_img,item.getListUrl());
-                                holder.setText(R.id.sc_title,item.getGoodsName());
-                                holder.setText(R.id.sc_markp,item.getMarketPrice());
-                                holder.setText(R.id.sc_price,item.getSellingPrice());
-                            }
-                        };
-
-                        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(RecyclerView parent, View view, int position) {
-                                Intent intent = new Intent(MyScActivity.this, HxxqLastActivity.class);
-                                intent.putExtra("id", lists.get(position).getGoodsId());
-                                intent.putExtra("type", 0);
-                                startActivity(intent);
-                            }
-                        });
-                        recyclerView.setAdapter(adapter);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
