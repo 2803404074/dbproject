@@ -2,12 +2,11 @@ package com.dabangvr.my.activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
 import com.dabangvr.util.StatusBarUtil;
 import com.example.mylibrary.ViewPagerForScrollView;
@@ -18,7 +17,7 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartOpenShopActivity extends BaseActivity {
+public class StartOpenShopActivity extends BaseNewActivity {
 
     private TabLayout tabLayout;
     private ViewPagerForScrollView vp_pager;
@@ -36,7 +35,7 @@ public class StartOpenShopActivity extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 
         Banner banner = findViewById(R.id.ms_banner);
         BannerStart.starBanner(StartOpenShopActivity.this,banner,"7");
@@ -68,7 +67,7 @@ public class StartOpenShopActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 }

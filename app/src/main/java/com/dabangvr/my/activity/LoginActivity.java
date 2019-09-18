@@ -1,25 +1,24 @@
 package com.dabangvr.my.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.lbroadcast.widget.MediaController;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.MyApplication;
 import com.dabangvr.main.WellComePageActivity;
-import com.dabangvr.util.GlideLoadUtils;
-import com.dabangvr.util.LoadingDialog;
-import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.wxapi.AppManager;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 import com.pili.pldroid.player.widget.PLVideoView;
 import com.tencent.connect.UserInfo;
@@ -39,27 +38,25 @@ import java.util.HashMap;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
-    private static final String TAG = "LoginActivity";
-    private static final String APP_ID = "1109644507";//官方获取的APPID
+import static com.dabangvr.base.resources.ThirdParty.QQ_APP_ID;
+
+public class LoginActivity extends BaseNewActivity implements View.OnClickListener {
+
+    @BindView(R.id.video_view)
+    PLVideoTextureView mVideoView;
+
     private Tencent mTencent;
     private BaseUiListener mIUiListener; //第三方登陆处理后的UI回调接口
     private UserInfo mUserInfo;
-    private LoadingDialog loadingDialog;
-    private SPUtils spUtils;
-    public static LoginActivity instant;
-
-    private PLVideoTextureView mVideoView;
-
-    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtil.setRootViewFitsSystemWindows(this, false);
+        AppManager.getAppManager().addActivity(this);
     }
 
     @Override
@@ -69,14 +66,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //初始化控件
     @Override
-    protected void initView() {
-        instant = this;
-        mTencent = Tencent.createInstance(APP_ID, LoginActivity.this.getApplicationContext());
+    public void initView() {
+        mTencent = Tencent.createInstance(QQ_APP_ID, LoginActivity.this.getApplicationContext());
 
-        spUtils = new SPUtils(this, "db_user");
-        //视频播放器
-        mVideoView = (PLVideoTextureView) findViewById(R.id.video_view);
+        //微信登录
+        findViewById(R.id.wechat_login).setOnClickListener(this);
+        //qq
+        findViewById(R.id.qq_login).setOnClickListener(this);
+        //手机
+        findViewById(R.id.phone_login).setOnClickListener(this);
+        //账号
+        //findViewById(R.id.account_login).setOnClickListener(this);
+    }
 
+    @Override
+    public void initData() {
         MediaController mMediaController = new MediaController(LoginActivity.this);
         mVideoView.setMediaController(mMediaController);
         mVideoView.setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_PAVED_PARENT);
@@ -84,54 +88,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mVideoView.setVideoPath(DyUrl.APP_LOGIN_VIDEO);
         mVideoView.setLooping(true);//重复播放
         mVideoView.start();
-
-        loadingDialog = new LoadingDialog(this);
-
-        imageView = findViewById(R.id.login_head);
-        GlideLoadUtils.getInstance().glideLoad(this,DyUrl.APP_LOGO,imageView);
-
-        //微信登录
-        findViewById(R.id.wechat_login).setOnClickListener(this);
-
-        //qq
-        findViewById(R.id.qq_login).setOnClickListener(this);
-
-
-        //手机
-        findViewById(R.id.phone_login).setOnClickListener(this);
-
-
-        //账号
-        findViewById(R.id.account_login).setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.qq_login:
-                loadingDialog.show();
+                setLoaddingView(true);
                 qqLogin();//qq登陆
                 break;
             case R.id.wechat_login:
+                setLoaddingView(true);
                 wechatLogin();
                 break;
             case R.id.phone_login:
                 //手机登陆页面
                 Intent intent = new Intent(this, PhoneActivity.class);
                 startActivity(intent);
-//                mVideoView.stopPlayback();
-                break;
-
-            case R.id.account_login:
-                //手机登陆页面
-                Intent intent2 = new Intent(this, PhoneActivity.class);
-                startActivity(intent2);
-//                mVideoView.stopPlayback();
                 break;
         }
     }
@@ -140,9 +113,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * qq登陆方法
      */
     private void qqLogin() {
-        /**通过这句代码，SDK实现了QQ的登录，这个方法有三个参数，第一个参数是context上下文，第二个参数SCOPO 是一个String类型的字符串，表示一些权限
-         官方文档中的说明：应用需要获得哪些API的权限，由“，”分隔。例如：SCOPE = “get_user_info,add_t”；所有权限用“all”
-         第三个参数，是一个事件监听器，IUiListener接口的实例，这里用的是该接口的实现类 */
         mIUiListener = new BaseUiListener();
         //all表示获取所有权限
         mTencent.login(LoginActivity.this, "all", mIUiListener);
@@ -156,6 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             MyApplication.api = WXAPIFactory.createWXAPI(this, MyApplication.APP_ID, true);
         }
         if (!MyApplication.api.isWXAppInstalled()) {
+            setLoaddingView(false);
             ToastUtil.showShort(this, "您手机尚未安装微信，请安装后再登录");
             return;
         }
@@ -173,7 +144,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         public void onComplete(Object response) {
             Toast.makeText(LoginActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "response:" + response);
             JSONObject obj = (JSONObject) response;
             try {
                 final String openID = obj.getString("openid");
@@ -189,51 +159,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         JSONObject objectResult = null;
                         try {
                             objectResult = new JSONObject(response.toString());
-                            //Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-
-                            //登陆成功后，通知广播,这里先声明
-                            //Intent intent = new Intent("android.intent.action.USER_LOGIN");
                             String uName = objectResult.optString("nickname");//获取第三方返回的昵称
                             String icon = objectResult.optString("figureurl_2");//第三方头像
                             String type = "qq";//登陆类型
-
-                            //根据openid获取用户信息
                             senMyServer(openID, uName, icon, type);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onError(UiError uiError) {
-                        Log.e(TAG, "登录失败" + uiError.toString());
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                        loadingDialog.dismiss();
+                        setLoaddingView(false);
                     }
 
                     @Override
                     public void onCancel() {
-                        Log.e(TAG, "登录取消");
                         Toast.makeText(LoginActivity.this, "登录取消", Toast.LENGTH_SHORT).show();
-                        loadingDialog.dismiss();
+                        setLoaddingView(false);
                     }
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
-                loadingDialog.dismiss();
             }
         }
 
         @Override
         public void onError(UiError uiError) {
             Toast.makeText(LoginActivity.this, "授权失败", Toast.LENGTH_LONG).show();
-            loadingDialog.dismiss();
         }
 
         @Override
         public void onCancel() {
             Toast.makeText(LoginActivity.this, "授权取消", Toast.LENGTH_LONG).show();
-            loadingDialog.dismiss();
         }
     }
 
@@ -249,7 +207,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_LOGIN) {
             Tencent.onActivityResultData(requestCode, resultCode, data, mIUiListener);
-            loadingDialog.dismiss();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -261,7 +218,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("nickName", uName);
         map.put("icon", icon);
         map.put("loginType", type);
-
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.LOGIN, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
@@ -270,11 +226,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     int errno = object.optInt("errno");
                     int code = object.optInt("code");
                     if (errno == 0){
-                        if (code == 500) return ;
+                        if (code == 500) {
+                            setLoaddingView(false);
+                            return ;
+                        }
                         JSONObject data = object.optJSONObject("data");
                         if (null != data){
                             String token = data.optString("token");
                             SPUtils2.instance(LoginActivity.this).put("token",token);
+                            String userStr = data.optString("user");
+                            SPUtils2.instance(getContext()).put("user",userStr);
                             //如果是第一次登陆，则跳到闪屏
                             boolean isNews = (boolean) SPUtils2.instance(LoginActivity.this).getkey("isNews",true);
                             if (isNews){
@@ -285,7 +246,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 startActivity(intent);
                             }
                             finish();
-
                         }else {
                             ToastUtil.showShort(LoginActivity.this,"网络繁忙，请稍候再试试？");
                         }
@@ -298,6 +258,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onFailed(Call call, IOException e) {
                 Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
+                setLoaddingView(false);
             }
         });
     }

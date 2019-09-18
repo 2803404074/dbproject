@@ -98,6 +98,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".main.MainActivity"
+            android:theme="@style/activityTheme"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -155,9 +156,6 @@
             android:name=".home.activity.OrderActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.activity.HxxqActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".home.activity.HxxqActivityCopy"
             android:screenOrientation="portrait" />
         <activity
@@ -165,6 +163,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.LoginActivity"
+            android:theme="@style/AppFullScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.PhoneActivity"

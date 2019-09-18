@@ -1,23 +1,16 @@
 package com.dabangvr.home.activity;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
-import com.dabangvr.home.fragment.MsFragmentMy;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.home.fragment.MsFragmentNow;
 import com.dabangvr.my.StatusBarUtil;
 
-public class XsMsActivity extends BaseActivity {
+public class XsMsActivity extends BaseNewActivity {
 
 
     private FragmentManager fragmentManager;
@@ -39,7 +32,7 @@ public class XsMsActivity extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -52,7 +45,7 @@ public class XsMsActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         changeFragment(0);
     }
 

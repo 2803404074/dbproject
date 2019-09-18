@@ -32,8 +32,10 @@ public class MyOrtherActivity extends BaseNewActivity implements MyOrtherPageFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT>=21){
-            StatusBarUtil.setTranslucentStatus(this);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            StatusBarUtil.setStatusBarColor(this, getResources().getColor(R.color.colorGray1));
         }
     }
 

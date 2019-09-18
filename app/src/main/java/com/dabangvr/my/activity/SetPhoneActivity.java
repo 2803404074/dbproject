@@ -18,6 +18,7 @@ import com.dabangvr.R;
 import com.dabangvr.util.DateUtil;
 import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.wxapi.AppManager;
 import com.dabangvr.wxapi.WXEntryActivity;
 
 import org.apache.commons.lang.StringUtils;
@@ -162,9 +163,7 @@ public class SetPhoneActivity extends AppCompatActivity {
                         if(WXEntryActivity.instants != null){
                             WXEntryActivity.instants.finish();
                         }
-                        if(LoginActivity.instant != null){//结束登陆页面
-                            LoginActivity.instant.finish();
-                        }
+                        AppManager.getAppManager().finishActivity(LoginActivity.class);
                     }
 
                 } catch (JSONException e) {

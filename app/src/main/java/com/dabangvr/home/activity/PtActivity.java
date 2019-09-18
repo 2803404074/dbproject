@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.activity.CartActivity;
 import com.dabangvr.home.fragment.PtHostFragment;
 import com.dabangvr.home.fragment.PtMyFragment;
@@ -26,7 +24,7 @@ import com.dabangvr.util.StatusBarUtil;
 
 import java.util.List;
 
-public class PtActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, PopupMenu.OnMenuItemClickListener {
+public class PtActivity extends BaseNewActivity implements RadioGroup.OnCheckedChangeListener, PopupMenu.OnMenuItemClickListener {
 
     private RadioGroup radioGroup;
     private FragmentManager fragmentManager;
@@ -46,7 +44,7 @@ public class PtActivity extends BaseActivity implements RadioGroup.OnCheckedChan
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +81,7 @@ public class PtActivity extends BaseActivity implements RadioGroup.OnCheckedChan
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 

@@ -50,13 +50,14 @@ import butterknife.Unbinder;
 import config.DyUrl;
 import okhttp3.Call;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends Activity {
     private Unbinder mUnbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//禁止横屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setTheme(R.style.activityTheme);
         setContentView(setLayout());
         mUnbinder = ButterKnife.bind(this);
 
@@ -129,32 +130,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
 
-    public static void show(final Activity activity, final int index, String mess, String btnStr) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle("海风暴")
-                .setMessage(mess)
-                .setIcon(R.mipmap.application)
-                .setPositiveButton(btnStr, new DialogInterface.OnClickListener() {//添加"Yes"按钮
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (index == 0) {
-                            Intent intent = new Intent(activity, LoginActivity.class);
-                            activity.startActivity(intent);
-                        }
-                        if (index == 1) {
-                            Intent intent = new Intent(activity, ApplyAnchorActivity.class);
-                            activity.startActivity(intent);
-                        }
-                    }
-                })
-                .setNeutralButton("取消", new DialogInterface.OnClickListener() {//添加普通按钮
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }).create();
-        alertDialog.show();
-    }
 
     /***********************我是分割线***************************/
 

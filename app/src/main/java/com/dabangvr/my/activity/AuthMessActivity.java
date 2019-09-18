@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.common.weight.SimpleFragmentPagerAdapter;
 import com.dabangvr.my.fragment.FragmentMyDynamic;
 import com.dabangvr.my.fragment.FragmentMyShort;
@@ -32,7 +32,7 @@ import Utils.OkHttp3Utils;
 import config.DyUrl;
 import okhttp3.Call;
 
-public class AuthMessActivity extends BaseActivity {
+public class AuthMessActivity extends BaseNewActivity {
 
     private TextView fanse;
     private TextView follow;
@@ -53,7 +53,7 @@ public class AuthMessActivity extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         aId = getIntent().getStringExtra("authId");
         String uId = getIntent().getStringExtra("userId");
         tvTitle = findViewById(R.id.tv_title);
@@ -82,7 +82,7 @@ public class AuthMessActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         if (StringUtils.isEmpty(aId))return;
         Map<String,String>map = new HashMap<>();
         map.put(DyUrl.TOKEN_NAME,getSPKEY(this,"token"));

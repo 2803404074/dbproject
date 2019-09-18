@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.dabangvr.R;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.dep.activity.DepActivity;
 import com.dabangvr.home.interf.ChangeRadioButtonCallBack;
 import com.dabangvr.model.MenuMo;
@@ -36,8 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dabangvr.common.activity.BaseActivity;
-
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import bean.ZBMain;
@@ -53,7 +52,7 @@ import okhttp3.Call;
  */
 
 
-public class MsActivity extends BaseActivity {
+public class MsActivity extends BaseNewActivity {
 
     @BindView(R.id.viewpager_id)
     ViewPager viewPager;

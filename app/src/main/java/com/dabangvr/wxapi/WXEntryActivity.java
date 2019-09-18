@@ -10,6 +10,7 @@ import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.MyApplication;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.SPUtils;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -106,12 +107,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    finish();
                 }
             }
 
             @Override
             public void onFailed(Call call, IOException e) {
-
+                    finish();
             }
         });
     }
@@ -130,6 +132,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 try {
                     JSONObject object = new JSONObject(result);
                     if (StringUtils.isEmpty(result)) {
+                        finish();
                         return ;
                     }
                     String openId = object.optString("openid");
@@ -141,12 +144,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     senMyServer(openId, nickname, headimgurl, "wechat");
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    finish();
                 }
             }
 
             @Override
             public void onFailed(Call call, IOException e) {
-
+                    finish();
             }
         });
     }
@@ -167,18 +171,24 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     int errno = object.optInt("errno");
                     int code = object.optInt("code");
                     if (errno == 0){
-                        if (code == 500) return ;
+                        if (code == 500) {
+                            finish();
+                            return ;
+                        }
                         JSONObject data = object.optJSONObject("data");
+                        String userStr = data.optString("user");
+                        SPUtils2.instance(WXEntryActivity.this).put("user",userStr);
                         String token = data.optString("token");
                         spUtils.put("isLogin","true");
                         spUtils.put("token",token);
                         Intent intent = new Intent(WXEntryActivity.this,MainActivity.class);
                         startActivity(intent);
-                        LoginActivity.instant.finish();
+                        AppManager.getAppManager().finishActivity(LoginActivity.class);
                         finish();//结束当前页面
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    finish();
                 }
             }
 
@@ -186,6 +196,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             public void onFailed(Call call, IOException e) {
                 Toast.makeText(WXEntryActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
                 //loadingDialog.dismiss();
+                finish();
             }
         });
     }

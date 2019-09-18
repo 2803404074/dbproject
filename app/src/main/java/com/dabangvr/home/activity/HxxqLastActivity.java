@@ -244,6 +244,11 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.getGoodsCollectSave, map,getToken(this),new TObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 //设置收藏动画
             }
 
