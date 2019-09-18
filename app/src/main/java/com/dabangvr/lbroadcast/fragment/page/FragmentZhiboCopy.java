@@ -38,10 +38,8 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
     private TabLayout tabLayout;
 
     private ViewPager viewPager;
-    private ImageView tv_my_zb;
     private TabLayoutFragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments;
-    private ZhiBoPage zhiBoPage;
     private VideoZBFragment videoZBFragment;
     private LinearLayout talRl;
     private int height;
@@ -109,7 +107,7 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
         titleList.add("海鲜干货");
 
         search_edit.setTextList(titleList);
-        search_edit.setText(10, 2, Color.BLACK);//设置属性
+        search_edit.setText(14, 2, Color.BLACK);//设置属性
         search_edit.setTextStillTime(3000);//设置停留时长间隔
         search_edit.setAnimTime(300);//设置进入和退出的时间间隔
         search_edit.setOnItemClickListener(new VerticalTextview.OnItemClickListener() {

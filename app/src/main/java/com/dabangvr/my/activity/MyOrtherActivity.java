@@ -71,10 +71,10 @@ public class MyOrtherActivity extends BaseNewActivity implements MyOrtherPageFra
         }
         adapter = new SimpleFragmentPagerAdapter(this.getSupportFragmentManager(), mFragments, title);
         vp_pager.setAdapter(adapter);
+        int position = getIntent().getIntExtra("position",0);
+        vp_pager.setCurrentItem(position);
         tabLayout.setupWithViewPager(vp_pager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//超过长度可滑动
-        //设置当前显示哪个标签页
-        vp_pager.setCurrentItem(0);
     }
 
     @Override

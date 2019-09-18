@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dabangvr.R;
+import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.base.plush.SPTAG;
 import com.dabangvr.common.activity.AddressActivity;
 import com.dabangvr.common.activity.BaseActivity;
@@ -32,6 +33,7 @@ import com.dabangvr.util.CameraUtil;
 import com.dabangvr.util.DiaLogUtil;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.wxapi.AppManager;
@@ -60,7 +62,7 @@ import okhttp3.Call;
 /**
  * 个人中心-设置
  */
-public class UserMessActivity extends BaseActivity implements View.OnClickListener, DiaLogUtil.DiaLogClickListener {
+public class UserMessActivity extends BaseNewActivity implements View.OnClickListener, DiaLogUtil.DiaLogClickListener {
     private static final int REQ_1 = 1;//打开相机
     private static final int REQ_2 = 2;//打开相册
     private static final int REQ_4 = 4;//相册后启动裁剪程序
@@ -82,7 +84,6 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
     private TextView tvCache;//缓存
 
     private AlertDialog alertDialog;
-    private UserMess userMess;
 
     private LocalBroadcastManager broadcastManager;
     private IntentFilter intentFilter;
@@ -101,9 +102,9 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
         //初始化控件
-        draweeView = (SimpleDraweeView) findViewById(R.id.mess_drawee_img);
+        draweeView = findViewById(R.id.mess_drawee_img);
         //我的收获地址
         findViewById(R.id.linear_address).setOnClickListener(this);
         findViewById(R.id.linear_nick).setOnClickListener(this);
@@ -134,7 +135,7 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         //获取缓存
         try {
             tvCache.setText(CacheUtil.getTotalCacheSize(this));
@@ -143,12 +144,9 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
         }
 
         //填充用户信息数据
-        String user = getIntent().getStringExtra("user");
-        userMess = JsonUtil.string2Obj(user, UserMess.class);
-
-        if (!StringUtils.isEmpty(userMess.getHeadUrl())) {
-            draweeView.setImageURI(userMess.getHeadUrl());
-        }
+        String str = (String) SPUtils2.instance(this).getkey("user","");
+        UserMess userMess = JsonUtil.string2Obj(str, UserMess.class);
+        draweeView.setImageURI(userMess.getHeadUrl());
 
         //个性签名
         tvTAG.setText(userMess.getAutograph());
@@ -307,7 +305,6 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
                 show(0, "确定要退出吗？");
                 break;
             }
-
         }
     }
 
@@ -321,8 +318,8 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
             public void onUi(String result) {
                 ToastUtil.showShort(context, "退出成功");
                 //移除本地缓存
-                removeSPKEY(UserMessActivity.this, "token");
-                removeSPKEY(UserMessActivity.this, "isLogin");
+                SPUtils2.instance(getContext()).remove("token");
+                SPUtils2.instance(getContext()).remove("isLogin");
                 JPushInterface.removeLocalNotification(UserMessActivity.this, SPTAG.SEQUENCE);
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);
@@ -334,8 +331,8 @@ public class UserMessActivity extends BaseActivity implements View.OnClickListen
             public void onFailed(Call call, IOException e) {
                 //ToastUtil.showShort(context,"退出成功");
                 //移除本地缓存
-                removeSPKEY(UserMessActivity.this, "token");
-                removeSPKEY(UserMessActivity.this, "isLogin");
+                SPUtils2.instance(getContext()).remove("token");
+                SPUtils2.instance(getContext()).remove("isLogin");
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();

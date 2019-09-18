@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class MyScActivity extends BaseNewActivity {
     @BindView(R.id.back)
     ImageView back;
 
-    private List<ShouCangMo>lists;
+    private List<ShouCangMo>lists = new ArrayList<>();
     private BaseLoadMoreHeaderAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

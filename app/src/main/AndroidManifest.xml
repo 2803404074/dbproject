@@ -96,9 +96,10 @@
         <activity
             android:name=".home.activity.SearchClassActivity"
             android:screenOrientation="portrait" />
+
+        <!--android:theme="@style/activityTheme"-->
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/activityTheme"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity

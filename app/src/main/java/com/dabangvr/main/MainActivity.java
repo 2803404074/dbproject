@@ -33,6 +33,7 @@ import com.dabangvr.home.interf.ChangeRadioButtonCallBack;
 import com.dabangvr.lbroadcast.activity.PlayZhiBoActivity;
 import com.dabangvr.lbroadcast.fragment.page.FragmentZhiboCopy;
 import com.dabangvr.lbroadcast.fragment.page.ZhiBoPage;
+import com.dabangvr.my.StatusBarUtil;
 import com.dabangvr.my.activity.ApplyAnchorActivity;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.my.fragment.FragmentMy;
@@ -41,7 +42,6 @@ import com.dabangvr.util.CheckPage;
 import com.dabangvr.util.DialogUtilT;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils2;
-import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.play.VideoRecordActivity;
 import com.dabangvr.video.utils.PermissionChecker;
@@ -77,8 +77,10 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtil.setRootViewFitsSystemWindows(this, false);
-        AppManager.getAppManager().addActivity(this);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            //解决Android5.0以上，状态栏设置颜色后变灰的问题
+            StatusBarUtil.setTransparentForWindow(this);
+        }
     }
 
     @Override
@@ -247,7 +249,7 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
                 break;
             case 4:
                 if (fg_04 == null) {
-                    fg_04 = FragmentMy.newInstance(4);
+                    fg_04 = new FragmentMy();
                     beginTransaction.add(R.id.fg_content, fg_04);
                 } else {
                     beginTransaction.show(fg_04);

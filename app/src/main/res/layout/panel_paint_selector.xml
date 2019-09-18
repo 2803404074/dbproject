@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#0000"
-            app:srcCompat="@drawable/p_tesk" />
+            app:srcCompat="@drawable/search_love" />
 
         <TextView
             android:id="@+id/paint_undo_text"
@@ -71,10 +71,10 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="5dp"
-            android:background="@drawable/p_tesk"
+            android:background="@drawable/search_love"
             android:clickable="true"
             android:padding="1dp"
-            android:src="@drawable/p_tesk" />
+            android:src="@drawable/search_love" />
 
         <SeekBar
             android:id="@+id/paint_size_seek"
