@@ -4,10 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +19,8 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMTextMessageBody;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,10 +33,10 @@ public class ChatActivity extends BaseNewActivity {
     RecyclerView recyclerView;
 
     @BindView(R.id.btn_send)
-    Button btn_send;
+    TextView btn_send;
 
-    @BindView(R.id.et_content)
-    EditText et_content;
+
+    private EditText et_content;
 
     private int chatType = 1;
     private String toChatUsername;
@@ -45,18 +44,21 @@ public class ChatActivity extends BaseNewActivity {
     private List<EMMessage> msgList;
     private EMConversation conversation;
     protected int pagesize = 20;
-
-
     private ChatAdapter chatAdapter;
-    @Override
-    protected void onCreate(Bundle arg0) {
-        super.onCreate(arg0);
-        setContentView(R.layout.activity_chat);
-    }
 
+    public void tvSand(View view){
+        String content = et_content.getText().toString();
+        if (StringUtils.isEmpty(content)) {
+            return;
+        }
+        setMesaage(content);
+    }
 
     @Override
     public void initView() {
+
+        et_content = findViewById(R.id.et_content_chart);
+
         toChatUsername = this.getIntent().getStringExtra("username");
         tv_toUsername.setText(toChatUsername);
 
@@ -77,18 +79,6 @@ public class ChatActivity extends BaseNewActivity {
         };
         recyclerView.setAdapter(chatAdapter);
 
-        btn_send.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String content = et_content.getText().toString().trim();
-                if (TextUtils.isEmpty(content)) {
-                    return;
-                }
-                setMesaage(content);
-            }
-
-        });
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
@@ -104,7 +94,6 @@ public class ChatActivity extends BaseNewActivity {
 
     protected void getAllMessage() {
         // 获取当前conversation对象
-
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername,
                 EaseCommonUtils.getConversationType(chatType), true);
         // 把此会话的未读数置为0

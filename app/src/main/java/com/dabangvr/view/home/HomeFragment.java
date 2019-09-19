@@ -447,8 +447,10 @@ public class HomeFragment extends BaseFragment {
         List<TypeBean> typeList = JsonUtil.string2Obj(str, List.class, TypeBean.class);
         if (null != typeList && typeList.size()>0){
             List<TypeBean> list = new ArrayList<>();
-            for (int i = 0; i < 8; i++) {
-                list.add(typeList.get(i));
+            for (int i = 0; i < typeList.size(); i++) {
+                if (typeList.get(i).getShowIndex() == 1){
+                    list.add(typeList.get(i));
+                }
             }
             for (int j = 0; j < list.size(); j++) {
                 typeData.add(list.get(j));

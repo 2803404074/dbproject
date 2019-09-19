@@ -8,8 +8,17 @@ public class TypeBean {
     private String name;
     private String jumpUrl;
     private String categoryImg;
+    private int showIndex;//0不显示，1不显示
 
     public TypeBean() {
+    }
+
+    public int getShowIndex() {
+        return showIndex;
+    }
+
+    public void setShowIndex(int showIndex) {
+        this.showIndex = showIndex;
     }
 
     public TypeBean(String id, String name) {

@@ -173,7 +173,7 @@ public class WellcomActivity extends AppCompatActivity{
     private void getType() {
         Map<String, String> map = new HashMap<>();
         map.put("parentId", "1");
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsCategoryList, map,
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getIndexCategoryList, map,
                 new GsonObjectCallback<String>(DyUrl.BASE) {
                     //主线程处理
                     @Override
