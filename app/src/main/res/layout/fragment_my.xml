@@ -45,12 +45,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:paddingVertical="@dimen/dp_1"
                     android:layout_below="@+id/tv_name"
                     android:layout_marginTop="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_8"
                     android:background="@drawable/touming_ruang_left_right"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="@dimen/dp_30"
+                        android:layout_width="@dimen/dp_20"
                         android:layout_height="@dimen/dp_20"
                         android:src="@drawable/search_love"/>
                     <TextView
@@ -58,6 +60,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
                         android:text="青铜会员"/>
                 </LinearLayout>
 
@@ -278,29 +282,21 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-
-    <ImageView
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
-        android:padding="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_30"
-        android:src="@mipmap/ms_search"/>
-
     <ImageView
         android:id="@+id/tv_set"
         android:layout_toLeftOf="@+id/iv_message"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_35"
         android:padding="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_30"
-        android:src="@drawable/p_setup"/>
+        android:src="@mipmap/p_setup"/>
 
     <ImageView
         android:id="@+id/iv_message"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_35"
         android:padding="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_alignParentRight="true"
-        android:src="@drawable/p_setup"/>
+        android:src="@mipmap/my_message"/>
 </RelativeLayout>

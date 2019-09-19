@@ -14,6 +14,7 @@ import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.model.MenuMo;
 import com.dabangvr.my.activity.LoginActivity;
+import com.dabangvr.my.activity.MyMessageActivity;
 import com.dabangvr.my.activity.MyOrtherActivity;
 import com.dabangvr.my.activity.MyScActivity;
 import com.dabangvr.my.activity.SbActivity;
@@ -27,9 +28,12 @@ import com.dabangvr.wxapi.AppManager;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Utils.OkHttp3Utils;
 import Utils.TObjectCallback;
@@ -122,7 +126,6 @@ public class FragmentMy extends BaseFragment {
     @Override
     public void initData() {
         setLoaddingView(true);
-
         //初始化用户信息
         String user = (String) SPUtils2.instance(getContext()).getkey("user", "");
         UserMess userMess = JsonUtil.string2Obj(user, UserMess.class);
@@ -134,19 +137,20 @@ public class FragmentMy extends BaseFragment {
             startActivity(new Intent(getContext(), LoginActivity.class));
             AppManager.getAppManager().finishActivity(MainActivity.class);
         }
-
-
         //初始化菜单
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson("", null, getToken(), new TObjectCallback<String>(DyUrl.BASE) {
+        Map<String,String>map = new HashMap<>();
+        map.put("mallSpeciesId","8");
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPostForm(DyUrl.getChannelMenuList, map, getToken(), new TObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) throws JSONException {
-                serverData = JsonUtil.string2Obj(result, List.class, MenuMo.class);
+                JSONObject object = new JSONObject(result);
+                String str = object.optString("channelMenuList");
+                serverData = JsonUtil.string2Obj(str, List.class, MenuMo.class);
                 if (serverData != null && serverData.size() > 0) {
                     adapter.updateDataa(serverData);
                 }
                 setLoaddingView(false);
             }
-
             @Override
             public void onFailed(String msg) {
                 ToastUtil.showShort(getContext(), msg);
@@ -155,7 +159,7 @@ public class FragmentMy extends BaseFragment {
         });
     }
 
-    @OnClick({R.id.tv_order, R.id.tv_dfk, R.id.tv_dfh, R.id.tv_dsh, R.id.tv_dpj, R.id.tv_tkth, R.id.tv_name, R.id.sdvHead, R.id.tv_set})
+    @OnClick({R.id.tv_order, R.id.tv_dfk, R.id.tv_dfh, R.id.tv_dsh, R.id.tv_dpj, R.id.tv_tkth, R.id.tv_name, R.id.sdvHead, R.id.tv_set,R.id.iv_message})
     public void onTouchClick(View view) {
         switch (view.getId()) {
             case R.id.tv_order:
@@ -195,8 +199,10 @@ public class FragmentMy extends BaseFragment {
             case R.id.tv_set:
                 startActivity(new Intent(getContext(), UserMessActivity.class));
                 break;//设置点击
+            case R.id.iv_message:
+                startActivity(new Intent(getContext(), MyMessageActivity.class));
+                break;//消息点击
             default:break;
         }
-
     }
 }

@@ -179,7 +179,6 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
                 holder.setImageByUrl(R.id.orther_shop_img, o.getDeptLogo());
                 //本店总消费
                 holder.setText(R.id.dep_count, "共:" + o.getDeptTotalPrice() + "元");
-
                 //快递
                 holder.setText(R.id.express, o.getDeptLogisticsTotalPrice() + "元");
 
@@ -307,6 +306,8 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
      */
     private BottomSheetDialog dialog;
     private List<CouponMo> couponMoList = new ArrayList<>();
+    private BaseLoadMoreHeaderAdapter couAdapter;
+
     private void showCoupon(){
         couponMoList.add(new CouponMo(true));
         couponMoList.add(new CouponMo(false));
@@ -320,7 +321,7 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
         tvSize.setText("可用优惠券("+couponMoList.size()+")");
         RecyclerView recyc =  view.findViewById(R.id.recy_coupon);
         recyc.setLayoutManager(new LinearLayoutManager(this));
-        final BaseLoadMoreHeaderAdapter couAdapter = new BaseLoadMoreHeaderAdapter<CouponMo>
+        couAdapter = new BaseLoadMoreHeaderAdapter<CouponMo>
                 (this,recyc,couponMoList,R.layout.coupon_item) {
             @Override
             public void convert(Context mContext, BaseRecyclerHolder holder, CouponMo o) {
@@ -335,11 +336,6 @@ public class OrderActivity extends BaseNewActivity implements View.OnClickListen
             public void onItemClick(View view, int position) {
                 for (int i = 0; i < couponMoList.size(); i++) {
                     couponMoList.get(position).setCheck(i==position?true:false);
-                    if (position == i){
-                        couponMoList.get(position).setCheck(true);
-                        continue;
-                    }
-                    couponMoList.get(i).setCheck(false);
                 }
                 couAdapter.updateDataa(couponMoList);
             }

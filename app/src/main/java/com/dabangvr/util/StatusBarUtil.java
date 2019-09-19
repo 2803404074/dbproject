@@ -205,6 +205,21 @@ public class StatusBarUtil {
         }
     }
 
+    /**
+     * 设置状态栏字体颜色
+     * 需要在根布局中设置FitsSystemWindows属性为true
+     * @param activity
+     * @param dark
+     */
+    private static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
+        View decor = activity.getWindow().getDecorView();
+        if (dark) {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
+    }
+
     //获取状态栏高度
     public static int getStatusBarHeight(Context context) {
         int result = 0;

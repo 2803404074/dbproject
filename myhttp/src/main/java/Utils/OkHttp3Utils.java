@@ -163,6 +163,31 @@ public class OkHttp3Utils {
         call.enqueue(callback);
     }
 
+    public void doPostForm(String url, Map<String, String> params,String token, Callback callback) {
+
+        //创建OkHttpClient请求对象
+        OkHttpClient okHttpClient = getOkHttpClient();
+        //3.x版本post请求换成FormBody 封装键值对参数
+
+        FormBody.Builder builder = new FormBody.Builder();
+
+        //遍历集合
+        if (params != null) {
+            for (String key : params.keySet()) {
+                builder.add(key, params.get(key));
+            }
+        }
+
+        //补全请求地址
+        String requestUrl = BASE_PATH + url;
+
+        //创建Request
+        Request request = new Request.Builder().url(requestUrl).addHeader(DyUrl.TOKEN_NAME,token).post(builder.build()).build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(callback);
+    }
+
     /**
      * post请求上传文件
      * 参数1 url

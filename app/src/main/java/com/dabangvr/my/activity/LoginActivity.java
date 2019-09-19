@@ -75,8 +75,6 @@ public class LoginActivity extends BaseNewActivity implements View.OnClickListen
         findViewById(R.id.qq_login).setOnClickListener(this);
         //手机
         findViewById(R.id.phone_login).setOnClickListener(this);
-        //账号
-        //findViewById(R.id.account_login).setOnClickListener(this);
     }
 
     @Override

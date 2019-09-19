@@ -5,40 +5,44 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dabangvr.R;
-import com.dabangvr.common.activity.BaseActivity;
+import com.dabangvr.base.BaseNewActivity;
+import com.dabangvr.base.im.ChatActivity;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
-import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.StatusBarUtil;
-import com.example.model.mess.MessMsg;
 import com.example.mylibrary.MessDetailsActivity;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.util.DateUtils;
 
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import Utils.GsonObjectCallback;
-import Utils.OkHttp3Utils;
-import config.DyUrl;
-import okhttp3.Call;
+import butterknife.BindView;
+
 
 /**
  * 个人中心-消息
  */
-public class MyMessageActivity extends BaseActivity implements View.OnClickListener {
+public class MyMessageActivity extends BaseNewActivity {
 
-    private RecyclerView recyclerView;
-    private List<MessMsg>list = new ArrayList<>();
+    @BindView(R.id.my_mess_recy)
+    RecyclerView recyclerView;
+
+    private List<EMConversation> conversationList = new ArrayList<EMConversation>();
     private BaseLoadMoreHeaderAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,26 +55,41 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected void initView() {
-        findViewById(R.id.my_fanse).setOnClickListener(this);
-        findViewById(R.id.iv_follow).setOnClickListener(this);
+    public void initView() {
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        recyclerView = findViewById(R.id.my_mess_recy);
-        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
-        layoutmanager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutmanager);
-        adapter = new BaseLoadMoreHeaderAdapter<MessMsg>(this,recyclerView,list,R.layout.my_mess_recyitem) {
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        conversationList.addAll(loadConversationList());
+        adapter = new BaseLoadMoreHeaderAdapter<EMConversation>(this, recyclerView, conversationList, R.layout.my_mess_recyitem) {
             @Override
-            public void convert(Context mContext, BaseRecyclerHolder holder, MessMsg o) {
-                holder.setText(R.id.name,o.getName());
-                holder.setImageByUrl(R.id.img_mess,o.getLogo());
-                holder.setText(R.id.mes,o.getMsg());
-                holder.setText(R.id.datas,o.getDate());
+            public void convert(Context mContext, BaseRecyclerHolder holder, EMConversation conversation) {
+                String username = conversation.getUserName();
+                holder.setText(R.id.name, "与 " + username + " 的会话");
+                if (conversation.getUnreadMsgCount() > 0) {
+                    // 显示与此用户的消息未读数
+                    TextView tvNumber = holder.getView(R.id.unread_msg_number);
+                    tvNumber.setText(String.valueOf(conversation.getUnreadMsgCount()));
+                    tvNumber.setVisibility(View.VISIBLE);
+                } else {
+                    holder.getView(R.id.unread_msg_number).setVisibility(View.INVISIBLE);
+                }
+                if (conversation.getAllMsgCount() != 0) {
+                    // 把最后一条消息的内容作为item的message内容
+                    EMMessage lastMessage = conversation.getLastMessage();
+                    holder.setText(R.id.message, lastMessage.getBody().toString());
+                    holder.setText(R.id.time, DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
+
+                    if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
+                        holder.getView(R.id.msg_state).setVisibility(View.VISIBLE);
+                    } else {
+                        holder.getView(R.id.msg_state).setVisibility(View.GONE);
+                    }
+                }
             }
         };
         recyclerView.setAdapter(adapter);
@@ -78,63 +97,73 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
         adapter.setOnItemClickListener(new BaseLoadMoreHeaderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(MyMessageActivity.this,MessDetailsActivity.class);
-                intent.putExtra("logo",list.get(position).getLogo());
-                intent.putExtra("mes",list.get(position).getMsg());
-                intent.putExtra("name",list.get(position).getName());
-                intent.putExtra("data",list.get(position).getDate());
+                EMConversation conversation = (EMConversation) adapter.getData().get(position);
+                String username = conversation.getUserName();
+                // 进入聊天页面
+                Intent intent = new Intent(MyMessageActivity.this, ChatActivity.class);
+                intent.putExtra("username", username);
                 startActivity(intent);
             }
         });
     }
 
-    @Override
-    protected void initData() {
-        Map<String,String>map = new HashMap<>();
-        map.put(DyUrl.TOKEN_NAME, getSPKEY(this,"token"));
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.deptOrAnchor, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-            @Override
-            public void onUi(String result) {
-                if(StringUtils.isEmpty(result)){
-                    return ;
-                }
-                try {
-                    JSONObject object = new JSONObject(result);
-                    if(0 == object.optInt("errno")){
-                        JSONObject dataObj = object.optJSONObject("data");
-                        String str = dataObj.optString("messageList");
-                        if(!StringUtils.isEmpty(str)){
-                            list = JsonUtil.string2Obj(str,List.class,MessMsg.class);
-                            if(null != list){
-                                adapter.updateData(list);
-                            }
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+    /**
+     * 获取会话列表
+     *
+     * @return
+     */
+    protected List<EMConversation> loadConversationList() {
+        // 获取所有会话，包括陌生人
+        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
+        // 过滤掉messages size为0的conversation
+        /**
+         * 如果在排序过程中有新消息收到，lastMsgTime会发生变化 影响排序过程，Collection.sort会产生异常
+         * 保证Conversation在Sort过程中最后一条消息的时间不变 避免并发问题
+         */
+        List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
+        synchronized (conversations) {
+            for (EMConversation conversation : conversations.values()) {
+                if (conversation.getAllMessages().size() != 0) {
+                    sortList.add(
+                            new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
                 }
             }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.my_fanse:
-                Intent intent = new Intent(MyMessageActivity.this,MyFanseActivity.class);
-                intent.putExtra("type",-1);
-                startActivity(intent);
-                break;
-            case R.id.iv_follow:
-                Intent intent2 = new Intent(MyMessageActivity.this,MyFanseActivity.class);
-                intent2.putExtra("type",-1);
-                startActivity(intent2);
-                break;
         }
+        try {
+            sortConversationByLastChatTime(sortList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<EMConversation> list = new ArrayList<EMConversation>();
+        for (Pair<Long, EMConversation> sortItem : sortList) {
+            list.add(sortItem.second);
+        }
+        return list;
+    }
+
+    /**
+     * 根据最后一条消息的时间排序
+     *
+     * @param
+     */
+    private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
+        Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
+            @Override
+            public int compare(final Pair<Long, EMConversation> con1, final Pair<Long, EMConversation> con2) {
+
+                if (con1.first == con2.first) {
+                    return 0;
+                } else if (con2.first > con1.first) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void initData() {
+
     }
 }

@@ -1,48 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="59dp"
+    android:id="@+id/list_itease_layout"
+    android:background="#fff"
+    android:gravity="center_vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+    <RelativeLayout
+        android:id="@+id/avatar_container"
+        android:layout_width="59dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true" >
+
         <ImageView
-            android:id="@+id/img_mess"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:padding="10dp"
-            android:src="@mipmap/server"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/name"
-                android:text="用户名---"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/mes"
-                android:text="消息信息---"
-                android:layout_marginTop="20dp"
-                android:maxLength="20"
-                android:maxLines="15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:scaleType="fitXY"
+            android:src="@drawable/ssdk_oks_classic_accountkit" />
 
         <TextView
-            android:id="@+id/datas"
-            android:layout_margin="10dp"
+            android:id="@+id/unread_msg_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时间---"/>
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/touming_ruang"
+            android:gravity="center"
+            android:text="7"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/name"
+        android:text="testdata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@id/avatar_container"
+        android:textColor="#000"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"
+        android:textColor="#999999"
+        android:textSize="13sp" />
+
+    <ImageView
+        android:id="@+id/msg_state"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@id/avatar_container"
+        android:src="@drawable/s_errno"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_toLeftOf="@id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/msg_state"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:padding="7dp"
+        android:textColor="#999999"
+        android:textSize="14sp" />
+
+</RelativeLayout>

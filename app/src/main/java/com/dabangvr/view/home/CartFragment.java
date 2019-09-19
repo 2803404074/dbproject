@@ -45,12 +45,6 @@ import okhttp3.Call;
  * 购物车
  */
 public class CartFragment extends BaseFragment implements View.OnClickListener, ShoppingCarAdapter.SendServerCallback {
-
-
-//    private TextView tvTitlebarRight;
-
-    private String token;
-    //TextView tvTitlebarLeft;
     @BindView(R.id.tv_titlebar_center)
     TextView tvTitlebarCenter;
     @BindView(R.id.tv_titlebar_right)
@@ -87,9 +81,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
 
     private List<ShoppingCarDataBean.DatasBean> datas;
-    private Context context;
     private ShoppingCarAdapter shoppingCarAdapter;
-    private SPUtils spUtils;
 
     public static CartFragment newInstance(int index) {
         CartFragment cartFragment = new CartFragment();
@@ -107,10 +99,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void initView() {
-        context = getActivity();
-//        token = getSPKEY(CartFragment.this,"token");
-        spUtils = new SPUtils(getActivity(), "db_user");
-        token = (String) spUtils.getkey("token", "");
         tvTitlebarRight.setOnClickListener(this);
         ivNoContant.setVisibility(View.GONE);
         tv_titlebar_left.setVisibility(View.GONE);
@@ -121,7 +109,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_titlebar_left:
-
                 break;
             case R.id.tv_titlebar_right://编辑
                 String edit = tvTitlebarRight.getText().toString().trim();
@@ -147,22 +134,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
      */
     @Override
     public void initData() {
+        setLoaddingView(true);
         HashMap<String, String> map = new HashMap<>();
-        map.put(DyUrl.TOKEN_NAME, token);
+        map.put(DyUrl.TOKEN_NAME, getToken());
         map.put("page", "1");
         map.put("limit", "10");
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoods2CartList, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
-                if (StringUtils.isEmpty(result)) {
-                    ToastUtil.showShort(context, "获取失败");
-                    return;
-                }
-
                 try {
                     JSONObject object = new JSONObject(result);
                     if (500 == object.optInt("code")) {
-                        ToastUtil.showShort(context, object.optString("msg"));
+                        ToastUtil.showShort(getContext(), object.optString("msg"));
+                        setLoaddingView(false);
                         return;
                     }
                     int errno = object.optInt("errno");
@@ -170,7 +154,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                         //ToastUtil.showShort(CartActivity.this,result);
                     }
                     if (errno == 500) {
-                        ToastUtil.showShort(context, object.optString("errmsg"));
+                        ToastUtil.showShort(getContext(), object.optString("errmsg"));
                         return;
                     }
                     if (errno == 0) {
@@ -183,28 +167,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                     } else {
                         initExpandableListViewData(null);
                     }
-
+                    setLoaddingView(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    setLoaddingView(false);
                 }
 
             }
 
             @Override
             public void onFailed(Call call, IOException e) {
-
+                setLoaddingView(false);
             }
         });
-
-
-        //使用Gson解析购物车数据，
-        //ShoppingCarDataBean为bean类，Gson按照bean类的格式解析数据
-        /**
-         * 实际开发中，通过请求后台接口获取购物车数据并解析
-         */
-//        Gson gson = new Gson();
-//        ShoppingCarDataBean shoppingCarDataBean = gson.fromJson(shoppingCarData, ShoppingCarDataBean.class);
-
     }
 
     /**
@@ -212,7 +187,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
      * 创建数据适配器adapter，并进行初始化操作
      */
     private void initExpandableListView() {
-        shoppingCarAdapter = new ShoppingCarAdapter(context, token, llSelectAll, ivSelectAll, btnOrder, btnDelete, rlTotalPrice, tvTotalPrice);
+        shoppingCarAdapter = new ShoppingCarAdapter(getContext(), getToken(), llSelectAll, ivSelectAll, btnOrder, btnDelete, rlTotalPrice, tvTotalPrice);
 
         shoppingCarAdapter.setSendServerCallback(this);
 
@@ -222,15 +197,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         shoppingCarAdapter.setOnDeleteListener(new ShoppingCarAdapter.OnDeleteListener() {
             @Override
             public void onDelete() {
-
                 initDelete();
-                /**
-                 * 实际开发中，在此请求删除接口，删除成功后，
-                 * 通过initExpandableListViewData（）方法刷新购物车数据。
-                 * 注：通过bean类中的DatasBean的isSelect_shop属性，判断店铺是否被选中；
-                 *                  GoodsBean的isSelect属性，判断商品是否被选中，
-                 *                  （true为选中，false为未选中）
-                 */
             }
         });
 
@@ -243,14 +210,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                  * 通过initExpandableListViewData（）方法刷新购物车数据。
                  */
                 HashMap<String, String> map = new HashMap<>();
-                map.put(DyUrl.TOKEN_NAME, token);
+                map.put(DyUrl.TOKEN_NAME, getToken());
                 map.put("cartId", goods_id);
                 map.put("number", String.valueOf(count));
                 OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.updateNumber2Cart, map, new GsonObjectCallback<String>(DyUrl.BASE) {
                     @Override
                     public void onUi(String result) {
                         if (StringUtils.isEmpty(result)) {
-                            ToastUtil.showShort(context, "获取失败");
+                            ToastUtil.showShort(getContext(), "获取失败");
                             return;
                         }
                         try {
@@ -368,7 +335,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         if (hasSelect) {
             showDeleteDialog(datasTemp, isSelectCartId);
         } else {
-            ToastUtil.showShort(context, "请选择要删除的商品");
+            ToastUtil.showShort(getContext(), "请选择要删除的商品");
         }
     }
 
@@ -378,8 +345,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
      * @param datasTemp
      */
     private void showDeleteDialog(final List<ShoppingCarDataBean.DatasBean> datasTemp, final List<String> cartIdArr) {
-        View view = View.inflate(context, R.layout.dialog_two_btn, null);
-        final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(context, 0, 0, view, R.style.RoundCornerDialog);
+        View view = View.inflate(getContext(), R.layout.dialog_two_btn, null);
+        final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(getContext(), 0, 0, view, R.style.RoundCornerDialog);
         roundCornerDialog.show();
         roundCornerDialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
         roundCornerDialog.setOnKeyListener(keylistener);//设置点击返回键Dialog不消失
@@ -416,7 +383,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     private void sendServer(final List<ShoppingCarDataBean.DatasBean> datasTemp, List<String> cartIdArr) {
         Map<String, String> map = new HashMap<>();
         map.put("cartIds", JsonUtil.obj2String(cartIdArr));
-        map.put(DyUrl.TOKEN_NAME, (String) spUtils.getkey("token", ""));
+        map.put(DyUrl.TOKEN_NAME, getToken());
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.delete2Cart, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {

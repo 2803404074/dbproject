@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 android {
     def versions = rootProject.ext.versions
-
     compileSdkVersion versions.sdkCompileVersion
     defaultConfig {
         applicationId "com.dabangvr"
@@ -14,7 +13,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            abiFilters "armeabi", "x86", "arm64-v8a"
         }
 
         manifestPlaceholders = [
@@ -69,6 +68,15 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    //use legacy for android 6.0
+    useLibrary 'org.apache.http.legacy'
+
+    //自3.6.0开始需要java8的支持
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 }
@@ -179,4 +187,6 @@ dependencies {
      */
     implementation 'cn.jiguang.sdk:jpush:3.3.4'  // 此处以JPush 3.3.4 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.1.2'  // 此处以JCore 2.1.2 版本为例。
+
+
 }

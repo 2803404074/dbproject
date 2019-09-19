@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.dabangvr.R;
 import com.dabangvr.base.plush.SPTAG;
 import com.dabangvr.model.MenuMo;
@@ -17,6 +20,10 @@ import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -84,6 +91,8 @@ public class WellcomActivity extends AppCompatActivity{
                 finish();
             }
         },1500);
+
+
     }
 
     protected void getUserInfo(String token) {
@@ -217,7 +226,6 @@ public class WellcomActivity extends AppCompatActivity{
         }
         return "";
     }
-
 
     @Override
     protected void onDestroy() {
