@@ -35,7 +35,6 @@ public class ChatActivity extends BaseNewActivity {
     @BindView(R.id.btn_send)
     TextView btn_send;
 
-
     private EditText et_content;
 
     private int chatType = 1;
@@ -120,7 +119,7 @@ public class ChatActivity extends BaseNewActivity {
         // 发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         msgList.add(message);
-        chatAdapter.upData(msgList);
+        chatAdapter.addData(msgList);
         et_content.setText("");
         et_content.clearFocus();
     }
@@ -142,7 +141,7 @@ public class ChatActivity extends BaseNewActivity {
                 // 如果是当前会话的消息，刷新聊天页面
                 if (username.equals(toChatUsername)) {
                     msgList.addAll(messages);
-                    chatAdapter.upData(msgList);
+                    chatAdapter.addData(msgList);
                     if (msgList.size() > 0) {
                         et_content.setSelection(chatAdapter.getItemCount() - 1);
                     }

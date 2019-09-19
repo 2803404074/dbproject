@@ -102,7 +102,7 @@ public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayou
         for (int i = 0; i < 9; i++) {
             Goods goods = new Goods();
             goods.setId("222");
-            goods.setListUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565973538408&di=f2e529d512a8fd531fb7a82594332098&imgtype=0&src=http%3A%2F%2Fs1.sinaimg.cn%2Fmw690%2F006fmRRJzy745Jb6KxG00%26690");
+            goods.setListUrl("http://5b0988e595225.cdn.sohucs.com/images/20190815/18dc68ac895b415992c37622ccaa2c36.jpeg");
             mData.add(goods);
         }
 
