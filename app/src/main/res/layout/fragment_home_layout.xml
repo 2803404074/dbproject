@@ -90,6 +90,7 @@
                 app:tabIndicator="@drawable/home_tab_indicator"
                 app:tabIndicatorFullWidth="false"
                 app:tabPaddingBottom="0dp"
+                app:tabRippleColor = "@android:color/transparent"
                 app:tabPaddingEnd="-1dp"
                 app:tabPaddingStart="-1dp"
                 app:tabPaddingTop="-1dp"

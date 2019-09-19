@@ -7,7 +7,8 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/xrfl_bg_jp"
-            android:orientation="vertical"
-            app:layout_behavior=".widget.FlingBehavior">
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,15 +68,15 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_100"
+                    android:layout_height="@dimen/dp_150"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/ic_camera" />
+                    android:src="@mipmap/ic_launcher" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:layout_marginBottom="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10"
                     android:src="@mipmap/xryl_bg" />
 
                 <LinearLayout
@@ -91,13 +92,14 @@
                         android:background="@mipmap/xrfl_bg"
                         android:padding="@dimen/dp_10">
 
-                        <android.support.v7.widget.RecyclerView
+                        <com.dabangvr.widget.ParentNoscrollRecyclerView
                             android:id="@+id/xrfl_recy_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/dp_10"
                             android:layout_marginTop="@dimen/dp_5"
                             android:background="@color/white" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -106,8 +108,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_35"
+                android:layout_marginBottom="@dimen/dp_15"
                 android:src="@mipmap/xrtj_bg"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </android.support.design.widget.AppBarLayout>
@@ -117,8 +119,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_10"
+            android:nestedScrollingEnabled="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 

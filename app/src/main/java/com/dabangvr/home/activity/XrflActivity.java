@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.view.home.HGoodsAdapter;
 import com.dabangvr.widget.GridDividerItemDecoration;
+import com.dabangvr.widget.ParentNoscrollRecyclerView;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -55,10 +57,12 @@ public class XrflActivity extends BaseNewActivity {
 
 
     @BindView(R.id.xrfl_recy_discount)
-    RecyclerView xrfl_recy_discount;
+    ParentNoscrollRecyclerView xrfl_recy_discount;
 
     @BindView(R.id.xrfl_recy_good)
     RecyclerView recyclerViewGoods;
+    @BindView(R.id.bl_id)
+    AppBarLayout bl_id;
     private BaseLoadMoreHeaderAdapter<CouponBean> adapter;
     private List<CouponBean> DiscontList = new ArrayList<>();
     private HGoodsAdapter goodsAdapter;
@@ -74,8 +78,6 @@ public class XrflActivity extends BaseNewActivity {
             //解决Android5.0以上，状态栏设置颜色后变灰的问题
             StatusBarUtil.setTransparentForWindow(this);
             StatusBarUtil.setDarkMode(this);
-
-
         }
     }
 
@@ -89,6 +91,8 @@ public class XrflActivity extends BaseNewActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         xrfl_recy_discount.setLayoutManager(manager);
+        xrfl_recy_discount.setHasFixedSize(true);
+        xrfl_recy_discount.setNestedScrollingEnabled(false);
         adapter = new BaseLoadMoreHeaderAdapter<CouponBean>(this, xrfl_recy_discount, DiscontList, R.layout.xrfl_discount_item) {
             @Override
             public void convert(Context mContext, BaseRecyclerHolder holder, CouponBean couponBean) {
@@ -112,6 +116,12 @@ public class XrflActivity extends BaseNewActivity {
             }
         };
         xrfl_recy_discount.setAdapter(adapter);
+        xrfl_recy_discount.setCallBack(new ParentNoscrollRecyclerView.CallBack() {
+            @Override
+            public void moveEvent() {
+                bl_id.requestDisallowInterceptTouchEvent(true);
+            }
+        });
         initRecycler();
     }
 

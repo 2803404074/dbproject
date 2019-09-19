@@ -13,6 +13,7 @@
         android:layout_gravity="top|center"
         android:background="@drawable/ms_bg_jp"
         app:tabGravity="fill"
+        app:tabRippleColor = "@android:color/transparent"
         app:tabIndicatorColor="#00ffffff"
         app:tabIndicatorHeight="@dimen/dp_4"
         app:tabMaxWidth="@dimen/dp_200"

@@ -56,6 +56,7 @@
                 app:tabIndicatorColor="@android:color/white"
                 app:tabMaxWidth="200dp"
                 app:tabMinWidth="20dp"
+                app:tabRippleColor = "@android:color/transparent"
                 app:tabPaddingBottom="0dp"
                 app:tabPaddingEnd="-1dp"
                 app:tabPaddingStart="-1dp"
