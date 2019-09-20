@@ -11,12 +11,14 @@ import com.dabangvr.R;
 import com.dabangvr.base.BaseFragment;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
+import com.dabangvr.contens.ParameterContens;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.model.MenuMo;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.my.activity.MyMessageActivity;
 import com.dabangvr.my.activity.MyOrtherActivity;
 import com.dabangvr.my.activity.MyScActivity;
+import com.dabangvr.my.activity.MyYhjActivity;
 import com.dabangvr.my.activity.SbActivity;
 import com.dabangvr.my.activity.StartOpenShopActivity;
 import com.dabangvr.my.activity.StartOpenZhuBoActivity;
@@ -97,25 +99,26 @@ public class FragmentMy extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 switch (serverData.get(position).getJumpUrl()) {
-                    case "yhq":
-                        ToastUtil.showShort(getContext(), "优惠券更新中");
+                    case ParameterContens.yhq:
+//                        ToastUtil.showShort(getContext(), "优惠券更新中");
+                        startActivity(new Intent(getContext(), MyYhjActivity.class));
                         break;
-                    case "spsc":
+                    case ParameterContens.spsc:
                         startActivity(new Intent(getContext(), MyScActivity.class));
                         break;
-                    case "wdpt":
+                    case ParameterContens.wdpt:
                         ToastUtil.showShort(getContext(), "我的拼团更新中");
                         break;
-                    case "wdqb":
+                    case ParameterContens.wdqb:
                         startActivity(new Intent(getContext(), SbActivity.class));
                         break;
-                    case "sjrz":
+                    case ParameterContens.sjrz:
                         startActivity(new Intent(getContext(), StartOpenShopActivity.class));
                         break;//商家入驻
-                    case "zbsq":
+                    case ParameterContens.zbsq:
                         startActivity(new Intent(getContext(), StartOpenZhuBoActivity.class));
                         break;
-                    case "kf":
+                    case ParameterContens.kf:
                         ToastUtil.showShort(getContext(), "服务更新中");
                         break;
                 }

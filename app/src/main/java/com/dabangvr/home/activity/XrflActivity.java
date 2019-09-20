@@ -122,6 +122,7 @@ public class XrflActivity extends BaseNewActivity {
                 bl_id.requestDisallowInterceptTouchEvent(true);
             }
         });
+
         initRecycler();
     }
 
