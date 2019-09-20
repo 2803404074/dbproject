@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dabangvr.R;
 import com.dabangvr.base.BaseNewActivity;
@@ -16,7 +15,7 @@ import com.dabangvr.base.im.ChatActivity;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.util.StatusBarUtil;
-import com.example.mylibrary.MessDetailsActivity;
+import com.dabangvr.util.TextUtil;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -81,7 +80,8 @@ public class MyMessageActivity extends BaseNewActivity {
                 if (conversation.getAllMsgCount() != 0) {
                     // 把最后一条消息的内容作为item的message内容
                     EMMessage lastMessage = conversation.getLastMessage();
-                    holder.setText(R.id.message, lastMessage.getBody().toString());
+                    //msg{from:tuhao11, to:52086 body:txt:"得得得"
+                    holder.setText(R.id.message, TextUtil.removeStr(lastMessage.getBody().toString()));
                     holder.setText(R.id.time, DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
 
                     if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {

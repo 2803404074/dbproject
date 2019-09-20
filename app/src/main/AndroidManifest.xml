@@ -268,7 +268,8 @@
         <activity android:name=".video.play.VideoRecordActivity" />
         <activity android:name=".video.play.VideoEditActivity" />
         <activity android:name=".video.play.VideoDubActivity" />
-        <activity android:name=".base.im.ChatActivity"/>
+        <activity android:name=".base.im.ChatActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

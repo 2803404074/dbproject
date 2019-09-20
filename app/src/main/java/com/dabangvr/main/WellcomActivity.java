@@ -72,13 +72,17 @@ public class WellcomActivity extends AppCompatActivity{
     }
 
     private void checkUser() {
-        String token = (String) SPUtils2.instance(this).getkey("token","");
-        if (StringUtils.isEmpty(token)){
+        UserMess userMess = SPUtils2.instance(this).getObj("userMo",UserMess.class);
+        if (userMess == null){
             goTActivity(LoginActivity.class);
         }else {
-            getUserInfo(token);
-            getType();
-            getMenu();
+            if (StringUtils.isEmpty(userMess.getToken())){
+                goTActivity(LoginActivity.class);
+            }else {
+                getUserInfo(userMess.getToken());
+                getType();
+                getMenu();
+            }
         }
     }
 
@@ -105,6 +109,7 @@ public class WellcomActivity extends AppCompatActivity{
                     JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE,String.valueOf(userMess.getId()));
                     SPUtils2.instance(WellcomActivity.this).put("user",result);
                     SPUtils2.instance(WellcomActivity.this).put("token",userMess.getToken());
+                    SPUtils2.instance(WellcomActivity.this).putObj("userMo",userMess);
                     goTActivity(MainActivity.class);
                 }else {
                     goTActivity(LoginActivity.class);
@@ -115,6 +120,9 @@ public class WellcomActivity extends AppCompatActivity{
                 ToastUtil.showShort(WellcomActivity.this,"登录失败,请重新登录");
                 SPUtils2.instance(WellcomActivity.this).remove("user");
                 SPUtils2.instance(WellcomActivity.this).remove("token");
+                SPUtils2.instance(WellcomActivity.this).remove("userMo");
+                SPUtils2.instance(WellcomActivity.this).remove("userMo");
+                SPUtils2.instance(WellcomActivity.this).remove("hxlogin");
                 goTActivity(LoginActivity.class);
             }
         });

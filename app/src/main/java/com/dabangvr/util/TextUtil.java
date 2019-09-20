@@ -31,4 +31,8 @@ public class TextUtil {
             return false;
         }
     }
+
+    public static String removeStr(String str){
+        return str.replace("txt:","");
+    }
 }

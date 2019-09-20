@@ -5,11 +5,17 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
+
+import bean.UserMess;
 
 /**
  * 保存信息配置类
@@ -109,6 +115,46 @@ public class SPUtils2 {
      */
     public Map<String, ?> getAll() {
         return sharedPreferences.getAll();
+    }
+
+    /**
+     * 保存对象
+     */
+    public <T> void putObj(String tag, T data) {
+        if (null == data)
+            return;
+        Gson gson = new Gson();
+        //change data to json
+        String strJson = gson.toJson(data);
+        editor.clear();
+        editor.putString(tag, strJson);
+        editor.commit();
+    }
+
+    /**
+     * 获取对象
+     */
+    public <T> T getObj(String tag, Class<T> cls) {
+        T data = null;
+        String strJson = sharedPreferences.getString(tag, null);
+        if (null == strJson) {
+            return null;
+        }
+        try {
+            Gson gson = new Gson();
+            JsonElement jsonElement = new JsonParser().parse(strJson);
+            data = gson.fromJson(jsonElement, cls);
+        } catch (Exception e) {
+
+        }
+        return data;
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public UserMess getUser(){
+        return getObj("userMo",UserMess.class);
     }
 
 

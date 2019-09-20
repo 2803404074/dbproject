@@ -26,7 +26,6 @@ import com.dabangvr.R;
 import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.base.plush.SPTAG;
 import com.dabangvr.common.activity.AddressActivity;
-import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.util.CacheUtil;
 import com.dabangvr.util.CameraUtil;
@@ -38,8 +37,6 @@ import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.wxapi.AppManager;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -320,6 +317,8 @@ public class UserMessActivity extends BaseNewActivity implements View.OnClickLis
                 //移除本地缓存
                 SPUtils2.instance(getContext()).remove("token");
                 SPUtils2.instance(getContext()).remove("isLogin");
+                SPUtils2.instance(getContext()).remove("userMo");
+                SPUtils2.instance(getContext()).remove("hxlogin");
                 JPushInterface.removeLocalNotification(UserMessActivity.this, SPTAG.SEQUENCE);
                 Intent intent = new Intent(UserMessActivity.this,LoginActivity.class);
                 startActivity(intent);

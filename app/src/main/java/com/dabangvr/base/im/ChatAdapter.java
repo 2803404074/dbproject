@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.dabangvr.R;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
+import com.dabangvr.main.MainActivity;
 import com.hyphenate.chat.EMMessage;
 
 import java.util.List;
@@ -22,15 +23,22 @@ public abstract class ChatAdapter extends RecyclerView.Adapter<BaseRecyclerHolde
         this.msgs = msgs;
     }
     public void upData(List<EMMessage> msgs){
-        msgs.clear();
+        this.msgs.clear();
         this.msgs = msgs;
         notifyDataSetChanged();
     }
 
     public void addData(List<EMMessage> msgs){
-        msgs.addAll(msgs);
+        this.msgs.addAll(msgs);
         notifyDataSetChanged();
     }
+
+    public void addPosition(EMMessage emMessage){
+        this.msgs.add(emMessage);
+        notifyDataSetChanged();
+    }
+
+
 
     @Override
     public BaseRecyclerHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

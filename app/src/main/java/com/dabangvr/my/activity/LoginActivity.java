@@ -15,6 +15,8 @@ import com.dabangvr.lbroadcast.widget.MediaController;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.MyApplication;
 import com.dabangvr.main.WellComePageActivity;
+import com.dabangvr.main.WellcomActivity;
+import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import bean.UserMess;
 import butterknife.BindView;
 import config.DyUrl;
 import okhttp3.Call;
@@ -231,9 +234,10 @@ public class LoginActivity extends BaseNewActivity implements View.OnClickListen
                         JSONObject data = object.optJSONObject("data");
                         if (null != data){
                             String token = data.optString("token");
-                            SPUtils2.instance(LoginActivity.this).put("token",token);
                             String userStr = data.optString("user");
-                            SPUtils2.instance(getContext()).put("user",userStr);
+                            UserMess userMess = JsonUtil.string2Obj(userStr, UserMess.class);
+                            userMess.setToken(token);
+                            SPUtils2.instance(LoginActivity.this).putObj("userMo",userMess);
                             //如果是第一次登陆，则跳到闪屏
                             boolean isNews = (boolean) SPUtils2.instance(LoginActivity.this).getkey("isNews",true);
                             if (isNews){

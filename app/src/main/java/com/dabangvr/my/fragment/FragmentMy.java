@@ -127,8 +127,7 @@ public class FragmentMy extends BaseFragment {
     public void initData() {
         setLoaddingView(true);
         //初始化用户信息
-        String user = (String) SPUtils2.instance(getContext()).getkey("user", "");
-        UserMess userMess = JsonUtil.string2Obj(user, UserMess.class);
+        UserMess userMess = SPUtils2.instance(getContext()).getObj("userMo",UserMess.class);
         if (userMess != null) {
             sdvHead.setImageURI(userMess.getHeadUrl());
             tvName.setText(userMess.getNickName());

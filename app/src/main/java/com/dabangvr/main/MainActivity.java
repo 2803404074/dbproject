@@ -190,56 +190,35 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
         }
 
         //注册/登陆环信
-        registerHX("tuhao","123");
+        registerHX("tuhao11","123");
     }
 
     /**
-     * 注册/登陆环信
+     * 注册
      */
     private void registerHX(String name,String pass) {
-        boolean hxIsRegist = (boolean) SPUtils2.instance(getContext()).getkey("hx",false);
-        if (!hxIsRegist){
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        // 调用sdk注册方法
-                        EMClient.getInstance().createAccount(name, pass);
-                        SPUtils2.instance(getContext()).put("hx",true);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    // 调用sdk注册方法
+                    EMClient.getInstance().createAccount(name, pass);
+                    loginToHx(name, pass);
+                } catch (final HyphenateException e) {
+                    e.printStackTrace();
+                    int errorCode=e.getErrorCode();
+                    if(errorCode == EMError.USER_ALREADY_EXIST){
                         loginToHx(name, pass);
-                    } catch (final HyphenateException e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int errorCode=e.getErrorCode();
-                                if(errorCode== EMError.NETWORK_ERROR){
-                                    ToastUtil.showShort(getContext(),"无网络");
-                                }else if(errorCode == EMError.USER_ALREADY_EXIST){
-                                    ToastUtil.showShort(getContext(),"用户已存在");
-                                    loginToHx(name, pass);
-                                }else if(errorCode == EMError.USER_AUTHENTICATION_FAILED){
-                                    ToastUtil.showShort(getContext(),"无权限");
-                                }else if(errorCode == EMError.USER_ILLEGAL_ARGUMENT){
-                                    ToastUtil.showShort(getContext(),"非法用户名");
-                                }else{
-                                    ToastUtil.showShort(getContext(),"失败"+e.getMessage());
-                                }
-                            }
-                        });
-
                     }
                 }
-            }).start();
-        }else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    loginToHx(name, pass);
-                }
-            }).start();
-        }
+            }
+        }).start();
     }
 
+    /**
+     * /登陆环信
+     * @param name
+     * @param psd
+     */
     private void loginToHx(String name,String psd){
         EMClient.getInstance().login(name, psd, new EMCallBack() {
             @Override
@@ -248,7 +227,7 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
                 // ** manually load all local groups and
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
-                ToastUtil.showShort(getContext(),"登陆成功");
+                ToastUtil.showShort(getContext(),"环信登陆成功");
             }
 
             @Override
@@ -257,10 +236,11 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
             @Override
             public void onError(final int code, final String message) {
                 ToastUtil.showShort(getContext(),message);
-                SPUtils2.instance(getContext()).remove("hx");
             }
         });
     }
+
+
     /**
      * RadioButton点击监听
      *

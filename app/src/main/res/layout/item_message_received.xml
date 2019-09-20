@@ -2,55 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_5">
+
+
+    <ImageView
+        android:id="@+id/iv_userhead"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:background="@mipmap/app_logo"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/iv_jt"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_12"
+        android:src="@mipmap/auth_mess" />
 
     <TextView
-        android:id="@+id/timestamp"
-        android:visibility="gone"
+        android:id="@+id/tv_chatcontent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginLeft="-10dp"
+        android:padding="@dimen/dp_5"
+        android:background="@drawable/shape_frame_db5"
+        android:text="您好"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp_16" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_5" >
-
-        <ImageView
-            android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_50"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:background="@mipmap/user_new"
-            android:scaleType="fitXY" />
-
-       <TextView
-             android:maxWidth="225.0dip"
-            android:id="@+id/tv_chatcontent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:layout_toRightOf="@id/iv_userhead"
-            android:autoLink="web"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="left|center"
-            android:lineSpacingExtra="2dp"
-            android:minHeight="50dp"
-           android:text="哈哈"
-            android:textColor="#ff000000"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/tv_userid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:textColor="@android:color/black"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:layout_below="@id/iv_userhead"/>
-    </RelativeLayout>
-
+    <ImageView
+        android:visibility="visible"
+        android:id="@+id/iv_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="wrap_content" />
 </LinearLayout>
