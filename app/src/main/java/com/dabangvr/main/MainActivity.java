@@ -409,13 +409,8 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
         view.findViewById(R.id.dilog_tv3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (getSPKEY(MainActivity.this, "isAnchor").equals("1")) {//是否已经主播认证
-                    Intent intent = new Intent(MainActivity.this, DynamicActivity.class);
-                    startActivity(intent);
-                } else {
-                    show(MainActivity.this, 1, "只有通过实名认证才能发动态哦", "去认证");
-                }
+                Intent intent = new Intent(MainActivity.this, DynamicActivity.class);
+                startActivity(intent);
                 if (mShareDialog != null && mShareDialog.isShowing()) {
                     mShareDialog.dismiss();
                 }

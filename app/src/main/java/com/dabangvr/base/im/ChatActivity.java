@@ -1,12 +1,21 @@
 package com.dabangvr.base.im;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +28,9 @@ import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ScreenUtils;
 import com.dabangvr.util.ToastUtil;
+import com.dbvr.imglibrary.model.Image;
+import com.dbvr.imglibrary.ui.SelectImageActivity;
+import com.dbvr.imglibrary.ui.adapter.SelectedImageAdapter;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.ybq.android.spinkit.animation.interpolator.Ease;
 import com.hyphenate.EMMessageListener;
@@ -36,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import bean.UserMess;
@@ -46,6 +59,9 @@ import butterknife.OnClick;
  * 聊天界面
  */
 public class ChatActivity extends BaseNewActivity {
+
+    private int position;
+
     @BindView(R.id.tv_toUsername)
     TextView tv_toUsername;
 
@@ -66,6 +82,8 @@ public class ChatActivity extends BaseNewActivity {
     @BindView(R.id.et_content_chart)
     EditText et_content;
 
+
+
     private int chatType = 1;
     private String toChatUsername;
 
@@ -85,6 +103,7 @@ public class ChatActivity extends BaseNewActivity {
      * @param view
      */
     public void tvSand(View view) {
+
         String content = et_content.getText().toString();
         if (StringUtils.isEmpty(content)) {
             return;
@@ -106,6 +125,7 @@ public class ChatActivity extends BaseNewActivity {
 
         getAllMessage();
         msgList = conversation.getAllMessages();
+        position = msgList.size()-1;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);  //键盘弹出
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -129,7 +149,11 @@ public class ChatActivity extends BaseNewActivity {
                             EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
                             ImageView imageView = holder.getView(R.id.iv_content);
                             imageView.setVisibility(View.VISIBLE);
-                            holder.setImageByUrl(R.id.iv_content, imgBody.getRemoteUrl());
+                            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                            params.height = imgBody.getHeight();
+                            params.width = imgBody.getWidth();
+                            imageView.setLayoutParams(params);
+                            holder.setImageByUrl(R.id.iv_content, imgBody.getRemoteUrl(),R.drawable.loading);
 
                             //隐藏文本内容区域
                             holder.getView(R.id.iv_jt).setVisibility(View.GONE);
@@ -142,17 +166,40 @@ public class ChatActivity extends BaseNewActivity {
 
 //                自己的消息
                 if (chatAdapter.getItemViewType(position) == 1) {
-                    EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-                    holder.setText(R.id.tv_chatcontent, txtBody.getMessage());
-                    if (userMess != null) {
-                        SimpleDraweeView head = holder.getView(R.id.iv_userhead);
-                        head.setImageURI(userMess.getHeadUrl());
+                    //文本消息
+                    if (message.getType() == EMMessage.Type.TXT){
+                        holder.getView(R.id.iv_content).setVisibility(View.GONE);//隐藏图片内容
+                        holder.getView(R.id.tv_chatcontent).setVisibility(View.VISIBLE);//显示文本内容
+                        holder.getView(R.id.iv_jt).setVisibility(View.VISIBLE);//显示文本箭头
+                        EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
+                        holder.setText(R.id.tv_chatcontent, txtBody.getMessage());//消息
+                        if (userMess != null) {
+                            SimpleDraweeView head = holder.getView(R.id.iv_userhead);
+                            head.setImageURI(userMess.getHeadUrl());
+                        }
+                    }
+                    //图片消息
+                    if (message.getType() == EMMessage.Type.IMAGE){
+                        holder.getView(R.id.iv_content).setVisibility(View.VISIBLE);//显示图片内容
+                        holder.getView(R.id.tv_chatcontent).setVisibility(View.GONE);//隐藏文本内容
+                        holder.getView(R.id.iv_jt).setVisibility(View.GONE);//隐藏文本箭头
+                        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+                        ImageView imageView = holder.getView(R.id.iv_content);
+                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                        params.height = imgBody.getHeight();
+                        params.width = imgBody.getWidth();
+                        imageView.setLayoutParams(params);
+                        holder.setImageByUrl(R.id.iv_content,imgBody.getRemoteUrl(),R.drawable.loading);
+                        if (userMess != null) {
+                            SimpleDraweeView head = holder.getView(R.id.iv_userhead);
+                            head.setImageURI(userMess.getHeadUrl());
+                        }
                     }
                 }
             }
         };
         recyclerView.setAdapter(chatAdapter);
-        recyclerView.smoothScrollToPosition(msgList.size() - 1);
+        recyclerView.smoothScrollToPosition(position);
 
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
 
@@ -178,7 +225,7 @@ public class ChatActivity extends BaseNewActivity {
         });
     }
 
-    @OnClick({R.id.iv_add})
+    @OnClick({R.id.iv_add,R.id.iv_selectPhoto,R.id.iv_selectCame})
     public void onTouchClick(View view) {
         switch (view.getId()) {
             case R.id.iv_add:
@@ -189,6 +236,15 @@ public class ChatActivity extends BaseNewActivity {
                 }
                 animatorUtil.startHeight(llAdd);
                 break;
+
+                //选择相册
+            case R.id.iv_selectPhoto:
+                selectImage();
+                break;
+                //选择相机
+            case R.id.iv_selectCame:
+                break;
+
         }
     }
 
@@ -242,7 +298,8 @@ public class ChatActivity extends BaseNewActivity {
         // 发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         chatAdapter.addPosition(message);
-        recyclerView.smoothScrollToPosition(msgList.size() - 1);
+        position++;
+        recyclerView.smoothScrollToPosition(position);
         et_content.setText("");
     }
 
@@ -254,11 +311,26 @@ public class ChatActivity extends BaseNewActivity {
             message.setChatType(ChatType.GroupChat);
         // 发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
-        chatAdapter.addPosition(message);
-        recyclerView.smoothScrollToPosition(msgList.size() - 1);
-        et_content.setText("");
-        et_content.clearFocus();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("data",message);
+        Message msg = new Message();
+        msg.what = 100;
+        msg.setData(bundle);
+        handler.sendMessage(msg);
     }
+    Handler handler = new android.os.Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (msg.what == 100) {
+                EMMessage emMessage = msg.getData().getParcelable("data");
+                position++;
+                recyclerView.smoothScrollToPosition(position);
+                chatAdapter.addPosition(emMessage);
+            }
+            return false;
+        }
+    });
 
     EMMessageListener msgListener = new EMMessageListener() {
 
@@ -276,7 +348,8 @@ public class ChatActivity extends BaseNewActivity {
                 // 如果是当前会话的消息，刷新聊天页面
                 if (username.equals(toChatUsername)) {
                     chatAdapter.addPosition(message);
-                    recyclerView.smoothScrollToPosition(msgList.size() - 1);
+                    position++;
+                    recyclerView.smoothScrollToPosition(position);
                 }
             }
         }
@@ -301,6 +374,43 @@ public class ChatActivity extends BaseNewActivity {
             // 消息状态变动
         }
     };
+
+
+    private static final int PERMISSION_REQUEST_CODE = 0;
+    private static final int SELECT_IMAGE_REQUEST = 0x0011;
+    private ArrayList<Image> mSelectImages = new ArrayList<>();
+    private void selectImage() {
+        int isPermission1 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int isPermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (isPermission1 == PackageManager.PERMISSION_GRANTED && isPermission2 == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, SelectImageActivity.class);
+            intent.putParcelableArrayListExtra("selected_images", mSelectImages);
+            startActivityForResult(intent, SELECT_IMAGE_REQUEST);
+        } else {
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_IMAGE_REQUEST && data != null) {
+                ArrayList<Image> selectImages = data.getParcelableArrayListExtra(SelectImageActivity.EXTRA_RESULT);
+                mSelectImages.clear();
+                mSelectImages.addAll(selectImages);
+                if (mSelectImages.size() >= 1) {
+                    animatorUtil.startHeight(llAdd);
+                    for (int i = 0; i < mSelectImages.size(); i++) {
+                        sendImgs(mSelectImages.get(i).getPath());
+                    }
+                }
+                mSelectImages.clear();
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

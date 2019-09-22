@@ -27,6 +27,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ public class SelectImageActivity extends BaseActivity implements ImageFolderView
     private static final int PERMISSION_REQUEST_CODE = 88;
     private static final int TAKE_PHOTO = 99;
 
-    TextView mTvBack;
+    ImageView mTvBack;
 
     TextView mTvSelectCount;
 
@@ -425,7 +426,6 @@ public class SelectImageActivity extends BaseActivity implements ImageFolderView
         int i = view.getId();
         if (i == R.id.tv_back) {
             finish();
-
         } else if (i == R.id.tv_ok) {
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra(EXTRA_RESULT, (ArrayList<? extends Parcelable>) mSelectedImages);

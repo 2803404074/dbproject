@@ -16,8 +16,8 @@
         android:id="@+id/iv_selected"
         android:src="@drawable/ic_check_background"
         android:layout_gravity="top|end"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_width="20dp"
+        android:layout_height="20dp"/>
 
 
     <View

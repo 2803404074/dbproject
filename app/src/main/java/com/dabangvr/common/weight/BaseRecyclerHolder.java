@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.dabangvr.R;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.GlideLoadUtils;
 import com.dabangvr.util.GlideRoundedCornersTransform;
@@ -103,6 +104,18 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public BaseRecyclerHolder setImageByUrl(int viewId, String url,int resources) {
+        // TODO: 2019/9/9
+        if (!StringUtils.isEmpty(url) && !url.endsWith("null")) {
+
+            RequestOptions options = new RequestOptions();
+            options.placeholder(resources); //设置加载未完成时的占位图
+            options.error(R.drawable.ic_image_loading);
+            //GlideLoadUtils.getInstance().glideLoad(context,url,(ImageView) getView(viewId));
+            Glide.with(context).load(url).apply(options).into((ImageView) getView(viewId));
+        }
+        return this;
+    }
 
     public BaseRecyclerHolder setImageByUrl(int viewId, String url, GlideRoundedCornersTransform.CornerType cornerType, float dpValue) {
         // TODO: 2019/9/9
