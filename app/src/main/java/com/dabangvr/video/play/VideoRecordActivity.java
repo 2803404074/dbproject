@@ -47,7 +47,7 @@ import com.qiniu.pili.droid.shortvideo.PLShortVideoRecorder;
 import com.qiniu.pili.droid.shortvideo.PLVideoEncodeSetting;
 import com.qiniu.pili.droid.shortvideo.PLVideoFrame;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
-import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
+
 import com.rey.material.app.BottomSheetDialog;
 
 import java.io.FileNotFoundException;

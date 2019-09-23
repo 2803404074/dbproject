@@ -14,6 +14,7 @@ import com.dabangvr.R;
 import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.common.weight.BaseRecyclerHolder;
 import com.dabangvr.model.AddressBean;
+import com.dabangvr.my.fragment.FragmentMy;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.StringUtils;

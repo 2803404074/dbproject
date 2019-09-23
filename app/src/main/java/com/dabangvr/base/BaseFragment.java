@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dabangvr.dynamic.activity.DynamicActivity;
 import com.dabangvr.util.LoaddingUtils;
 import com.dabangvr.util.SPUtils2;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
@@ -24,7 +25,6 @@ public abstract class BaseFragment extends Fragment {
 
     private View rootView;
     protected Unbinder unbinder;
-
 
     @Nullable
     @Override

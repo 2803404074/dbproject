@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.dabangvr.R;
 import com.dabangvr.common.activity.BaseActivity;
 import com.dabangvr.common.adapter.CheckAdapter;
+import com.dabangvr.common.weight.BaseLoadMoreHeaderAdapter;
 import com.dabangvr.model.ZBGoods;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.PreImg;

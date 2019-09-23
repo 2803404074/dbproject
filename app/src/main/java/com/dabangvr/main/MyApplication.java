@@ -11,7 +11,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.mob.MobSDK;
-import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -36,9 +35,6 @@ public class MyApplication extends Application {
         MobSDK.init(this);//分享、短信功能初始化
 
         Fresco.initialize(this);//第三方加载图片
-
-        //七牛云推流端
-        StreamingEnv.init(getApplicationContext());
 
         //微信
         api = WXAPIFactory.createWXAPI(this,APP_ID,true);
