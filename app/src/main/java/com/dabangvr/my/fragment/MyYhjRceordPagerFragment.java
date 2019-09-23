@@ -154,7 +154,7 @@ public class MyYhjRceordPagerFragment extends Fragment implements BGARefreshLayo
     public void setTabPos(int mTabPos, String hoursTime) {
         this.mTabPos = mTabPos;
         this.hoursTime = hoursTime;
-        Log.d("luhuas", "setTabPos: " + hoursTime);
+
     }
 
     /**

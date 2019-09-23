@@ -20,6 +20,8 @@ import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.video.fragment.VideoFragment;
+import com.dabangvr.video.fragment.model.PlayMode;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -28,73 +30,73 @@ import com.hyphenate.exceptions.HyphenateException;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import Utils.TObjectCallback;
 import bean.UserMess;
 import cn.jpush.android.api.JPushInterface;
 import config.DyUrl;
+import config.GiftUrl;
 import okhttp3.Call;
 
 /**
  * 欢迎页
- *  （1）如果第一次进入app：
- *              1.5秒的启动页 -> 登陆 -> 闪屏 -> 首页
- *  （2）退出登陆再登陆：
- *              1.5秒的启动页 -> 首页
- *  （3）版本更新后再次打开app：
- *              1.5秒的启动页 -> 闪屏 -> 首页
- *
+ * （1）如果第一次进入app：
+ * 1.5秒的启动页 -> 登陆 -> 闪屏 -> 首页
+ * （2）退出登陆再登陆：
+ * 1.5秒的启动页 -> 首页
+ * （3）版本更新后再次打开app：
+ * 1.5秒的启动页 -> 闪屏 -> 首页
+ * <p>
  * 逻辑简述：判断是否是第一次安装app
- *
- *
  */
-public class WellcomActivity extends AppCompatActivity{
+public class WellcomActivity extends AppCompatActivity {
     private TextView text_version;
+    private UserMess userMess;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         checkUser();
         //获取首页数据
         getMenu();
         getType();
+        getAnchorList();
         setContentView(R.layout.activity_wellcom);
         text_version = this.findViewById(R.id.text_version);
         text_version.setText("V" + getVersion());
 
     }
 
+
     private void checkUser() {
-        UserMess userMess = SPUtils2.instance(this).getObj("userMo",UserMess.class);
-        if (userMess == null){
+        userMess = SPUtils2.instance(this).getObj("userMo", UserMess.class);
+        if (userMess == null) {
             goTActivity(LoginActivity.class);
-        }else {
-            if (StringUtils.isEmpty(userMess.getToken())){
+        } else {
+            if (StringUtils.isEmpty(userMess.getToken())) {
                 goTActivity(LoginActivity.class);
-            }else {
+            } else {
                 getUserInfo(userMess.getToken());
-                getType();
-                getMenu();
             }
         }
     }
 
-    private void goTActivity(final Class T){
+    private void goTActivity(final Class T) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(WellcomActivity.this,T);
+                Intent intent = new Intent(WellcomActivity.this, T);
                 startActivity(intent);
                 finish();
             }
-        },1500);
+        }, 1500);
 
 
     }
@@ -104,20 +106,21 @@ public class WellcomActivity extends AppCompatActivity{
         OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.USER_INFO, map, token, new TObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
-                UserMess userMess = JsonUtil.string2Obj(result, UserMess.class);
-                if (userMess!=null){
-                    JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE,String.valueOf(userMess.getId()));
-                    SPUtils2.instance(WellcomActivity.this).put("user",result);
-                    SPUtils2.instance(WellcomActivity.this).put("token",userMess.getToken());
-                    SPUtils2.instance(WellcomActivity.this).putObj("userMo",userMess);
+                userMess = JsonUtil.string2Obj(result, UserMess.class);
+                if (userMess != null) {
+                    JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE, String.valueOf(userMess.getId()));
+                    SPUtils2.instance(WellcomActivity.this).put("user", result);
+                    SPUtils2.instance(WellcomActivity.this).put("token", userMess.getToken());
+                    SPUtils2.instance(WellcomActivity.this).putObj("userMo", userMess);
                     goTActivity(MainActivity.class);
-                }else {
+                } else {
                     goTActivity(LoginActivity.class);
                 }
             }
+
             @Override
             public void onFailed(String msg) {
-                ToastUtil.showShort(WellcomActivity.this,"登录失败,请重新登录");
+                ToastUtil.showShort(WellcomActivity.this, "登录失败,请重新登录");
                 SPUtils2.instance(WellcomActivity.this).remove("user");
                 SPUtils2.instance(WellcomActivity.this).remove("token");
                 SPUtils2.instance(WellcomActivity.this).remove("userMo");
@@ -145,19 +148,20 @@ public class WellcomActivity extends AppCompatActivity{
                             if (code == 0) {//成功
                                 JSONObject data = object.optJSONObject("data");
                                 String str = data.optString("channelMenuList");
-                                SPUtils2.instance(WellcomActivity.this).put("menuList",str);
+                                SPUtils2.instance(WellcomActivity.this).put("menuList", str);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+
                     //请求失败
                     @Override
                     public void onFailed(Call call, IOException e) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
                             }
                         });
                     }
@@ -168,7 +172,7 @@ public class WellcomActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
                             }
                         });
                     }
@@ -192,7 +196,7 @@ public class WellcomActivity extends AppCompatActivity{
                             if (code == 0) {//成功
                                 JSONObject data = object.optJSONObject("data");
                                 String str = data.optString("goodsCategoryList");
-                                SPUtils2.instance(WellcomActivity.this).put("typeList",str);
+                                SPUtils2.instance(WellcomActivity.this).put("typeList", str);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -205,7 +209,7 @@ public class WellcomActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
                             }
                         });
                     }
@@ -216,7 +220,53 @@ public class WellcomActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtil.showShort(WellcomActivity.this,"网络连接超时");
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
+                            }
+                        });
+                    }
+                });
+    }
+
+
+    private void getAnchorList() {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", "1");
+        map.put("limit", "10");
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.indexAnchorList, map,
+                new GsonObjectCallback<String>(DyUrl.BASE) {
+                    //主线程处理
+                    @Override
+                    public void onUi(String msg) {
+                        try {
+                            JSONObject object = new JSONObject(msg);
+                            int code = object.optInt("errno");
+                            if (code == 0) {//成功
+                                JSONObject data = object.optJSONObject("data");
+                                SPUtils2.instance(WellcomActivity.this).put("AnchorList", data);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //请求失败
+                    @Override
+                    public void onFailed(Call call, IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        super.onFailure(call, e);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(WellcomActivity.this, "网络连接超时");
                             }
                         });
                     }

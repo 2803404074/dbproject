@@ -4,19 +4,29 @@ public class PlayMode {
     private String id;
     private String userId;
     private String title;
-    private String videoUrl;
+    private String videoUrl; //短视频地址
     private String videoSeconds;
-    private String coverPath;
-    private String likeCounts;
+    private String coverPath; //  封面地址
+    private String likeCounts; //喜欢数量
     private String praseCount;//点赞量
     private String commentCount;//评论量
-    private String headUrl;//
-    private String nickName;
-    private String addTime;//
+    private String livestate;//1：直播中；0没有直播
+    private String headUrl;//  作者头像地址
+    private String nickName; //作者明
+    private String addTime;// 添加时间
     private boolean isDz;
 
 
+
     public PlayMode() {
+    }
+
+    public String getLivestate() {
+        return livestate;
+    }
+
+    public void setLivestate(String livestate) {
+        this.livestate = livestate;
     }
 
     public String getAddTime() {

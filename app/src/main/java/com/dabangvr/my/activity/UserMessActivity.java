@@ -141,7 +141,8 @@ public class UserMessActivity extends BaseNewActivity implements View.OnClickLis
         }
 
         //填充用户信息数据
-        String str = (String) SPUtils2.instance(this).getkey("user","");
+//        SPUtils2.instance(this).getObj("userMo", UserMess.class);
+        String str = (String) SPUtils2.instance(this).getkey("userMo","");
         UserMess userMess = JsonUtil.string2Obj(str, UserMess.class);
         draweeView.setImageURI(userMess.getHeadUrl());
 

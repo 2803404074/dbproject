@@ -56,7 +56,6 @@ public class MsFragmentNow extends Fragment {
                 int intstate = Integer.parseInt(state);
                 String times = time.substring(0, 2);
                 int anInttimes = Integer.parseInt(times);
-                Log.d("luhuas", "tab_icon: " + intstate + "====" + anInttimes);
                 if (intstate == anInttimes) {
                     tabtv.setTextSize(22);
                     tabim.setTextColor(getActivity().getResources().getColor(R.color.white));

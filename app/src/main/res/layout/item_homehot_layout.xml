@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginHorizontal="@dimen/dp_3"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
-            android:id="@+id/zb_iv"
+            android:id="@+id/image_coverPath"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_200"
             android:scaleType="fitXY"
@@ -22,21 +22,24 @@
             android:background="@drawable/item_jb_bg">
 
             <ImageView
-                android:id="@+id/iv_zb"
+
+                android:id="@+id/image_livestate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_7"
                 android:layout_marginTop="@dimen/dp_7"
                 android:src="@mipmap/live_new_zb"
                 android:textSize="@dimen/text_small" />
+
             <ImageView
-                android:layout_toRightOf="@id/iv_zb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_7"
                 android:layout_marginTop="@dimen/dp_7"
+                android:layout_toRightOf="@id/image_livestate"
                 android:src="@mipmap/merchant_zb"
-                android:textSize="@dimen/text_small" />
+                android:textSize="@dimen/text_small"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -52,7 +55,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/i_zb"
+
+                        android:id="@+id/image_headUrl"
                         android:layout_width="@dimen/dp_24"
                         android:layout_height="@dimen/dp_24"
                         android:layout_gravity="center"
@@ -60,10 +64,13 @@
                         android:textSize="9sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/dsp_name"
+                        android:layout_width="@dimen/dp_40"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:ellipsize="end"
+                        android:lines="1"
                         android:text="菲尔"
                         android:textColor="@color/white"
                         android:textSize="10dp" />
@@ -83,6 +90,7 @@
                         android:src="@mipmap/heart_zb" />
 
                     <TextView
+                        android:id="@+id/dsp_likeCounts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

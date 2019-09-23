@@ -42,7 +42,6 @@ public class MyYhjRecordActivity extends BaseNewActivity {
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             //解决Android5.0以上，状态栏设置颜色后变灰的问题
             StatusBarUtil.setTransparentForWindow(this);
-
         }
     }
 

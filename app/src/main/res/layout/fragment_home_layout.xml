@@ -108,13 +108,5 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <ImageView
-        android:id="@+id/iv_suspension"
-        android:layout_width="@dimen/dp_50"
-        android:layout_height="50dp"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginTop="130dp"
-        android:src="@mipmap/p_button"
-        android:visibility="gone" />
 
 </FrameLayout>

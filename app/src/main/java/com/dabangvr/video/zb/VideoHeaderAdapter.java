@@ -185,8 +185,8 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
         ImageView gsImgs;
         public MyHolder(View itemView) {
             super(itemView);
-           gsImg = itemView.findViewById(R.id.zb_iv);
-           gsImgs = itemView.findViewById(R.id.i_zb);
+           gsImg = itemView.findViewById(R.id.image_coverPath);
+           gsImgs = itemView.findViewById(R.id.image_headUrl);
         }
     }
 

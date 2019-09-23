@@ -41,6 +41,7 @@ import com.dabangvr.util.LoginTipsDialog;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.ItemOnClickListener;
+import com.dabangvr.video.fragment.model.PlayMode;
 import com.dabangvr.video.utils.ToastUtils;
 import com.youth.banner.Banner;
 
@@ -80,23 +81,17 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerType;
     @BindView(R.id.home_banner)
     Banner homeBanner;
-    //@BindView(R.id.rl_more_id
-    // RelativeLayout moreRelative;
     @BindView(R.id.bl_id)
     AppBarLayout appBarLayout;
-    @BindView(R.id.iv_suspension)
-    ImageView iv_suspension;
+
     @BindView(R.id.linear_layout)
     LinearLayout linear_layout;
-
-    //    @BindView(R.id.content)
-    //    WithBottomContentView  contentView;
     private TabLayoutFragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments;
     private ChannelAdapter channelAdapter;
     private List<MenuMo> menuData = new ArrayList<>();  //渠道
     private ChangeRadioButtonCallBack callBack;
-    private List<ZBMain> topData = new ArrayList<>();
+    private List<PlayMode> topData = new ArrayList<>();
     private TypeRVAdapter typeRVAdapter;
     private List<TypeBean> typeData = new ArrayList<>(); //分类
     private List<TypeBean> typeData1 = new ArrayList<>(); //分类
@@ -125,19 +120,6 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onDraw() {
                 height = linear_layout.getMeasuredHeight();
-            }
-        });
-
-        try {
-            Glide.with(this).load("http://image.vrzbgw.com/upload/20190808/03385165642ccc.png").into(iv_suspension);
-        } catch (Exception e) {
-            iv_suspension.setVisibility(View.GONE);
-            e.printStackTrace();
-        }
-        iv_suspension.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ToastUtil.showShort(getContext(), "该功能正在努力升级中，敬请期待!");
             }
         });
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -242,30 +224,34 @@ public class HomeFragment extends BaseFragment {
      * 初始化主播列表头像列表
      */
     private void initAnchorRecyclerView() {
-        String arrurl[] = {"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
-                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
-                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
-                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
-                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"};
-        for (int i = 0; i < 10; i++) {
-            ZBMain zbMain = new ZBMain();
-            zbMain.setHeadUrl(arrurl[i]);
-            zbMain.setAnchorName("飘飘" + 1);
-            if (i == 0) {
-                zbMain.setRoundurl(R.mipmap.rounda);
-            } else if (i == 1) {
-                zbMain.setRoundurl(R.mipmap.roundb);
-            } else {
-                zbMain.setRoundurl(R.mipmap.roundc);
-            }
+//        String arrurl[] = {"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
+//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
+//                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
+//                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
+//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"
+//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
+//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
+//                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
+//                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
+//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"};
+//        for (int i = 0; i < 10; i++) {
+//            ZBMain zbMain = new ZBMain();
+//            zbMain.setHeadUrl(arrurl[i]);
+//            zbMain.setAnchorName("飘飘" + 1);
+//            if (i == 0) {
+//                zbMain.setRoundurl(R.mipmap.rounda);
+//            } else if (i == 1) {
+//                zbMain.setRoundurl(R.mipmap.roundb);
+//            } else {
+//                zbMain.setRoundurl(R.mipmap.roundc);
+//            }
+//
+//            topData.add(zbMain);
+//        }
 
-            topData.add(zbMain);
-        }
+        String str = (String) SPUtils2.instance(getContext()).getkey("AnchorList", "");
+        topData = JsonUtil.string2Obj(str, List.class, PlayMode.class);
+
 
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -309,7 +295,6 @@ public class HomeFragment extends BaseFragment {
                 MenuMo menuMo = menuData.get(position);
                 Class T = null;
                 String jumpUrl = menuMo.getJumpUrl();
-                Log.d("luhuas", "onItemClick: " + jumpUrl);
                 switch (jumpUrl) {
                     case ParameterContens.DSP:
                         LoginTipsDialog.ortehrTips(HomeFragment.this.getActivity(), "短视频功能维护中，敬请期待");
@@ -412,12 +397,12 @@ public class HomeFragment extends BaseFragment {
 
 
     /**
-     *已经在欢迎页获取请求了数据进行缓存
+     * 已经在欢迎页获取请求了数据进行缓存
      * 在这里只拿缓存的数据
      * 获取渠道列表
      */
     private void getMenu() {
-        String str = (String) SPUtils2.instance(getContext()).getkey("menuList","");
+        String str = (String) SPUtils2.instance(getContext()).getkey("menuList", "");
         List<MenuMo> list = JsonUtil.string2Obj(str, List.class, MenuMo.class);
         if (null != list && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
@@ -443,12 +428,12 @@ public class HomeFragment extends BaseFragment {
      * 获取分类列表
      */
     private void getType() {
-        String str = (String) SPUtils2.instance(getContext()).getkey("typeList","");
+        String str = (String) SPUtils2.instance(getContext()).getkey("typeList", "");
         List<TypeBean> typeList = JsonUtil.string2Obj(str, List.class, TypeBean.class);
-        if (null != typeList && typeList.size()>0){
+        if (null != typeList && typeList.size() > 0) {
             List<TypeBean> list = new ArrayList<>();
             for (int i = 0; i < typeList.size(); i++) {
-                if (typeList.get(i).getShowIndex() == 1){
+                if (typeList.get(i).getShowIndex() == 1) {
                     list.add(typeList.get(i));
                 }
             }

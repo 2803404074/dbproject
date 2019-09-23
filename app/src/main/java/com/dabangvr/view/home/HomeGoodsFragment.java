@@ -63,12 +63,10 @@ public class HomeGoodsFragment extends BaseFragment {
             type = savedInstanceState.getInt("type");
         }
     }
-
     @Override
     public int layoutId() {
         return R.layout.fragment_homegoods_layout;
     }
-
     @Override
     public void initView() {
         initRecycler();
@@ -117,7 +115,6 @@ public class HomeGoodsFragment extends BaseFragment {
      */
     private void initRecycler() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-
         recyclerViewGoods.setLayoutManager(gridLayoutManager);
         recyclerViewGoods.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(getContext(), 7), ContextCompat.getColor(getContext(), R.color.color_00d8d6d6)));
         goodsAdapter = new HGoodsAdapter(getContext());
@@ -125,7 +122,7 @@ public class HomeGoodsFragment extends BaseFragment {
         goodsAdapter.setOnItemClickListener(new HGoodsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Goods goods = (Goods) mData.get(position);
+                Goods goods =  mData.get(position);
                 Intent intent = new Intent(HomeGoodsFragment.this.getContext(), HxxqLastActivity.class);
                 intent.putExtra("id", goods.getId());
                 intent.putExtra("type", 0);

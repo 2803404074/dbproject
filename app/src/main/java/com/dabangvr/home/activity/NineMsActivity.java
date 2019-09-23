@@ -12,14 +12,12 @@ import com.dabangvr.base.BaseNewActivity;
 import com.dabangvr.home.fragment.NineMsPagerFragment;
 import com.dabangvr.my.StatusBarUtil;
 import com.dabangvr.view.home.TabLayoutFragmentPagerAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class NineMsActivity extends BaseNewActivity implements View.OnClickListener {
 
     private ImageView title;
-
     private TextView tev_nine;
     private TextView tev_two_nine;
     private TextView tev_three_nine;
@@ -27,14 +25,12 @@ public class NineMsActivity extends BaseNewActivity implements View.OnClickListe
     private TabLayoutFragmentPagerAdapter adapter;
     private NineMsPagerFragment nineMsPagerFragment;
     private String[] tabString = {"9.9", "19.9", "39.9"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             //解决Android5.0以上，状态栏设置颜色后变灰的问题
             StatusBarUtil.setTransparentForWindow(this);
-
         }
     }
 
@@ -56,8 +52,6 @@ public class NineMsActivity extends BaseNewActivity implements View.OnClickListe
         tev_nine.setSelected(true);
         tev_two_nine.setSelected(false);
         tev_three_nine.setSelected(false);
-
-
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +59,6 @@ public class NineMsActivity extends BaseNewActivity implements View.OnClickListe
             }
         });
         initFragment();
-
-
     }
 
     private void initFragment() {
@@ -75,7 +67,6 @@ public class NineMsActivity extends BaseNewActivity implements View.OnClickListe
             nineMsPagerFragment = new NineMsPagerFragment(0);
             nineMsPagerFragment.setTabPos(i, tabString[i]);//设置第几页，以及每页的id
             mFragments.add(nineMsPagerFragment);
-
         }
         adapter = new TabLayoutFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         vp_pager.setAdapter(adapter);
@@ -148,6 +139,5 @@ public class NineMsActivity extends BaseNewActivity implements View.OnClickListe
                 tev_three_nine.setSelected(true);
                 break;
         }
-
     }
 }

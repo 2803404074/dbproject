@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.dabangvr.R;
 import com.dabangvr.video.adapter.ItemOnClickListener;
+import com.dabangvr.video.fragment.model.PlayMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import bean.ZBMain;
 public class AddHeaderAdapter extends RecyclerView.Adapter<AddHeaderAdapter.MyHolder> {
     private RecyclerView mRecyclerView;
 
-    private List<ZBMain> data = new ArrayList<>();
+    private List<PlayMode> data = new ArrayList<>();
     private Context mContext;
 
     private View VIEW_FOOTER;
@@ -35,7 +36,7 @@ public class AddHeaderAdapter extends RecyclerView.Adapter<AddHeaderAdapter.MyHo
     private int TYPE_HEADER = 1001;
     private int TYPE_FOOTER = 1002;
 
-    public AddHeaderAdapter(List<ZBMain> data, Context mContext) {
+    public AddHeaderAdapter(List<PlayMode> data, Context mContext) {
         this.data = data;
         this.mContext = mContext;
     }
@@ -60,10 +61,10 @@ public class AddHeaderAdapter extends RecyclerView.Adapter<AddHeaderAdapter.MyHo
             Glide.with(mContext).load(data.get(position).getHeadUrl()).into(content);
             if (position < 3) {
 
-                Glide.with(mContext).load(data.get(position).getRoundurl()).into(iv_round);
+                Glide.with(mContext).load(data.get(position).getHeadUrl()).into(iv_round);
             }
             TextView name = holder.itemView.findViewById(R.id.tv_name);
-            name.setText(data.get(position).getAnchorName());
+            name.setText(data.get(position).getNickName());
             final int finalPosition = position;
             //点击item
             holder.itemView.setOnClickListener(new View.OnClickListener() {

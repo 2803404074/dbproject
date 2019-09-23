@@ -3,6 +3,7 @@ package com.dabangvr.my.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -164,6 +165,7 @@ public class LoginActivity extends BaseNewActivity implements View.OnClickListen
                             String icon = objectResult.optString("figureurl_2");//第三方头像
                             String type = "qq";//登陆类型
                             senMyServer(openID, uName, icon, type);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -237,7 +239,9 @@ public class LoginActivity extends BaseNewActivity implements View.OnClickListen
                             String userStr = data.optString("user");
                             UserMess userMess = JsonUtil.string2Obj(userStr, UserMess.class);
                             userMess.setToken(token);
+
                             SPUtils2.instance(LoginActivity.this).putObj("userMo",userMess);
+                            Log.d("luhuas", "onUi: "+userMess.getToken());
                             //如果是第一次登陆，则跳到闪屏
                             boolean isNews = (boolean) SPUtils2.instance(LoginActivity.this).getkey("isNews",true);
                             if (isNews){

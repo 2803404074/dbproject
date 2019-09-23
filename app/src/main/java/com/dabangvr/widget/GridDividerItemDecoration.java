@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
@@ -50,7 +51,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         } else {
             top = 0;
         }
-        outRect.set(left, 0, 0, bottom);
+        outRect.set(left, 0, right, bottom);
 
     }
 

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.dabangvr.main.MainActivity;
 import com.dabangvr.main.MyApplication;
 import com.dabangvr.my.activity.LoginActivity;
+import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 
 import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
+import bean.UserMess;
 import config.DyUrl;
 import okhttp3.Call;
 
@@ -177,10 +179,14 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         }
                         JSONObject data = object.optJSONObject("data");
                         String userStr = data.optString("user");
-                        SPUtils2.instance(WXEntryActivity.this).put("user",userStr);
                         String token = data.optString("token");
-                        spUtils.put("isLogin","true");
-                        spUtils.put("token",token);
+//                        SPUtils2.instance(WXEntryActivity.this).put("user",userStr);
+//                        String token = data.optString("token");
+//                        spUtils.put("isLogin","true");
+//                        spUtils.put("token",token);
+                        UserMess userMess = JsonUtil.string2Obj(userStr, UserMess.class);
+                        userMess.setToken(token);
+                        SPUtils2.instance(WXEntryActivity.this).putObj("userMo",userMess);
                         Intent intent = new Intent(WXEntryActivity.this,MainActivity.class);
                         startActivity(intent);
                         AppManager.getAppManager().finishActivity(LoginActivity.class);

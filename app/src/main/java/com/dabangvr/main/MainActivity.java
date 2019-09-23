@@ -196,7 +196,7 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
     /**
      * 注册
      */
-    private void registerHX(String name,String pass) {
+    private void registerHX(final String name, final String pass) {
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -227,7 +227,7 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
                 // ** manually load all local groups and
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
-                ToastUtil.showShort(getContext(),"环信登陆成功");
+//                ToastUtil.showShort(getContext(),"环信登陆成功");
             }
 
             @Override
@@ -374,12 +374,15 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
             @Override
             public void onClick(View v) {
 
-                if (getSPKEY(MainActivity.this, "isAnchor").equals("1")) {//是否已经主播认证
-                    Intent intent = new Intent(MainActivity.this, PlayZhiBoActivity.class);
-                    startActivity(intent);
-                } else {
-                    show(MainActivity.this, 1, "只有通过实名认证才能开直播哦", "去认证");
-                }
+                Intent intent = new Intent(MainActivity.this, PlayZhiBoActivity.class);
+                startActivity(intent);
+
+//                if (getSPKEY(MainActivity.this, "isAnchor").equals("1")) {//是否已经主播认证
+//                    Intent intent = new Intent(MainActivity.this, PlayZhiBoActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    show(MainActivity.this, 1, "只有通过实名认证才能开直播哦", "去认证");
+//                }
                 if (mShareDialog != null && mShareDialog.isShowing()) {
                     mShareDialog.dismiss();
                 }

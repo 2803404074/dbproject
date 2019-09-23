@@ -23,8 +23,11 @@ import com.dabangvr.model.ShouCangMo;
 import com.dabangvr.my.adapter.Yhjadapter;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.LoadingDialog;
 import com.dabangvr.util.StatusBarUtil;
 import com.dabangvr.util.ToastUtil;
+import com.dabangvr.video.adapter.BGANormalRefreshViewHolder;
+import com.dabangvr.video.adapter.ThreadUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -40,6 +43,7 @@ import Utils.GsonObjectCallback;
 import Utils.OkHttp3Utils;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import config.DyUrl;
 import okhttp3.Call;
 import top.androidman.SuperButton;
@@ -47,7 +51,7 @@ import top.androidman.SuperButton;
 /**
  * 个人中心-我的优惠卷
  */
-public class MyYhjActivity extends BaseNewActivity {
+public class MyYhjActivity extends BaseNewActivity implements BGARefreshLayout.BGARefreshLayoutDelegate {
 
     @BindView(R.id.sc_recycler)
     RecyclerView recyclerView;
@@ -58,6 +62,10 @@ public class MyYhjActivity extends BaseNewActivity {
 
     private List<CouponBean> DiscontList = new ArrayList<>();
     private BaseLoadMoreHeaderAdapter adapter;
+    private int mMorePageNumber = 1;
+    private int mNewPageNumber = 1;
+    private LoadingDialog loadingDialog;
+    private BGARefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +81,18 @@ public class MyYhjActivity extends BaseNewActivity {
 
     @Override
     public void initView() {
+        loadingDialog = new LoadingDialog(getContext());
+        mRefreshLayout = findViewById(R.id.refreshLayout);
+        BGANormalRefreshViewHolder moocStyleRefreshViewHolder = new BGANormalRefreshViewHolder(this, true);
+        moocStyleRefreshViewHolder.setRefreshLayout(mRefreshLayout);
+        mRefreshLayout.setRefreshViewHolder(moocStyleRefreshViewHolder);
+        mRefreshLayout.setDelegate(this);
+
         recyclerView = findViewById(R.id.sc_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Yhjadapter yhjadapter = new Yhjadapter(this);
         //添加adapter
-        adapter = yhjadapter.setAdaper(recyclerView, DiscontList,0);
+        adapter = yhjadapter.setAdaper(recyclerView, DiscontList, 0);
 
         recyclerView.setAdapter(adapter);
     }
@@ -148,5 +163,38 @@ public class MyYhjActivity extends BaseNewActivity {
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+        mNewPageNumber++;
+        ThreadUtil.runInUIThread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: 2019/9/23 下拉更新
+                mRefreshLayout.endRefreshing();
+
+            }
+        }, 500);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+        mMorePageNumber++;
+
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
+        ThreadUtil.runInUIThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingDialog != null && loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
+                // TODO: 2019/9/23  加载更多
+                mRefreshLayout.endLoadingMore();
+            }
+        }, 500);
+        return true;
     }
 }
