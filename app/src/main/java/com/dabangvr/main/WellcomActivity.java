@@ -18,6 +18,7 @@ import com.dabangvr.model.MenuMo;
 import com.dabangvr.model.TypeBean;
 import com.dabangvr.my.activity.LoginActivity;
 import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.SPUtils;
 import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.fragment.VideoFragment;
@@ -63,7 +64,6 @@ public class WellcomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkUser();
         //获取首页数据
         getMenu();
         getType();
@@ -71,6 +71,7 @@ public class WellcomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wellcom);
         text_version = this.findViewById(R.id.text_version);
         text_version.setText("V" + getVersion());
+        checkUser();
 
     }
 
@@ -109,9 +110,9 @@ public class WellcomActivity extends AppCompatActivity {
                 userMess = JsonUtil.string2Obj(result, UserMess.class);
                 if (userMess != null) {
                     JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE, String.valueOf(userMess.getId()));
-                    SPUtils2.instance(WellcomActivity.this).put("user", result);
-                    SPUtils2.instance(WellcomActivity.this).put("token", userMess.getToken());
-                    SPUtils2.instance(WellcomActivity.this).putObj("userMo", userMess);
+//                    SPUtils2.instance(WellcomActivity.this).put("user", result);
+//                    SPUtils2.instance(WellcomActivity.this).put("token", userMess.getToken());
+//                    SPUtils2.instance(WellcomActivity.this).putObj("userMo", userMess);
                     goTActivity(MainActivity.class);
                 } else {
                     goTActivity(LoginActivity.class);
@@ -124,7 +125,7 @@ public class WellcomActivity extends AppCompatActivity {
                 SPUtils2.instance(WellcomActivity.this).remove("user");
                 SPUtils2.instance(WellcomActivity.this).remove("token");
                 SPUtils2.instance(WellcomActivity.this).remove("userMo");
-                SPUtils2.instance(WellcomActivity.this).remove("userMo");
+//                SPUtils2.instance(WellcomActivity.this).remove("userMo");
                 SPUtils2.instance(WellcomActivity.this).remove("hxlogin");
                 goTActivity(LoginActivity.class);
             }
@@ -241,8 +242,8 @@ public class WellcomActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject(msg);
                             int code = object.optInt("errno");
                             if (code == 0) {//成功
-                                JSONObject data = object.optJSONObject("data");
-                                SPUtils2.instance(WellcomActivity.this).put("AnchorList", data);
+                                String data = object.optString("data");
+                                SPUtils2.instance(getApplicationContext()).put("AnchorList", data);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -112,8 +112,8 @@ public class HomeFragment extends BaseFragment {
 
         initAnchorRecyclerView();
         initRecylerViewChannel();
-        initBanner();
         initTypeRecyclerView();
+        initBanner();
         initTablayout();
         ViewTreeObserver viewTreeObserver = linear_layout.getViewTreeObserver();
         viewTreeObserver.addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
@@ -189,8 +189,6 @@ public class HomeFragment extends BaseFragment {
                 homeGoodsFragment.setArguments(bundle);
                 mFragments.add(homeGoodsFragment);
             }
-
-
         }
 
         mAdapter = new TabLayoutFragmentPagerAdapter(getChildFragmentManager(), mFragments);
@@ -224,34 +222,13 @@ public class HomeFragment extends BaseFragment {
      * 初始化主播列表头像列表
      */
     private void initAnchorRecyclerView() {
-//        String arrurl[] = {"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
-//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
-//                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
-//                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
-//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"
-//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298698598&di=54fd66fb65702697d4cdf82ae529f81f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F12%2F20161212061637_WUAdF.jpeg"
-//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565893460&di=5fd735d05598db423a79f6c0529575f4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201411%2F04%2F20141104214413_ivUjv.jpeg"
-//                , "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3951107419,1294462328&fm=26&gp=0.jpg"
-//                , "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=20577780,3476556477&fm=26&gp=0.jpg"
-//                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565298790094&di=0766b04dfa2b3adb3d04c5168336583f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201611%2F27%2F20161127223627_UhKxQ.jpeg"};
-//        for (int i = 0; i < 10; i++) {
-//            ZBMain zbMain = new ZBMain();
-//            zbMain.setHeadUrl(arrurl[i]);
-//            zbMain.setAnchorName("飘飘" + 1);
-//            if (i == 0) {
-//                zbMain.setRoundurl(R.mipmap.rounda);
-//            } else if (i == 1) {
-//                zbMain.setRoundurl(R.mipmap.roundb);
-//            } else {
-//                zbMain.setRoundurl(R.mipmap.roundc);
-//            }
-//
-//            topData.add(zbMain);
-//        }
 
-        String str = (String) SPUtils2.instance(getContext()).getkey("AnchorList", "");
-        topData = JsonUtil.string2Obj(str, List.class, PlayMode.class);
-
+        try {
+            String str = (String) SPUtils2.instance(getActivity()).getkey("AnchorList", "");
+            topData = JsonUtil.string2Obj(str, List.class, PlayMode.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);

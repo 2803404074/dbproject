@@ -196,14 +196,14 @@ public class PlayZhiBoActivity extends BaseActivity implements View.OnClickListe
                         if (object.optInt("code") == 500) {
                             ToastUtil.showShort(PlayZhiBoActivity.this, object.optString("msg"));
                         } else {
-                            String url = object.optString("publishURL");//推流地址
-                            String tag = object.optString("tag");//播放地址（用于存到通讯服务）
-                            Intent intent = new Intent(PlayZhiBoActivity.this, HWCameraStreamingActivity.class);
-                            intent.putExtra("stream_publish_url", url);
-                            intent.putExtra("tag", tag);
-                            String goods = object.optString("goodsVoList");
-                            intent.putExtra("goods", goods);
-                            startActivity(intent);
+//                            String url = object.optString("publishURL");//推流地址
+//                            String tag = object.optString("tag");//播放地址（用于存到通讯服务）
+//                            Intent intent = new Intent(PlayZhiBoActivity.this, HWCameraStreamingActivity.class);
+//                            intent.putExtra("stream_publish_url", url);
+//                            intent.putExtra("tag", tag);
+//                            String goods = object.optString("goodsVoList");
+//                            intent.putExtra("goods", goods);
+//                            startActivity(intent);
                         }
                     }
                     if (errno == 1){
