@@ -85,6 +85,7 @@ public class MainActivity extends BaseNewActivity implements RadioGroup.OnChecke
             //解决Android5.0以上，状态栏设置颜色后变灰的问题
             StatusBarUtil.setTransparentForWindow(this);
         }
+        AppManager.getAppManager().addActivity(this);
     }
 
     @Override

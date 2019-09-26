@@ -28,6 +28,10 @@
 
     </FrameLayout>
     <TextView
+        android:textSize="@dimen/sp_10"
+        android:maxEms="5"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_marginTop="@dimen/dp_5"
         android:textColor="@color/color_black"
         android:layout_gravity="center"

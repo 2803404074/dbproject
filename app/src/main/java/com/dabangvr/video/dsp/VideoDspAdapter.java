@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -14,7 +15,9 @@ import com.dabangvr.R;
 import com.dabangvr.model.Goods;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.GlideRoundedCornersTransform;
+import com.dabangvr.util.TextUtil;
 import com.dabangvr.video.adapter.ItemOnClickListener;
+import com.dabangvr.video.fragment.model.PlayMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.List;
 public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHolder> {
     private RecyclerView mRecyclerView;
 
-    private List<Goods> data = new ArrayList<>();
+    private List<PlayMode> data = new ArrayList<>();
     private Context mContext;
 
     private View VIEW_FOOTER;
@@ -33,7 +36,7 @@ public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHold
     private int TYPE_HEADER = 1001;
     private int TYPE_FOOTER = 1002;
 
-    public VideoDspAdapter(List<Goods> data, Context mContext) {
+    public VideoDspAdapter(List<PlayMode> data, Context mContext) {
         this.data = data;
         this.mContext = mContext;
     }
@@ -45,7 +48,7 @@ public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHold
         } else if (viewType == TYPE_HEADER) {
             return new MyHolder(VIEW_HEADER);
         } else {
-            return new MyHolder(getLayout(R.layout.item_homedsp_layout,parent));
+            return new MyHolder(getLayout(R.layout.item_homedsp_layout, parent));
         }
     }
 
@@ -53,23 +56,27 @@ public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHold
     public void onBindViewHolder(MyHolder holder, int position) {
         if (!isHeaderView(position) && !isFooterView(position)) {
             if (haveHeaderView()) position--;
-            Goods goods = data.get(position);
-            ImageView gsImg = holder.itemView.findViewById(R.id.zb_iv);
-            ImageView gsImgs = holder.itemView.findViewById(R.id.i_zb);
+            PlayMode playMode = data.get(position);
+            ImageView image_coverPath = holder.itemView.findViewById(R.id.image_coverPath);
+            ImageView image_headUrl = holder.itemView.findViewById(R.id.image_headUrl);
+            TextView iv_nickName = holder.itemView.findViewById(R.id.iv_nickName);
+            TextView iv_likeCounts = holder.itemView.findViewById(R.id.iv_likeCounts);
+            iv_likeCounts.setText(playMode.getLikeCounts());
+            iv_nickName.setText(playMode.getNickName());
             RequestOptions myOptions = new RequestOptions().optionalTransform
                     (new GlideRoundedCornersTransform(DensityUtil.dip2px(mContext, 15f)
                             , GlideRoundedCornersTransform.CornerType.ALL));
-            Glide.with(mContext).load(goods.getListUrl()).apply(myOptions).into(gsImg);
+            Glide.with(mContext).load(playMode.getCoverPath()).apply(myOptions).into(image_coverPath);
             RequestOptions myOptionss = new RequestOptions().optionalTransform
                     (new GlideRoundedCornersTransform(DensityUtil.dip2px(mContext, 12f)
                             , GlideRoundedCornersTransform.CornerType.ALL));
-            Glide.with(mContext).load(goods.getListUrl()).apply(myOptionss).into(gsImgs);
+            Glide.with(mContext).load(playMode.getHeadUrl()).apply(myOptionss).into(image_headUrl);
 
             final int finalPosition = position;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (itemOnClickListener!=null){
+                    if (itemOnClickListener != null) {
                         itemOnClickListener.onClickListener(finalPosition);
                     }
                 }
@@ -114,8 +121,8 @@ public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHold
         }
     }
 
-    private View getLayout(int layoutId,ViewGroup parent) {
-        return LayoutInflater.from(mContext).inflate(layoutId,parent, false);
+    private View getLayout(int layoutId, ViewGroup parent) {
+        return LayoutInflater.from(mContext).inflate(layoutId, parent, false);
     }
 
     public void addHeaderView(View headerView) {
@@ -182,26 +189,30 @@ public class VideoDspAdapter extends RecyclerView.Adapter<VideoDspAdapter.MyHold
         }
     }
 
-    public void addNewData(List<Goods> list) {
+
+    public void addNewData(List<PlayMode> list) {
         if (list != null && !list.isEmpty()) {
-            data.addAll(0, list);
+            data.clear();
+            data.addAll(list);
             notifyItemRangeInsertedWrapper(0, data.size());
         }
     }
 
     public final void notifyItemRangeInsertedWrapper(int positionStart, int itemCount) {
-       notifyDataSetChanged();
+        notifyDataSetChanged();
     }
-    public void addMoreData(List<Goods> list) {
-        if (list != null && !list.isEmpty()) {
 
+    public void addMoreData(List<PlayMode> list) {
+        if (list != null && !list.isEmpty()) {
             data.addAll(data.size(), list);
-           notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     }
+
     private ItemOnClickListener itemOnClickListener;
-    public void setItemOnClickListener(ItemOnClickListener onClickListener){
-        itemOnClickListener=onClickListener;
+
+    public void setItemOnClickListener(ItemOnClickListener onClickListener) {
+        itemOnClickListener = onClickListener;
     }
 
 }

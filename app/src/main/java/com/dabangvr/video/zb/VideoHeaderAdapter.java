@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dabangvr.R;
 import com.dabangvr.model.Goods;
+import com.dabangvr.model.ZhiboMo;
 import com.dabangvr.util.DensityUtil;
 import com.dabangvr.util.GlideRoundedCornersTransform;
 import com.dabangvr.video.adapter.ItemOnClickListener;
@@ -27,7 +28,7 @@ import bean.ZBMain;
 public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.MyHolder> {
     private RecyclerView mRecyclerView;
 
-    private List<Goods> data = new ArrayList<>();
+    private List<ZhiboMo> data = new ArrayList<>();
     private Context mContext;
 
     private View VIEW_FOOTER;
@@ -38,7 +39,7 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
     private int TYPE_HEADER = 1001;
     private int TYPE_FOOTER = 1002;
 
-    public VideoHeaderAdapter(List<Goods> data, Context mContext) {
+    public VideoHeaderAdapter(List<ZhiboMo> data, Context mContext) {
         this.data = data;
         this.mContext = mContext;
     }
@@ -50,7 +51,7 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
         } else if (viewType == TYPE_HEADER) {
             return new MyHolder(VIEW_HEADER);
         } else {
-            return new MyHolder(getLayout(R.layout.item_homehot_layout,parent));
+            return new MyHolder(getLayout(R.layout.item_homezb_layout, parent));
         }
     }
 
@@ -58,21 +59,25 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
     public void onBindViewHolder(MyHolder holder, int position) {
         if (!isHeaderView(position) && !isFooterView(position)) {
             if (haveHeaderView()) position--;
-            Goods goods = data.get(position);
+            ZhiboMo zhiboMo = data.get(position);
+
+            holder.zb_nickName.setTag(zhiboMo.getNickName());
+
             RequestOptions myOptions = new RequestOptions().optionalTransform
                     (new GlideRoundedCornersTransform(DensityUtil.dip2px(mContext, 15f)
                             , GlideRoundedCornersTransform.CornerType.ALL));
-            Glide.with(mContext).load(goods.getListUrl()).apply(myOptions).into(holder.gsImg);
+
+            Glide.with(mContext).load(zhiboMo.getCoverUrl()).apply(myOptions).into(holder.image_coverPath);
             RequestOptions myOptionss = new RequestOptions().optionalTransform
                     (new GlideRoundedCornersTransform(DensityUtil.dip2px(mContext, 12f)
                             , GlideRoundedCornersTransform.CornerType.ALL));
-            Glide.with(mContext).load(goods.getListUrl()).apply(myOptionss).into(holder.gsImgs);
+            Glide.with(mContext).load(zhiboMo.getHeadUrl()).apply(myOptionss).into(holder.image_headUrl);
 
             final int finalPosition = position;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (itemOnClickListener!=null){
+                    if (itemOnClickListener != null) {
                         itemOnClickListener.onClickListener(finalPosition);
                     }
                 }
@@ -117,9 +122,9 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
         }
     }
 
-    private View getLayout(int layoutId,ViewGroup parent) {
+    private View getLayout(int layoutId, ViewGroup parent) {
 
-        return LayoutInflater.from(parent.getContext()).inflate(layoutId,parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
     }
 
     public void addHeaderView(View headerView) {
@@ -181,19 +186,25 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
 
 
     public static class MyHolder extends RecyclerView.ViewHolder {
-        ImageView gsImg;
-        ImageView gsImgs;
+        ImageView image_coverPath;
+        ImageView image_headUrl;
+        TextView zb_nickName;
+        TextView zb_likeCounts;
+
         public MyHolder(View itemView) {
             super(itemView);
-           gsImg = itemView.findViewById(R.id.image_coverPath);
-           gsImgs = itemView.findViewById(R.id.image_headUrl);
+            image_coverPath = itemView.findViewById(R.id.image_coverPath);
+            image_headUrl = itemView.findViewById(R.id.image_headUrl);
+            zb_nickName = itemView.findViewById(R.id.zb_nickName);
+            zb_likeCounts = itemView.findViewById(R.id.zb_likeCounts);
         }
     }
 
-    public void addNewData(List<Goods> list) {
+    public void addNewData(List<ZhiboMo> list) {
         if (list != null && !list.isEmpty()) {
-            data.addAll(0, list);
-            notifyDataSetChanged();
+            data.clear();
+            data.addAll(list);
+            notifyItemRangeInsertedWrapper(0, data.size());
         }
     }
 
@@ -204,16 +215,18 @@ public class VideoHeaderAdapter extends RecyclerView.Adapter<VideoHeaderAdapter.
             notifyDataSetChanged();
         }
     }
-    public void addMoreData(List<Goods> list) {
+
+    public void addMoreData(List<ZhiboMo> list) {
         if (list != null && !list.isEmpty()) {
-            int positionStart = data.size();
             data.addAll(data.size(), list);
-           notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     }
+
     private ItemOnClickListener itemOnClickListener;
-    public void setItemOnClickListener(ItemOnClickListener onClickListener){
-        itemOnClickListener=onClickListener;
+
+    public void setItemOnClickListener(ItemOnClickListener onClickListener) {
+        itemOnClickListener = onClickListener;
     }
 
 }

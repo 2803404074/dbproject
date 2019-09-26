@@ -1,8 +1,10 @@
 package com.dabangvr.video.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dabangvr.R;
+import com.dabangvr.video.zb.VideoZBFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,7 @@ import bean.ZBMain;
 public class AddtabAdapter extends RecyclerView.Adapter<AddtabAdapter.MyHolder> {
     private RecyclerView mRecyclerView;
 
-    private List<String> data = new ArrayList<>();
+    private List<VideoZBFragment.SataterBean> data = new ArrayList<>();
     private Context mContext;
 
     private View VIEW_FOOTER;
@@ -31,7 +34,7 @@ public class AddtabAdapter extends RecyclerView.Adapter<AddtabAdapter.MyHolder> 
     private int TYPE_HEADER = 1001;
     private int TYPE_FOOTER = 1002;
 
-    public AddtabAdapter(List<String> data, Context mContext) {
+    public AddtabAdapter(List<VideoZBFragment.SataterBean> data, Context mContext) {
         this.data = data;
         this.mContext = mContext;
     }
@@ -48,12 +51,25 @@ public class AddtabAdapter extends RecyclerView.Adapter<AddtabAdapter.MyHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
+    public void onBindViewHolder(final MyHolder holder, int position) {
         if (!isHeaderView(position) && !isFooterView(position)) {
             if (haveHeaderView()) position--;
             TextView content = holder.itemView.findViewById(R.id.tv_tab_title);
-            content.setText(data.get(position));
+            VideoZBFragment.SataterBean sataterBean = data.get(position);
+            if (sataterBean != null) {
+                String state = sataterBean.getState();
+                if (!TextUtils.isEmpty(state)) {
+                    if (TextUtils.equals(state, "1")) {
+                        content.setTextColor(Color.parseColor("#D81B60"));
+                        content.setTextSize(17);
+                    } else {
+                        content.setTextColor(Color.parseColor("#000000"));
+                        content.setTextSize(14);
+                    }
 
+                }
+                content.setText(data.get(position).getTatile());
+            }
             final int finalPosition = position;
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -162,6 +178,13 @@ public class AddtabAdapter extends RecyclerView.Adapter<AddtabAdapter.MyHolder> 
 
     private boolean isFooterView(int position) {
         return haveFooterView() && position == getItemCount() - 1;
+    }
+    public void setNewData(List<VideoZBFragment.SataterBean> newData){
+        if (newData != null && !newData.isEmpty()) {
+            data.clear();
+            data.addAll(newData);
+            notifyDataSetChanged();
+        }
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {

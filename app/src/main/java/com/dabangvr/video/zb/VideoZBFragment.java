@@ -38,6 +38,8 @@ public class VideoZBFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.viewpager_id)
     NoScrollViewPager viewPager;
+    private VideoSonZBragment videoSonZBragment;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,12 +57,18 @@ public class VideoZBFragment extends BaseFragment {
 
 
     private void initTablayout() {
-
-
         String[] titles = new String[]{"推荐", "美女", "搞笑", "内衣", "游戏", "美女", "搞笑", "内衣", "游戏", "美女", "搞笑", "内衣", "游戏"};
-        List<String> tab = new ArrayList<>();
+        final List<SataterBean> tab = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
-            tab.add(titles[i]);
+            SataterBean sataterBean = new SataterBean();
+            if (i == 0) {
+                sataterBean.setState("1");
+                sataterBean.setTatile(titles[i]);
+            } else {
+                sataterBean.setState("0");
+                sataterBean.setTatile(titles[i]);
+            }
+            tab.add(sataterBean);
         }
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -70,7 +78,7 @@ public class VideoZBFragment extends BaseFragment {
 
 
         for (int i = 0; i < titles.length; i++) {
-            VideoSonZBragment videoSonZBragment = new VideoSonZBragment();
+            videoSonZBragment = new VideoSonZBragment();
             Bundle bundle = new Bundle();
             bundle.putString("type", titles[i]);
             videoSonZBragment.setArguments(bundle);
@@ -80,6 +88,7 @@ public class VideoZBFragment extends BaseFragment {
         mAdapter = new TabLayoutFragmentPagerAdapter(getChildFragmentManager(), mFragments);
         viewPager.setAdapter(mAdapter);
         viewPager.setCurrentItem(0);
+        viewPager.setScroll(false);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -89,6 +98,7 @@ public class VideoZBFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 Log.d(TAG, "onPageSelected: " + i);
+
             }
 
             @Override
@@ -100,6 +110,19 @@ public class VideoZBFragment extends BaseFragment {
             @Override
             public void onClickListener(int position) {
                 viewPager.setCurrentItem(position);
+                List<SataterBean> tabt = new ArrayList<>();
+                for (int j = 0; j < tab.size(); j++) {
+                    SataterBean sataterBean = tab.get(j);
+                    if (j == position) {
+                        sataterBean.setState("1");
+                    } else {
+                        sataterBean.setState("0");
+                    }
+                    tabt.add(sataterBean);
+                }
+
+                addtabAdapter.setNewData(tabt);
+
             }
         });
     }
@@ -121,4 +144,24 @@ public class VideoZBFragment extends BaseFragment {
 
     }
 
+    public class SataterBean {
+        String tatile;
+        String state;
+
+        public String getTatile() {
+            return tatile;
+        }
+
+        public void setTatile(String tatile) {
+            this.tatile = tatile;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+    }
 }

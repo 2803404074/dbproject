@@ -13,23 +13,38 @@ import android.view.View;
 
 import com.dabangvr.R;
 import com.dabangvr.base.BaseFragment;
+import com.dabangvr.main.WellcomActivity;
 import com.dabangvr.model.Goods;
+import com.dabangvr.model.ZhiboMo;
 import com.dabangvr.util.BannerStart;
 import com.dabangvr.util.DensityUtil;
+import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.BGANormalRefreshViewHolder;
 import com.dabangvr.video.adapter.ItemOnClickListener;
 import com.dabangvr.video.adapter.ThreadUtil;
+import com.dabangvr.video.fragment.model.PlayMode;
 import com.dabangvr.view.home.SpacesItemDecoration;
 import com.dabangvr.widget.GridDividerItemDecoration;
 import com.youth.banner.Banner;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Utils.GsonObjectCallback;
+import Utils.OkHttp3Utils;
 import butterknife.BindView;
 
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+import config.DyUrl;
+import okhttp3.Call;
 
 
 public class VideoSonZBragment extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate {
@@ -41,11 +56,12 @@ public class VideoSonZBragment extends BaseFragment implements BGARefreshLayout.
     private int intPage = 1;
 
     private VideoHeaderAdapter videoHeaderAdapter;
-    private List<Goods> mData = new ArrayList<>();
+    private List<ZhiboMo> mData = new ArrayList<>();
+
     private String type;
     private Banner homeBanner;
     private int mNewPageNumber = 0;
-    private int mMorePageNumber = 0;
+    private int mMorePageNumber = 1;
 
 
     @Override
@@ -74,7 +90,8 @@ public class VideoSonZBragment extends BaseFragment implements BGARefreshLayout.
     @Override
     public void initData() {
         mRefreshLayout.setDelegate(this);
-        setDate(intPage);
+        setDate(intPage, type, true);
+        Log.d("luhuas", "initData: " + type);
         initBanner();
 
     }
@@ -114,57 +131,53 @@ public class VideoSonZBragment extends BaseFragment implements BGARefreshLayout.
      * 第一个item   my_orther_item_dep
      * 第二个item   my_orther_item_goods
      */
-    private void setDate(int page) {
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("222");
-            goods.setListUrl("http://5b0988e595225.cdn.sohucs.com/images/20180805/0ca1f0922bb4482daed2e108353239af.jpeg");
-            mData.add(goods);
-        }
-//        videoSonAdapter.setData(mData);
-//        final HashMap<String, String> map = new HashMap<>();
-//        map.put("page", String.valueOf(page));
-//        map.put("limit", "10");
-//        map.put("type", String.valueOf(typex));
-//        //ToastUtil.showShort(context,"加载的类型是:"+typex+","+type);
-//        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsLists, map, new GsonObjectCallback<String>(DyUrl.BASE) {
-//            //主线程处理
-//            @Override
-//            public void onUi(String newsBean) {
-//                if (StringUtils.isEmpty(newsBean)) {
-//                    Toast.makeText(getActivity(), "获取数据失败", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                try {
-//                    JSONObject object = new JSONObject(newsBean);
-//                    int err = object.optInt("errno");
-//                    if (err == 0) {
-//                        if (object.optInt("code") == 500) {
-//                            //ToastUtil.showShort(context, "服务数据更新中...");
-//                            return;
-//                        }
-//                        JSONObject data = object.optJSONObject("data");
-//                        String str = data.optString("goodsList");
-////                        mData=JsonUtil.string2Obj(str, List.class, Goods.class);
-//                        Collection<? extends Goods> goods = (Collection<? extends Goods>) JsonUtil.string2Obj(str, List.class, Goods.class);
-//                        if (goods != null && goods.size() > 0) {
-//                            mData.addAll(goods);
-//                            videoSonAdapter.setData(mData);
-//                        }
-//
-////                        adapter.updateData(mData);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            //请求失败
-//            @Override
-//            public void onFailed(Call call, IOException e) {
-//
-//            }
-//        });
+    private void setDate(int page, String type, final boolean isRefresh) {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("anchorCategory","0");
+        map.put("page", String.valueOf(page));
+        map.put("limit", "10");
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.LiveList, map,
+                new GsonObjectCallback<String>(DyUrl.BASE) {
+                    //主线程处理
+                    @Override
+                    public void onUi(String msg) {
+                        try {
+                            JSONObject object = new JSONObject(msg);
+                            int code = object.optInt("errno");
+                            if (code == 0) {//成功
+                                String data = object.optString("data");
+                                mData = JsonUtil.string2Obj(data, List.class, ZhiboMo.class);
+
+                                if (mData != null && mData.size() > 0) {
+                                    if (isRefresh) {
+                                        videoHeaderAdapter.addNewData(mData);
+                                    } else {
+                                        videoHeaderAdapter.addMoreData(mData);
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //请求失败
+                    @Override
+                    public void onFailed(Call call, IOException e) {
+
+                        ToastUtil.showShort(getActivity(), "网络连接超时");
+
+                    }
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        super.onFailure(call, e);
+
+                        ToastUtil.showShort(getActivity(), "网络连接超时");
+
+                    }
+                });
     }
 
     @Override
@@ -178,54 +191,29 @@ public class VideoSonZBragment extends BaseFragment implements BGARefreshLayout.
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-        mNewPageNumber++;
-        if (mNewPageNumber > 4) {
-            mRefreshLayout.endRefreshing();
-            ToastUtil.showShort(getActivity(), "没有最新数据了");
-            return;
-        }
-        final List<Goods> list =new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("下拉刷新");
-            goods.setListUrl("https://img.lovebuy99.com/uploads/allimg/190819/15-1ZQ9205339.jpg");
-            list.add(goods);
-        }
+
+        setDate(1, "", true);
 
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
                 mRefreshLayout.endRefreshing();
-                videoHeaderAdapter.addNewData(list);
                 recyclerViewGoods.smoothScrollToPosition(0);
             }
-        }, 1500);
+        }, 500);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
         mMorePageNumber++;
-        if (mMorePageNumber > 4) {
-            mRefreshLayout.endLoadingMore();
-            ToastUtil.showShort(getActivity(), "没有更多数据了");
-            return false;
-        }
-        final List<Goods> list =new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("加载更多");
-            goods.setListUrl("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3441742992,2765570575&fm=26&gp=0.jpg");
-            list.add(goods);
-        }
-
+        setDate(mMorePageNumber, "", false);
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
                 mRefreshLayout.endLoadingMore();
-                videoHeaderAdapter.addMoreData(list);
 
             }
-        }, 1500);
+        }, 500);
 
 
         return true;

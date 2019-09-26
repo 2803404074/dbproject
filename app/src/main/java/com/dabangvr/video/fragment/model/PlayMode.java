@@ -15,10 +15,19 @@ public class PlayMode {
     private String nickName; //作者明
     private String addTime;// 添加时间
     private boolean isDz;
+    private int framevideoUrl;
 
 
 
     public PlayMode() {
+    }
+
+    public int getFramevideoUrl() {
+        return framevideoUrl;
+    }
+
+    public void setFramevideoUrl(int framevideoUrl) {
+        this.framevideoUrl = framevideoUrl;
     }
 
     public String getLivestate() {

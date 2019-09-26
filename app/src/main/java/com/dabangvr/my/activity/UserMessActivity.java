@@ -301,6 +301,7 @@ public class UserMessActivity extends BaseNewActivity implements View.OnClickLis
             }
             case R.id.tv_logout: {
                 show(0, "确定要退出吗？");
+
                 break;
             }
         }

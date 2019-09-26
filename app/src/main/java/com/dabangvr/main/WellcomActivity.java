@@ -112,7 +112,7 @@ public class WellcomActivity extends AppCompatActivity {
                     JPushInterface.setAlias(WellcomActivity.this, SPTAG.SEQUENCE, String.valueOf(userMess.getId()));
 //                    SPUtils2.instance(WellcomActivity.this).put("user", result);
 //                    SPUtils2.instance(WellcomActivity.this).put("token", userMess.getToken());
-//                    SPUtils2.instance(WellcomActivity.this).putObj("userMo", userMess);
+                    SPUtils2.instance(WellcomActivity.this).putObj("userMo", userMess);
                     goTActivity(MainActivity.class);
                 } else {
                     goTActivity(LoginActivity.class);
@@ -228,7 +228,9 @@ public class WellcomActivity extends AppCompatActivity {
                 });
     }
 
-
+    /**
+     * 获取首页正在直播列表
+     */
     private void getAnchorList() {
         Map<String, String> map = new HashMap<>();
         map.put("page", "1");

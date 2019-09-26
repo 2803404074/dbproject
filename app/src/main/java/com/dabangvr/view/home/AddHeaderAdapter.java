@@ -61,7 +61,7 @@ public class AddHeaderAdapter extends RecyclerView.Adapter<AddHeaderAdapter.MyHo
             Glide.with(mContext).load(data.get(position).getHeadUrl()).into(content);
             if (position < 3) {
 
-                Glide.with(mContext).load(data.get(position).getHeadUrl()).into(iv_round);
+                Glide.with(mContext).load(data.get(position).getFramevideoUrl()).into(iv_round);
             }
             TextView name = holder.itemView.findViewById(R.id.tv_name);
             name.setText(data.get(position).getNickName());

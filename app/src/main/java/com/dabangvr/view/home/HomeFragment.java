@@ -39,27 +39,15 @@ import com.dabangvr.util.BannerStart;
 import com.dabangvr.util.JsonUtil;
 import com.dabangvr.util.LoginTipsDialog;
 import com.dabangvr.util.SPUtils2;
-import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.ItemOnClickListener;
 import com.dabangvr.video.fragment.model.PlayMode;
 import com.dabangvr.video.utils.ToastUtils;
 import com.youth.banner.Banner;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import Utils.GsonObjectCallback;
-import Utils.OkHttp3Utils;
-import bean.ZBMain;
 import butterknife.BindView;
-import config.DyUrl;
-import okhttp3.Call;
 
 /**
  * homeFragment 首页新版重构
@@ -74,7 +62,7 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.recycler_view_id)
-    RecyclerView recyclerView;
+    RecyclerView AnchorListRecycler;
     @BindView(R.id.recy_content)
     RecyclerView rvChannel;
     @BindView(R.id.recy_type)
@@ -226,20 +214,29 @@ public class HomeFragment extends BaseFragment {
         try {
             String str = (String) SPUtils2.instance(getActivity()).getkey("AnchorList", "");
             topData = JsonUtil.string2Obj(str, List.class, PlayMode.class);
+            if (topData==null&&topData.size()<0){
+                return;
+            }
+            int[] FramevUrl={R.mipmap.rounda,R.mipmap.roundb,R.mipmap.roundc};
+            for (int i = 0; i < topData.size(); i++) {
+                if (i<3){
+                    topData.get(i).setFramevideoUrl(FramevUrl[i]);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(manager);
+        AnchorListRecycler.setLayoutManager(manager);
         addHeaderAdapter = new AddHeaderAdapter(topData, getContext());
         View inflate = View.inflate(getActivity(), R.layout.item_header_layout, null);
         ImageView imageView = inflate.findViewById(R.id.v_user_hean);
         Glide.with(this).load(R.mipmap.gif_zb).into(imageView);
         addHeaderAdapter.addHeaderView(inflate);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(0));
-        recyclerView.setAdapter(addHeaderAdapter);
+        AnchorListRecycler.addItemDecoration(new SpacesItemDecoration(0));
+        AnchorListRecycler.setAdapter(addHeaderAdapter);
 
         addHeaderAdapter.setItemOnClickListener(new ItemOnClickListener() {
             @Override
@@ -292,7 +289,7 @@ public class HomeFragment extends BaseFragment {
 
                     case ParameterContens.QDHB: //签到红包
                         T = XsMsActivity.class;
-//                        break;
+                        break;
                     case ParameterContens.XRFL: //新人福利
                         T = XrflActivity.class;
                         break;

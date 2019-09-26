@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -13,19 +14,35 @@ import com.dabangvr.base.BaseFragment;
 import com.dabangvr.model.Goods;
 import com.dabangvr.util.BannerStart;
 import com.dabangvr.util.DensityUtil;
+import com.dabangvr.util.JsonUtil;
+import com.dabangvr.util.SPUtils2;
 import com.dabangvr.util.ToastUtil;
 import com.dabangvr.video.adapter.BGANormalRefreshViewHolder;
 import com.dabangvr.video.adapter.ItemOnClickListener;
 import com.dabangvr.video.adapter.ThreadUtil;
+import com.dabangvr.video.fragment.model.PlayMode;
 import com.dabangvr.video.zb.VideoHeaderAdapter;
 import com.dabangvr.widget.GridDividerItemDecoration;
 import com.youth.banner.Banner;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Utils.GsonObjectCallback;
+import Utils.OkHttp3Utils;
+import bean.UserMess;
 import butterknife.BindView;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+import config.DyUrl;
+import config.GiftUrl;
+import okhttp3.Call;
 
 
 public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate {
@@ -37,11 +54,11 @@ public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayou
     private int intPage = 1;
 
     private VideoDspAdapter videoDspAdapter;
-    private List<Goods> mData = new ArrayList<>();
+    private List<PlayMode> mData = new ArrayList<>();
     private String type;
 
-    private int mNewPageNumber = 0;
-    private int mMorePageNumber = 0;
+    private int mNewPageNumber = 1;
+    private int mMorePageNumber = 1;
 
 
     @Override
@@ -70,7 +87,8 @@ public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayou
     @Override
     public void initData() {
         mRefreshLayout.setDelegate(this);
-        setDate(intPage);
+        Log.d("luhuas", "initData: " + type);
+        setDate(1, 1, true);
     }
 
 
@@ -98,14 +116,47 @@ public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayou
      * 第一个item   my_orther_item_dep
      * 第二个item   my_orther_item_goods
      */
-    private void setDate(int page) {
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("222");
-            goods.setListUrl("http://5b0988e595225.cdn.sohucs.com/images/20190815/18dc68ac895b415992c37622ccaa2c36.jpeg");
-            mData.add(goods);
-        }
 
+
+    private void setDate(int typex, int page, final boolean isRefresh) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("limit", "10");
+
+        String url = GiftUrl.indexHot;
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPost(url, map, new GsonObjectCallback<String>(DyUrl.BASE) {
+            @Override
+            public void onUi(String result) {
+                if (StringUtils.isEmpty(result)) return;
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if (0 == object.optInt("errno")) {
+                        if (500 == object.optInt("code")) {
+                            return;
+                        }
+                        String data = object.optString("data");
+                        List<PlayMode> playModes = JsonUtil.string2Obj(data, List.class, PlayMode.class);
+                        if (playModes != null && playModes.size() > 0) {
+                            if (isRefresh) {
+                                videoDspAdapter.addNewData(playModes);
+                            } else {
+                                videoDspAdapter.addMoreData(playModes);
+                            }
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException e) {
+
+                ToastUtil.showShort(getActivity(), "网络连接超时");
+
+            }
+        });
     }
 
     @Override
@@ -117,54 +168,30 @@ public class VideoSonDspFragment extends BaseFragment implements BGARefreshLayou
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-        mNewPageNumber++;
-        if (mNewPageNumber > 4) {
-            mRefreshLayout.endRefreshing();
-            ToastUtil.showShort(getActivity(), "没有最新数据了");
-            return;
-        }
-        final List<Goods> list =new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("下拉刷新");
-            goods.setListUrl("https://img.lovebuy99.com/uploads/allimg/190819/15-1ZQ9205339.jpg");
-            list.add(goods);
-        }
+//        mNewPageNumber++;
+
+        setDate(1, 1, true);
 
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
                 mRefreshLayout.endRefreshing();
-                videoDspAdapter.addNewData(list);
                 recyclerViewGoods.smoothScrollToPosition(0);
             }
-        }, 1500);
+        }, 500);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
         mMorePageNumber++;
-        if (mMorePageNumber > 4) {
-            mRefreshLayout.endLoadingMore();
-            ToastUtil.showShort(getActivity(), "没有更多数据了");
-            return false;
-        }
-        final List<Goods> list =new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            Goods goods = new Goods();
-            goods.setId("加载更多");
-            goods.setListUrl("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3441742992,2765570575&fm=26&gp=0.jpg");
-            list.add(goods);
-        }
-
+        setDate(1, mMorePageNumber, false);
         ThreadUtil.runInUIThread(new Runnable() {
             @Override
             public void run() {
                 mRefreshLayout.endLoadingMore();
-                videoDspAdapter.addMoreData(list);
 
             }
-        }, 1500);
+        }, 500);
 
 
         return true;

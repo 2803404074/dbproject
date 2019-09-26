@@ -43,7 +43,11 @@ public class SPUtils2 {
 
     public static SPUtils2 instance(Context context){
         if (null == spUtils){
-            return new SPUtils2(context.getApplicationContext());
+            synchronized (SPUtils.class){
+                if (spUtils==null){
+                    spUtils=new SPUtils2(context.getApplicationContext());
+                }
+            }
         }
         return spUtils;
     }
@@ -124,9 +128,7 @@ public class SPUtils2 {
         if (null == data)
             return;
         Gson gson = new Gson();
-        //change data to json
         String strJson = gson.toJson(data);
-        editor.clear();
         editor.putString(tag, strJson);
         editor.commit();
     }
