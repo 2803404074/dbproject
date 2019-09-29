@@ -148,7 +148,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
     @Override
     public void initView() {
-        type = getIntent().getIntExtra("type",0);
+        type = getIntent().getIntExtra("type", 0);
         realTabLayout = findViewById(R.id.tablayout_real);
         scrollView = findViewById(R.id.scrollView);
         container = findViewById(R.id.container);
@@ -160,7 +160,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         btCollect.init(this);
 
         jg.setOnClickListener(this);
-        if (type != 0){
+        if (type != 0) {
             jg.setVisibility(View.GONE);
         }
         //立即购买
@@ -169,8 +169,8 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         tvBuyGroup = findViewById(R.id.hx_shop_pt);
         tvBuyGroup.setOnClickListener(this);
         goodsRecy = findViewById(R.id.orther_recy);
-        GridLayoutManager manager = new GridLayoutManager(this,2);
-        goodsRecy.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(this,7), ContextCompat.getColor(this,R.color.white)));
+        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        goodsRecy.addItemDecoration(new GridDividerItemDecoration(DensityUtil.dip2px(this, 7), ContextCompat.getColor(this, R.color.white)));
         goodsRecy.setLayoutManager(manager);
         goodsRecy.setNestedScrollingEnabled(false);
         goodsAdapter = new BaseLoadMoreHeaderAdapter<Goods>(this, goodsRecy, goodsData, R.layout.new_release_item) {
@@ -200,7 +200,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         btCollect.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(View view, boolean checked) {
-                if (null == mData)return;
+                if (null == mData) return;
                 if (checked) {
                     tvCollect.setTextColor(getResources().getColor(R.color.colorDb3));
                 } else {
@@ -240,8 +240,8 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
      */
     private void collectionGoods() {
         Map<String, Object> map = new HashMap<>();
-        map.put("goodsId",mData.getGoodsId());
-        OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.getGoodsCollectSave, map,getToken(this),new TObjectCallback<String>(DyUrl.BASE) {
+        map.put("goodsId", mData.getGoodsId());
+        OkHttp3Utils.getInstance(DyUrl.BASE).doPostJson(DyUrl.getGoodsCollectSave, map, getToken(this), new TObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
                 try {
@@ -254,30 +254,34 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
             @Override
             public void onFailed(String msg) {
-                ToastUtil.showShort(getContext(),msg);
+                ToastUtil.showShort(getContext(), msg);
             }
         });
     }
 
     private ShoppingSelectDialog dialogView;
+
     /**
      * 底部弹窗购买
+     *
      * @param index 0普通商品，1拼团购买，2秒杀购买
      */
     private void showBottomDialog(final int index) {
-        dialogView = new ShoppingSelectDialog(this,index);
+        dialogView = new ShoppingSelectDialog(this, index);
         dialogView.setListener(new ShoppingSelectDialog.OnClickAddCartOrConfirmListener() {
             //加入购物车或确认订单时的回掉，显示加载动画
             @Override
             public void showLoadingView() {
                 setLoaddingView(true);
             }
+
             //加入购物车后的回掉，释放加载动画
             @Override
             public void addCartOk(String mess) {
                 setLoaddingView(false);
                 dialogView.desDialogView();
             }
+
             //确认订单后的回掉,跳转订单页面
             @Override
             public void confirmOk(String mess) {
@@ -299,14 +303,17 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        topMessView.desTop();//释放第一部分视图资源
+        if (topMessView != null) {
+
+            topMessView.desTop();//释放第一部分视图资源
+        }
     }
 
     /**
      * 购买按钮 以及初始化库存和价钱信息
      */
     private void setGoodsData() {
-        if (type == 1 || type == 2){
+        if (type == 1 || type == 2) {
             jg.setClickable(false);
         }
         //-----------------------分类信息----------0普通，1拼团，2秒杀------------
@@ -357,11 +364,11 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     private void setAdapter() {
         int type = getIntent().getIntExtra("type", 0);
         //0普通，1拼团，2秒杀
-        if (type == 1 || type == 2){
+        if (type == 1 || type == 2) {
             jg.setClickable(false);
         }
         //商品基本信息视图
-        topMessView = new TopMessView(this,this);
+        topMessView = new TopMessView(this, this);
         topMessView.setMess(type, mData);
         topMessView.setLoadingListener(new TopMessView.LoadingListener() {
             @Override
@@ -372,7 +379,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
         //评论视图
         CommentView commentView = new CommentView(this);
-        commentView.setBaseMess(mData.getGoodsId(),mData.getDeptLogo(),mData.getDeptName(),commentMoList);
+        commentView.setBaseMess(mData.getGoodsId(), mData.getDeptLogo(), mData.getDeptName(), commentMoList);
 
         //商品详细信息视图
         DeatilsView deatilsView = new DeatilsView(this);
@@ -408,7 +415,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        isScroll = true;
+                    isScroll = true;
 
                 }
                 return false;
@@ -432,11 +439,11 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                         }
                     }
                 }
-                if (y < 250 && y>120) {
+                if (y < 250 && y > 120) {
                     //.mutate()方法不会通知其他控件跟着改变background
                     realTabLayout.getBackground().mutate().setAlpha(y);
                     realTabLayout.setVisibility(View.VISIBLE);
-                }else if(y < 120){
+                } else if (y < 120) {
                     realTabLayout.setVisibility(View.GONE);
                 }
             }
@@ -479,7 +486,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
         setLoaddingView(true);
         String id = getIntent().getStringExtra("id");
         HashMap<String, String> map = new HashMap<>();
-        map.put(DyUrl.TOKEN_NAME,getSPKEY(this,"token"));
+        map.put(DyUrl.TOKEN_NAME, getSPKEY(this, "token"));
         map.put("goodsId", id);
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsDetails, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             //主线程处理
@@ -493,7 +500,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                 try {
                     JSONObject object = new JSONObject(newsBean);
                     int err = object.optInt("errno");
-                    if (1 == err){
+                    if (1 == err) {
                         LoginTipsDialog.finishTips(HxxqLastActivity.this, "该产品已下架");
                     }
                     if (err == 0) {
@@ -508,10 +515,10 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
                         String commentVoList = object1.optString("commentVoList");
 
-                        commentMoList = JsonUtil.string2Obj(commentVoList,List.class,GoodsComment.class);
+                        commentMoList = JsonUtil.string2Obj(commentVoList, List.class, GoodsComment.class);
 
                         //设置商品详细信息
-                        if ( null != mData){
+                        if (null != mData) {
                             setGoodsData();
                             //设置滑动
                             setAdapter();
@@ -535,7 +542,7 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
             public void onFailure(Call call, IOException e) {
                 super.onFailure(call, e);
                 Looper.prepare();
-                ToastUtil.showShort(HxxqLastActivity.this,"电波无法到达，请检查您的网络~~");
+                ToastUtil.showShort(HxxqLastActivity.this, "电波无法到达，请检查您的网络~~");
                 Looper.loop();
                 jg.setClickable(false);
             }
@@ -552,13 +559,13 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
     //获取推荐商品
     public void setOrtherData(final boolean isLoad) {
         if (isLoad) {
-            page ++;
+            page++;
         } else {
             page = 1;
         }
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        map.put("categoryId",mData.getCategoryId());
+        map.put("categoryId", mData.getCategoryId());
         OkHttp3Utils.getInstance(DyUrl.BASE).doPost(DyUrl.getGoodsList, map, new GsonObjectCallback<String>(DyUrl.BASE) {
             @Override
             public void onUi(String result) {
@@ -571,13 +578,13 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
                         if (object.optInt("code") == 500) return;
                         JSONObject object1 = object.optJSONObject("data");
                         String str = object1.optString("goodsList");
-                        goodsData = JsonUtil.string2Obj(str,List.class,Goods.class);
+                        goodsData = JsonUtil.string2Obj(str, List.class, Goods.class);
                         if (isLoad) {
-                            if (goodsData.size()>0){
+                            if (goodsData.size() > 0) {
                                 goodsAdapter.addAll(goodsData);
                             }
                         } else {
-                            if (goodsData.size()>0){
+                            if (goodsData.size() > 0) {
                                 goodsAdapter.updateData(goodsData);
                             }
                         }
@@ -595,11 +602,12 @@ public class HxxqLastActivity extends BaseNewActivity implements View.OnClickLis
 
     /**
      * 秒杀或拼团是否已经结束
+     *
      * @param b
      */
     @Override
     public void isEnd(boolean b) {
-        if (b){
+        if (b) {
             tvBuyGroup.setClickable(false);
             tvBuyGroup.setBackgroundResource(R.color.colorGray2);
             tvBuyGroup.setText("活动已结束");
