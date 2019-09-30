@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentZhiboCopy extends Fragment implements View.OnClickListener {
+public class FragmentZhiboCopy extends Fragment {
 
     private TabLayout tabLayout;
 
@@ -43,14 +43,11 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
     private VideoZBFragment videoZBFragment;
     private LinearLayout talRl;
     private int height;
-    private VerticalTextview search_edit;
 
     private ArrayList<String> titleList = new ArrayList<String>();
-    private TextView home_type;
-    private TextView h_cart;
-    private LinearLayout home_search;
     private VideoSonDspFragment videoSonDspFragment;
     private HomeFragment homeFragment;
+    private VideoSonDspFragment videoSonDspFragment1;
 
     public static FragmentZhiboCopy newInstance(int index) {
         FragmentZhiboCopy zhibo = new FragmentZhiboCopy();
@@ -70,17 +67,10 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
 
 
     private void initView(View view) {
-        search_edit = view.findViewById(R.id.search_edit);
-        home_type = view.findViewById(R.id.home_type);
-        h_cart = view.findViewById(R.id.h_cart);
-        home_search = view.findViewById(R.id.home_search);
-        home_type.setOnClickListener(this);
-        h_cart.setOnClickListener(this);
-        home_search.setOnClickListener(this);
         tabLayout = view.findViewById(R.id.tabs);
         talRl = view.findViewById(R.id.rl_tab);
         viewPager = view.findViewById(R.id.viewpager_id);
-        view.findViewById(R.id.start_search).setOnClickListener(new View.OnClickListener() {
+        ((ImageView)view.findViewById(R.id.start_search)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ZbSearchActivity.class);
@@ -106,33 +96,10 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
         titleList.add("海产品批发");
         titleList.add("海鲜干货");
 
-        search_edit.setTextList(titleList);
-        search_edit.setText(14, 2, Color.BLACK);//设置属性
-        search_edit.setTextStillTime(3000);//设置停留时长间隔
-        search_edit.setAnimTime(300);//设置进入和退出的时间间隔
-        search_edit.setOnItemClickListener(new VerticalTextview.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Intent sintent = new Intent(getContext(), SearchActivity.class);
-                startActivity(sintent);
-            }
-        });
-
-        search_edit.startAutoScroll();
     }
 
 
-    public View tab_icon(String name, int iconID) {
-        View newtab = LayoutInflater.from(getActivity()).inflate(R.layout.icon_view, null);
-        TextView tv = (TextView) newtab.findViewById(R.id.tabtext);
-        newtab.setPadding(28, 0, 10, 0);
-        tv.setText(name);
-        ImageView im = (ImageView) newtab.findViewById(R.id.tabicon);
-        if (iconID != 0) {
-            im.setImageResource(iconID);
-        }
-        return newtab;
-    }
+
 
     private void initTablayout() {
         ViewTreeObserver viewTreeObserver = talRl.getViewTreeObserver();
@@ -144,7 +111,7 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
                 viewPager.setPadding(0, height, 0, 0);
             }
         });
-        String[] titles = new String[]{"", "直播", "视频"};
+        String[] titles = new String[]{"关注", "发现", "跳跳","推荐"};
 
         int leng = titles.length;
         for (int i = 0; i < leng; i++) {
@@ -152,14 +119,15 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
             tabLayout.getTabAt(i).setText(titles[i]);
 
         }
-        tabLayout.getTabAt(0).setCustomView(tab_icon("同城", R.mipmap.ic_down));
 
 
-        mFragments = new ArrayList<>(3);
+        mFragments = new ArrayList<>(4);
 //        zhiBoPage = new ZhiBoPage(0);
         videoZBFragment = new VideoZBFragment();
         videoSonDspFragment = new VideoSonDspFragment();
+        videoSonDspFragment1 = new VideoSonDspFragment();
         homeFragment = new HomeFragment();
+        mFragments.add(videoSonDspFragment1);
         mFragments.add(homeFragment);
         mFragments.add(videoZBFragment);
         mFragments.add(videoSonDspFragment);
@@ -167,7 +135,7 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
         mAdapter = new TabLayoutFragmentPagerAdapter(getChildFragmentManager(), mFragments);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         viewPager.setAdapter(mAdapter);
-
+        viewPager.setCurrentItem(1);
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -187,24 +155,4 @@ public class FragmentZhiboCopy extends Fragment implements View.OnClickListener 
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.home_type:        //头部分类
-                Intent intent = new Intent(getContext(), HxClassActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.h_cart:           //头部消息
-                // TODO: 2019/8/6 头部消息
-                Intent cintent = new Intent(getContext(), CartActivity.class);
-                startActivity(cintent);
-                break;
-            case R.id.home_search:          //头部搜索
-                Intent sintent = new Intent(getContext(), SearchActivity.class);
-                startActivity(sintent);
-                break;
-            default:
-                break;
-        }
-    }
 }
