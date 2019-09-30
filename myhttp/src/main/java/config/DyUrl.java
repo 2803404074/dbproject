@@ -11,8 +11,8 @@ public class DyUrl {
 //    public static String BASE = "http://192.168.200.111:8080";//
 //    public static String BASE = "http://192.168.200.103:8080";//
     //public static String BASE = "http://192.168.1.103:8080";//强
-     //public static String BASE = "http://192.168.0.108:8080";//邓
-    //public static String BASE = "http://192.168.1.110:8080";//桃
+//     public static String BASE = "http://192.168.0.168:8080";//邓
+//    public static String BASE = "http://192.168.0.112:8080";//桃
 
     //public static String BASE = "http://www.vrzbgw.com/dabang";
 
@@ -258,4 +258,8 @@ public class DyUrl {
 
     //主播信息
     public static String getAnchor = "/api/my/getAnchor";
+    //首页主播列表
+    public static String indexAnchorList = "/api/pili/indexAnchorList";
+    //直播播列表
+    public static String LiveList = "/api/pili/LiveList";
 }

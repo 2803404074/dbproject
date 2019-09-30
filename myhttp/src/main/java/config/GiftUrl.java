@@ -22,6 +22,9 @@ public class GiftUrl {
 
     //短视频列表
     public static String getLiveShortVideoList = "/api/liveShortVideo/getLiveShortVideoList";
+    //首页热榜
+    public static String indexHot = "/api/liveShortVideo/indexHot";
+
 
     //点赞视频
     public static String praseShortVideo = "/api/liveShortVideo/praseShortVideo";
